@@ -1,0 +1,168 @@
+---
+title: "GeoCovid"
+output: html_document
+params:
+  partido: "Avellaneda"
+  fecha: "2020-05-12"
+  tipo_de_raster: 'pc'
+  bsas: NA
+  area: NA
+  base_raster: NA
+  pandoc: NA
+  opacidad: 0.5
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      fig.align = "center")
+library(leaflet)
+library(sf)
+library(terra)
+library(dplyr)
+library(lubridate)
+library(here)
+
+
+  if(is.null(params$fechas)){
+
+    fecha = as.Date('2020-05-12', origin = "1970-01-01")
+    formatted_date <- format(fecha, format = "%Y-%m-%d")
+
+  }else{
+  fecha <- params$fechas
+ formatted_date <-  format(lubridate::ymd_hms(fecha),
+                                        format = "%Y-%m-%d")}
+ 
+
+```
+
+## Reporte para `r params$partido` 
+### Fecha: `r formatted_date`
+Tipo de raster: `r if(params$tipo_de_raster == 'pc'){'cambio prepandemia'}else{'cambio semanal'}`
+
+#### Mañana
+
+```{r fig.align = 'center'}
+              # selecciono un solo dia y tiempo, ya que estoy probando
+
+
+        raster_data <-  params$base_raster |>
+          dplyr::filter(fecha == as.Date(formatted_date,
+                                         origin = "1970-01-01"),
+                        tipo_de_raster == params$tipo_de_raster,
+                        momento == 'mañana',
+                        locacion == params$area 
+                       ) 
+
+
+
+    imagen <- terra::rast(paste0(here::here('data','rasters', 
+                                            raster_data$value)))
+
+ filter_partido <-  sf::st_as_sf(base::subset(params$bsas, # incluye amba
+                     partido == params$partido))
+
+
+
+
+        pal <- leaflet::colorBin(palette = c("#0000FF", "#0040FF",
+                                             "#0080FF", "#00BFFF",
+                                             "#00FFFF", "#FFFFFF",
+                                             "#FFCC00", "#FF9900",
+                                             "#FF6600", "#FF3300",
+                                             "#FF0000"),
+                                 # colorRamps::blue2red(10),
+                                 bins = c(50, 40, 30 , 20 , 10, 1, -1,
+                                          -10, -20, -30, -40, -50),
+                                 na.color = "transparent")
+
+        labels <- c("Aumento más de 40", "40 - 30",
+                    "30 - 20", "20 - 10", "10 - 1",
+                    "Sin cambio",
+                    "-1 - -10", "-10 - -20", "-20 - -30",
+                    "-30 - -40", "Dismunuyo bajo -40")
+
+
+        # mapa mañana
+    mapa_dpto_reporte <- function(imagen,
+                                  opacidad = params$opacidad,
+                                  pal,
+                                  filter_partido){  
+      leaflet::leaflet(options = leafletOptions(zoomControl = FALSE)) %>%
+          leaflet::addTiles() |>
+          leaflet::addRasterImage(imagen,
+                                  colors = pal,
+                                  opacity = params$opacidad,
+                                  group = "basic",
+                                  layerId = "raster") %>%
+          leaflet::addPolygons(data = filter_partido[,'geom'],
+                               layerId = filter_partido[,'partido'], # Importante agregar layerId
+                               label = filter_partido[,'partido'],
+                               color = "black",
+                               fillColor = "transparent",
+                               weight = 2,
+                               stroke = TRUE,
+                               fillOpacity = 0.1,
+                               smoothFactor = 0.5
+          ) |>
+            leaflet::fitBounds(
+            lng1 = filter_partido$lng1,
+            lat1 = filter_partido$lat1,
+            lng2 = filter_partido$lng2,
+            lat2 = filter_partido$lat2
+          )
+
+}
+       
+    mapa_dpto_reporte(imagen,
+                      opacidad = params$opacidad,
+                      pal,
+                      filter_partido)
+
+```
+
+
+#### Tarde
+```{r fig.align = 'center'}
+   
+    raster_data <-  params$base_raster |>
+          dplyr::filter(fecha == as.Date(formatted_date,
+                                         origin = "1970-01-01"),
+                        tipo_de_raster == params$tipo_de_raster,
+                        momento == 'tarde',
+                       locacion == params$area 
+                       )
+
+
+
+   imagen <- terra::rast(paste0(here::here('data','rasters', raster_data$value)))
+
+ mapa_dpto_reporte(imagen,
+                        opacidad = params$opacidad,
+                      pal,
+                      filter_partido)
+
+```
+
+#### Noche
+```{r fig.align = 'center'}
+
+    raster_data <-  params$base_raster |>
+          dplyr::filter(fecha == as.Date(formatted_date,
+                                         origin = "1970-01-01"),
+                        tipo_de_raster == params$tipo_de_raster,
+                        momento == 'noche',
+                       locacion == params$area 
+                       )
+
+
+
+    imagen <- terra::rast(paste0(here::here('data','rasters', raster_data$value)))
+
+    mapa_dpto_reporte(imagen,
+                        opacidad = params$opacidad,
+                      pal,
+                      filter_partido)
+
+```
+
