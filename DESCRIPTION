@@ -18,7 +18,6 @@ Imports:
     dplyr (>= 1.1.2),
     dygraphs (>= 1.1.1.6),
     forcats (>= 1.0.0),
-    geocovidapp (>= 0.0.0.9000),
     leafem (>= 0.2.3),
     leaflet (>= 2.2.0),
     leaflet.extras (>= 1.0.0),
@@ -48,5 +47,8 @@ Suggests:
     testthat (>= 3.0.0),
     tibble (>= 3.2.1),
     markdown (>= 1.12),
-    rlang (>= 1.1.2)
+    rlang (>= 1.1.2),
+    geocovidapp
+Remotes:
+    Fernandez-Lab-WSU/geocovidapp
 Config/testthat/edition: 3
