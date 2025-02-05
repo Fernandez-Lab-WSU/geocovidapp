@@ -5,4 +5,5 @@
 .DS_Store
 .REnvironment
 inst/geocovidapp/data/
+inst/geocovidapp/config.yml
 config.yml

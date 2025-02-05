@@ -12,7 +12,7 @@ server <- function(input, output, session, r) {
   observe({print(imagen$imagen)})
    
   # Cargo mapa panel "Movilidad Buenos Aires"
-  elecciones_mapa <- MapaBaires_Server("inter_mapa",
+  elecciones_mapa <- geocovidapp::MapaBaires_Server("inter_mapa",
                                        bsas = bsas,
                                        amba_reducido_names,
                                        imagen = imagen$imagen,
@@ -22,7 +22,7 @@ server <- function(input, output, session, r) {
   
   # Tab movilidad Buenos Aires -----
   # Cargo imagenes raster para cada dia
-  imagen <- FechaMomento_Server("test",
+  imagen <- geocovidapp::FechaMomento_Server("test",
                                 base_raster = base_raster,
                                 mapa_zoom = elecciones_mapa$mapa_zoom
                             )

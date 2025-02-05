@@ -36,12 +36,12 @@ ui <- function(){
                                        # me permite que se vean los controles
                                        # por encima del mapa
                                         style ="z-index:500;", 
-                                       FechaMomentoUI("test",
+                                       geocovidapp::FechaMomentoUI("test",
                                                       base_raster = base_raster),
                                        draggable = TRUE,
                                        width = "350px"),
                   shinycssloaders::withSpinner(
-                    MapaBaires_UI("inter_mapa"),
+                    geocovidapp::MapaBaires_UI("inter_mapa"),
                     type = 2,
                     color = 'lightgrey',
                     color.background = 'white')),

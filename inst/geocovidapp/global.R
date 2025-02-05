@@ -1,22 +1,25 @@
 # Cargar bases de datos
 # Los datos estan en una carpeta interna dentro de inst/
+ 
+# Instalo el paquete con los modulos
+ source("install.R")
 
-# load("data/bsas.rda")
-# load("data/bsas_comunas.rda")
-# load("data/centroides_mapa.rda")
-# load("data/base_raster.rda")
-# load("data/data_sisa.rda")
+ load("data/bsas.rda")
+ load("data/bsas_comunas.rda")
+ load("data/centroides_mapa.rda")
+ load("data/base_raster.rda")
+ load("data/data_sisa.rda")
 
-load(system.file("geocovidapp", "data", "bsas.rda",
-                 package = "geocovidapp"))
-load(system.file("geocovidapp", "data", "bsas_comunas.rda",
-                 package = "geocovidapp"))
-load(system.file("geocovidapp", "data", "centroides_mapa.rda",
-                 package = "geocovidapp"))
-load(system.file("geocovidapp", "data", "base_raster.rda",
-                 package = "geocovidapp"))
-load(system.file("geocovidapp", "data", "data_sisa.rda",
-                 package = "geocovidapp"))
+#load(system.file("geocovidapp", "data", "bsas.rda",
+#                 package = "geocovidapp"))
+#load(system.file("geocovidapp", "data", "bsas_comunas.rda",
+#                 package = "geocovidapp"))
+#load(system.file("geocovidapp", "data", "centroides_mapa.rda",
+#                 package = "geocovidapp"))
+#load(system.file("geocovidapp", "data", "base_raster.rda",
+#                 package = "geocovidapp"))
+#load(system.file("geocovidapp", "data", "data_sisa.rda",
+#                 package = "geocovidapp"))
 
 # Para chequar la reactividad, descomentar
 #library(reactlog)
