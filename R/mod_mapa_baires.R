@@ -61,35 +61,24 @@ MapaBaires_Server <- function(id, bsas,
 
     sf::st_geometry(bsas) <- "geom"
     amba <- bsas[bsas$partido %in% amba_reducido_names, ]
-  
     amba_bbox <- sf::st_bbox(amba)
+    
+    pal <- leaflet::colorBin(
+      palette = c("#0000FF", "#0040FF", "#0080FF", "#00BFFF", "#00FFFF", 
+                  "#FFFFFF", 
+                  "#FFCC00", "#FF9900", "#FF6600", "#FF3300", "#FF0000"),
+      bins = c(50, 40, 30, 20, 10, 1, -1, -10, -20, -30, -40, -50), 
+      na.color = "transparent"
+    )
+    
+    labels <- c("Aumento más de 40", "40 - 30", "30 - 20", "20 - 10", 
+                "10 - 1", "Sin cambio", "-1 - -10", "-10 - -20", 
+                "-20 - -30", "-30 - -40", "Disminuyó bajo -40")
+    
+    
 
     output$inter_mapa <- leaflet::renderLeaflet({
-
-    pal <- leaflet::colorBin(palette = c("#0000FF", "#0040FF",
-                                         "#0080FF", "#00BFFF",
-                                         "#00FFFF", "#FFFFFF",
-                                         "#FFCC00", "#FF9900",
-                                         "#FF6600", "#FF3300",
-                                         "#FF0000"),
-                             bins = c(50, 40,
-                                      30, 20,
-                                      10, 1,
-                                      -1, -10,
-                                      -20, -30,
-                                      -40, -50), 
-                             na.color = "transparent")
-
-    labels <- c("Aumento más de 40", "40 - 30",
-                "30 - 20", "20 - 10",
-                "10 - 1",
-                "Sin cambio",
-                "-1 - -10",
-                "-10 - -20", "-20 - -30",
-                "-30 - -40", "Dismunuyo bajo -40")
-
    #https://leaflet-extras.github.io/leaflet-providers/preview/
-
 
   if(area() == 'amba'){
 
@@ -103,11 +92,11 @@ MapaBaires_Server <- function(id, bsas,
           'GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User',
           'Community - Powered by Esri'))) |>
         leaflet::groupOptions("polys",
-                              zoomLevels = 0:6) |>
+                              zoomLevels = 0:6) |> # los poligonos con los partidos se veran solo para los 
         leaflet::groupOptions("basic",
                               zoomLevels = 7:20) |>
         leaflet::addPolygons(data = bsas,
-                    layerId = bsas$partido, # esto fue importante agregarlo
+                    layerId = bsas$partido, # esto permite reconocer el poligono
                     label = bsas$partido,
                     color = "black",
                     fillColor = "blue",
@@ -134,7 +123,7 @@ MapaBaires_Server <- function(id, bsas,
                  zoom=10)
 
     }else if(area() == 'baires'){
-print(imagen())
+
       leaflet::leaflet() |>
         leaflet::addProviderTiles("Esri.WorldImagery",
                          group = "Esri.WorldImagery",
@@ -180,26 +169,9 @@ print(imagen())
 
   shiny::observe({
     
-    print(imagen())
-
-    pal <- leaflet::colorBin(palette = c("#0000FF", "#0040FF",
-                                         "#0080FF", "#00BFFF",
-                                         "#00FFFF", "#FFFFFF",
-                                         "#FFCC00", "#FF9900",
-                                         "#FF6600", "#FF3300",
-                                         "#FF0000"),
-                             bins = c(50,40, 30 , 20 , 10, 1, -1,
-                                      -10, -20, -30,-40, -50), 
-                             na.color = "transparent")
-
-    labels <- c("Aumento más de 40", "40 - 30",
-                "30 - 20", "20 - 10", "10 - 1",
-                "Sin cambio",
-                "-1 - -10", "-10 - -20", "-20 - -30",
-                "-30 - -40", "Dismunuyo bajo -40")
-
 if(basemap() == 'calles'){
-    # Agregar la imagen de nuevo con la nueva opacidad
+   
+   # Agregar la imagen de nuevo con la nueva opacidad
    leafprox <-  leaflet::leafletProxy(mapId ="inter_mapa",
                  session = session) |>
      leaflet::removeTiles(layerId = 'esri') |>
@@ -208,7 +180,7 @@ if(basemap() == 'calles'){
               layerId = 'open',
               options = leaflet::providerTileOptions(attribution = 'Powered by OpenStreetMaps')) |>
      leaflet::addPolygons(data = bsas,
-                  layerId = bsas$partido, # esto fue importante agregarlo
+                  layerId = bsas$partido, # Permite identificar los poligonos
                   label = bsas$partido,
                   color = "black",
                   fillColor = "blue",
@@ -223,14 +195,14 @@ if(basemap() == 'calles'){
                     opacity = opacidad(),
                     group = "basic",
                     layerId = "raster",
-                    project = FALSE) |> # evita que el mapa se reproyecte / mejora de performance
+                    project = FALSE) |> # Evita que el mapa se reproyecte / mejora de performance
      leaflet::addLegend(pal = pal,
                 values = terra::values(imagen()),
                 title = "Porcentaje de cambio",
                 position = "topright",
                 group = "basic",
                 layerId = "raster2",
-                labFormat = function(type, cuts, p) {  # Here's the trick
+                labFormat = function(type, cuts, p) {  # Agrega etiquetas
                   paste0(labels)
                 }) |>
      leaflet::addPolygons(data = bsas,
@@ -241,9 +213,10 @@ if(basemap() == 'calles'){
                   stroke = TRUE,
                   fillOpacity = 0.1,
                   smoothFactor = 0.5,
-                  group = "basic") }else{
+                  group = "basic") 
+   }else{
 
-
+# si no es calles, estamos hablando del mapa con relieve
                     leafprox <-  leaflet::leafletProxy(mapId ="inter_mapa",
                                               session = session) |>
                       leaflet::addPolygons(data = bsas,
@@ -287,14 +260,16 @@ if(basemap() == 'calles'){
      })
 
 
-  # actualizo el mapa con el click sin tener que cargarlo de cero devuelta.
+  # Actualizo el mapa con el click sin tener que cargarlo de cero devuelta.
+  # Permite que el mapa se acerque a un partido en especifico y muestre una version mas ampliada 
+  
   shiny::observeEvent(input$inter_mapa_shape_click, {
     click <- input$inter_mapa_shape_click
 
     mapa_proxy <- leaflet::leafletProxy(mapId ="inter_mapa") |>
       leaflet::setView(lng = click$lng,
               lat = click$lat,
-              zoom = 11)
+              zoom = 10)
 
      mapa_proxy
   })
