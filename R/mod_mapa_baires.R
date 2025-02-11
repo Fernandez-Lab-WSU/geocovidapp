@@ -56,228 +56,99 @@ MapaBaires_Server <- function(id, bsas,
                               basemap,
                               amba_reducido_names){
   moduleServer(id,
-  function(input, output, session) {
+               function(input, output, session) {
+                 
+                 # Paleta de color
+                 pal <- leaflet::colorBin(
+                   palette = c("#0000FF", "#0040FF", "#0080FF", "#00BFFF", "#00FFFF", 
+                               "#FFFFFF",
+                               "#FFCC00", "#FF9900", "#FF6600", "#FF3300", "#FF0000"),
+                   bins = c(50, 40, 30, 20, 10, 1, -1, -10, -20, -30, -40, -50),
+                   na.color = "transparent"
+                 )
+                 
+                 labels <- c("Aumento más de 40", 
+                             "40 - 30", "30 - 20", "20 - 10", "10 - 1",
+                             "Sin cambio",
+                             "-1 - -10", "-10 - -20", "-20 - -30", "-30 - -40", 
+                             "Disminuyó bajo -40")
+                 
+                 # Selecciono los partidos de AMBA
+                 amba <- bsas[bsas$partido %in% amba_reducido_names, ]
+                 amba_bbox <- sf::st_bbox(amba)
+                 
 
-
-    sf::st_geometry(bsas) <- "geom"
-    amba <- bsas[bsas$partido %in% amba_reducido_names, ]
-    amba_bbox <- sf::st_bbox(amba)
-    
-    pal <- leaflet::colorBin(
-      palette = c("#0000FF", "#0040FF", "#0080FF", "#00BFFF", "#00FFFF", 
-                  "#FFFFFF", 
-                  "#FFCC00", "#FF9900", "#FF6600", "#FF3300", "#FF0000"),
-      bins = c(50, 40, 30, 20, 10, 1, -1, -10, -20, -30, -40, -50), 
-      na.color = "transparent"
-    )
-    
-    labels <- c("Aumento más de 40", "40 - 30", "30 - 20", "20 - 10", 
-                "10 - 1", "Sin cambio", "-1 - -10", "-10 - -20", 
-                "-20 - -30", "-30 - -40", "Disminuyó bajo -40")
-    
-    
-
-    output$inter_mapa <- leaflet::renderLeaflet({
-   #https://leaflet-extras.github.io/leaflet-providers/preview/
-
-  if(area() == 'amba'){
-
-  leaflet::leaflet() |>
-  leaflet::addProviderTiles(
-           "Esri.WorldImagery",
-           group = "Esri.WorldImagery",
-           layerId = 'esri',
-           options = leaflet::providerTileOptions(attribution = paste('Tiles',
-          '&copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX,',
-          'GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User',
-          'Community - Powered by Esri'))) |>
-        leaflet::groupOptions("polys",
-                              zoomLevels = 0:6) |> # los poligonos con los partidos se veran solo para los 
-        leaflet::groupOptions("basic",
-                              zoomLevels = 7:20) |>
-        leaflet::addPolygons(data = bsas,
-                    layerId = bsas$partido, # esto permite reconocer el poligono
-                    label = bsas$partido,
-                    color = "black",
-                    fillColor = "blue",
-                    weight = 1,
-                    stroke = TRUE,
-                    fillOpacity = 0.1,
-                    smoothFactor = 0.5,
-                    group = "polys"
-        ) |>
-        leaflet.extras::addResetMapButton() |>
-        leaflet::addMeasure(position = "bottomleft",
-                   primaryLengthUnit = "kilometers",
-                   primaryAreaUnit = "hectares",
-                   localization = "es",
-                   activeColor = "#3D535D",
-                   completedColor = "#7D4479")|>
-
-        leaflet.extras::addFullscreenControl() |>
-        leaflet::addScaleBar(options = leaflet::scaleBarOptions(imperial = FALSE),
-                             position = c("topright")) |>
-        leafem::addMouseCoordinates() |>
-        leaflet::setView( lat=-34.72,
-                 lng=-59.12,
-                 zoom=10)
-
-    }else if(area() == 'baires'){
-
-      leaflet::leaflet() |>
-        leaflet::addProviderTiles("Esri.WorldImagery",
-                         group = "Esri.WorldImagery",
-                         layerId = 'esri',
-                         options = leaflet::providerTileOptions(
-                                  attribution = 'Powered by Esri')) |>
-        leaflet::groupOptions("polys",
-                              zoomLevels = 0:6) |>
-        leaflet::groupOptions("basic",
-                              zoomLevels = 7:20) |>
-        leaflet::addPolygons(data = bsas,
-                    layerId = bsas$partido, # esto fue importante agregarlo
-                    label = bsas$partido,
-                    color = "black",
-                    fillColor = "blue",
-                    weight = 1,
-                    stroke = TRUE,
-                    fillOpacity = 0.1,
-                    smoothFactor = 0.5,
-                    group = "polys"
-        ) |>
-        leaflet.extras::addResetMapButton() |>
-        leaflet::addMeasure(position = "bottomleft",
-                   primaryLengthUnit = "kilometers",
-                   primaryAreaUnit = "hectares",
-                   localization = "es",
-                   activeColor = "#3D535D",
-                   completedColor = "#7D4479")|>
-        leaflet.extras::addFullscreenControl() |>
-        leaflet::addScaleBar(options = leaflet::scaleBarOptions(imperial = FALSE),
-                             position = c("topright")) |>
-        leafem::addMouseCoordinates() |>
-        leaflet::setView( lat=-36.94,
-                 lng=-63.94 ,
-                 zoom=6)
-    }
- })
-
-
-
-  # actualizo el mapa cuando la persona elige la opacidad
-  # https://stackoverflow.com/questions/28393310/how-to-prevent-leaflet-map-from-resetting-zoom-in-shiny-app
-
-  shiny::observe({
-    
-if(basemap() == 'calles'){
-   
-   # Agregar la imagen de nuevo con la nueva opacidad
-   leafprox <-  leaflet::leafletProxy(mapId ="inter_mapa",
-                 session = session) |>
-     leaflet::removeTiles(layerId = 'esri') |>
-     leaflet::addProviderTiles("OpenStreetMap",
-              group = "OpenStreetMap",
-              layerId = 'open',
-              options = leaflet::providerTileOptions(attribution = 'Powered by OpenStreetMaps')) |>
-     leaflet::addPolygons(data = bsas,
-                  layerId = bsas$partido, # Permite identificar los poligonos
-                  label = bsas$partido,
-                  color = "black",
-                  fillColor = "blue",
-                  weight = 1,
-                  stroke = TRUE,
-                  fillOpacity = 0.1,
-                  smoothFactor = 0.5,
-                  group = "polys"
-      ) |>
-     leaflet::addRasterImage(imagen(),
-                    colors = pal,
-                    opacity = opacidad(),
-                    group = "basic",
-                    layerId = "raster",
-                    project = FALSE) |> # Evita que el mapa se reproyecte / mejora de performance
-     leaflet::addLegend(pal = pal,
-                values = terra::values(imagen()),
-                title = "Porcentaje de cambio",
-                position = "topright",
-                group = "basic",
-                layerId = "raster2",
-                labFormat = function(type, cuts, p) {  # Agrega etiquetas
-                  paste0(labels)
-                }) |>
-     leaflet::addPolygons(data = bsas,
-                  layerId = abbreviate(bsas$partido),
-                  color = "black",
-                  fillColor = "transparent",
-                  weight = 1,
-                  stroke = TRUE,
-                  fillOpacity = 0.1,
-                  smoothFactor = 0.5,
-                  group = "basic") 
-   }else{
-
-# si no es calles, estamos hablando del mapa con relieve
-                    leafprox <-  leaflet::leafletProxy(mapId ="inter_mapa",
-                                              session = session) |>
-                      leaflet::addPolygons(data = bsas,
-                                  layerId = bsas$partido, # esto fue importante agregarlo
-                                  label = bsas$partido,
-                                  color = "black",
-                                  fillColor = "blue",
-                                  weight = 1,
-                                  stroke = TRUE,
-                                  fillOpacity = 0.1,
-                                  smoothFactor = 0.5,
-                                  group = "polys"
-                      ) |>
-                      leaflet::addRasterImage(imagen(),
-                                     colors = pal,
-                                     opacity = opacidad(),
-                                     group = "basic",
-                                     layerId = "raster") |>
-                      leaflet::addLegend(pal = pal,
-                                values = terra::values(imagen()),
-                                title = "Porcentaje de cambio",
-                                position = "topright",
-                                group = "basic",
-                                layerId = "raster2",
-                                labFormat = function(type, cuts, p) {  
-                                  paste0(labels)
-                                }) |>
-                      leaflet::addPolygons(data = bsas,
-                                  layerId = abbreviate(bsas$partido),
-                                  color = "black",
-                                  fillColor = "transparent",
-                                  weight = 1,
-                                  stroke = TRUE,
-                                  fillOpacity = 0.1,
-                                  smoothFactor = 0.5,
-                                  group = "basic")
-
-                  }
-
-   leafprox
-     })
-
-
-  # Actualizo el mapa con el click sin tener que cargarlo de cero devuelta.
-  # Permite que el mapa se acerque a un partido en especifico y muestre una version mas ampliada 
-  
-  shiny::observeEvent(input$inter_mapa_shape_click, {
-    click <- input$inter_mapa_shape_click
-
-    mapa_proxy <- leaflet::leafletProxy(mapId ="inter_mapa") |>
-      leaflet::setView(lng = click$lng,
-              lat = click$lat,
-              zoom = 10)
-
-     mapa_proxy
-  })
-
-  return(
-    list(
-      mapa_zoom = reactive({ input$inter_mapa_zoom })
-    )
-  )
-
-})}
+                 output$inter_mapa <- leaflet::renderLeaflet({
+                   base_map <- leaflet::leaflet() |>
+                     addBasemapTiles() |>
+                     leaflet.extras::addResetMapButton() |>
+                     leaflet::addMeasure(position = "bottomleft",
+                                         primaryLengthUnit = "kilometers",
+                                         primaryAreaUnit = "hectares",
+                                         localization = "es") |>
+                     leaflet.extras::addFullscreenControl() |>
+                     leaflet::addScaleBar(position = "topright") |>
+                     leafem::addMouseCoordinates()
+                   
+                   # El zoom va a ser diferente al inicio para AMBA y provincia
+                   if (area() == 'amba') {
+                     base_map |>
+                       addPolygonsLayer(bsas, 
+                                        fillopacity_poly = 0) |>
+                       leaflet::setView(lat = -34.72, lng = -59.12, zoom = 10)
+                   } else {
+                     base_map |>
+                       addPolygonsLayer(bsas,
+                                        fillopacity_poly = 0.1) |>
+                       leaflet::setView(lat = -36.94, lng = -63.94, zoom = 6)
+                   }
+                 })
+                 
+                 # Ahora observo cambios en la opacidad y mapa de base
+                 shiny::observe({
+                   leafprox <- leaflet::leafletProxy(mapId = "inter_mapa",
+                                                     session = session)
+                   
+                   if (basemap() == 'calles') {
+                     leafprox |>
+                       leaflet::clearTiles() |>
+                       leaflet::addProviderTiles("OpenStreetMap",
+                                                 group = "OpenStreetMap",
+                                                 layerId = 'open')
+                   }
+                   
+                   # si cambio imagen() o opacidad() el mapa se regenera
+                   leafprox |>
+                     leaflet::clearShapes() |> 
+                     addPolygonsLayer(bsas,
+                                      fillopacity_poly = 0.1) |>
+                     leaflet::addRasterImage(imagen(), 
+                                             colors = pal,
+                                             opacity = opacidad(),
+                                             group = "basic", 
+                                             layerId = "raster",
+                                             project = FALSE) |>
+                     leaflet::removeControl("legend") |>  # Evita que se duplique la leyenda
+                     leaflet::addLegend(
+                       pal = pal, values = terra::values(imagen()),
+                       title = "Porcentaje de cambio",
+                       position = "topright",
+                       group = "basic", 
+                       layerId = "legend",
+                       labFormat = function(type, cuts, p) { paste0(labels) }
+                     )
+                     
+                 })
+                 
+                 # Click en el mapa de la provincia de BsAs permite acercarme al mapa
+                 shiny::observeEvent(input$inter_mapa_shape_click, {
+                   click <- input$inter_mapa_shape_click
+                   leaflet::leafletProxy("inter_mapa") |>
+                     leaflet::setView(lng = click$lng, 
+                                      lat = click$lat,
+                                      zoom = 10)
+                 })
+                 
+                 return(list(mapa_zoom = reactive({ input$inter_mapa_zoom })))
+               })
+}

@@ -35,7 +35,7 @@ Imports:
     tidyr (>= 1.3.0),
     xts (>= 0.13.1)
 Depends: 
-    R (>= 2.10)
+    R (>= 3.5)
 LazyData: true
 Suggests: 
     ggplot2 (>= 3.4.4),
@@ -47,8 +47,5 @@ Suggests:
     testthat (>= 3.0.0),
     tibble (>= 3.2.1),
     markdown (>= 1.12),
-    rlang (>= 1.1.2),
-    geocovidapp
-Remotes:
-    Fernandez-Lab-WSU/geocovidapp
+    rlang (>= 1.1.2)
 Config/testthat/edition: 3
