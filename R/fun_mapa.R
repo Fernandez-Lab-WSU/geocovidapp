@@ -1,4 +1,5 @@
 # Creo una funcion para agregar el mapa base con relieve
+# que es el mapa elegido por default
 addBasemapTiles <- function(map) {
   map |>
     leaflet::addProviderTiles("Esri.WorldImagery",

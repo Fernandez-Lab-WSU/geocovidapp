@@ -90,7 +90,10 @@ MapaBaires_Server <- function(id, bsas,
                      leaflet::addScaleBar(position = "topright") |>
                      leafem::addMouseCoordinates()
                    
-                   # El zoom va a ser diferente al inicio para AMBA y provincia
+                   # El zoom va a ser diferente al inicio para AMBA y provincia.
+                   # De todas formas es codigo innecesario,  ya que solo corre
+                   # Baires porque es la opcion definida por defaukt
+                   # Lo dejo, por si en algun momento se quiere cambiar esto
                    if (area() == 'amba') {
                      base_map |>
                        addPolygonsLayer(bsas, 
@@ -108,6 +111,7 @@ MapaBaires_Server <- function(id, bsas,
                  shiny::observe({
                    leafprox <- leaflet::leafletProxy(mapId = "inter_mapa",
                                                      session = session)
+                   
                    
                    if (basemap() == 'calles') {
                      leafprox |>
