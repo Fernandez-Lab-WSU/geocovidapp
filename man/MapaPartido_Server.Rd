@@ -6,6 +6,7 @@
 \usage{
 MapaPartido_Server(
   id,
+  pool,
   amba_reducido_names,
   base_raster,
   bsas_comunas,

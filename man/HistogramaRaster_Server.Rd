@@ -6,6 +6,7 @@
 \usage{
 HistogramaRaster_Server(
   id,
+  pool,
   amba_reducido_names,
   bsas_comunas,
   base_raster,
@@ -22,7 +23,7 @@ HistogramaRaster_Server(
 \item{amba_reducido_names}{String. Vector con los nombres de los partidos
 que conforman el AMBA.}
 
-\item{bsas_comunas}{Mapa vectoria de la provincia de Buenos Aires simplifica
+\item{bsas_comunas}{Mapa vectorial de la provincia de Buenos Aires simplifica
 do.}
 
 \item{base_raster}{Dataframe que lista todos los rasters y desagrega en

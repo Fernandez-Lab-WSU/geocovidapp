@@ -4,7 +4,7 @@
 \alias{FechaMomento_Server}
 \title{Convierte el archivo en raster en base a las elecciones del usuario}
 \usage{
-FechaMomento_Server(id, base_raster, mapa_zoom)
+FechaMomento_Server(id, pool, base_raster, mapa_zoom)
 }
 \arguments{
 \item{id}{Module name}
