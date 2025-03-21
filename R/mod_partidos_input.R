@@ -12,7 +12,7 @@
 #' @return Elementos de la IU para que se seleccione partidos de AMBA o de 
 #' BsAs de forma condicional.
 #' @export
- Partidos_UI <- function(id, amba_reducido_names, base_raster) {
+Partidos_UI <- function(id, amba_reducido_names, base_raster) {
    ns <- NS(id)
 
    shiny::tagList(
