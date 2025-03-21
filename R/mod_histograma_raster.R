@@ -44,6 +44,7 @@ HistogramaRaster_UI <- function(id) {
 #' @importFrom graphics hist par
 #' @export
 HistogramaRaster_Server <- function(id,
+                                    pool = pool,
                                     amba_reducido_names,
                                     bsas_comunas, base_raster,
                                     area, fecha,
@@ -64,39 +65,27 @@ HistogramaRaster_Server <- function(id,
         f_date <- formatted_date(fecha()) 
         }
 
-        db <- config::get("database")
-        
-        pool <- pool::dbPool(
-          drv = RPostgres::Postgres(),
-          dbname = db$dbname,
-          user = db$user,
-          password = db$password,
-          port = db$port,
-          host = db$host
-        )
-        onStop(function() {
-          pool::poolClose(pool)
-        })
-        
+       
         
         #Extraigo el raster que eligio el usuario
         raster_data <- base_raster |>
           dplyr::filter(
-            fecha == as.Date(reactiveVal({ f_date }),
+            fecha == as.Date(f_date,
                              origin = "1970-01-01"
             ),
-            tipo_de_raster == tipo_de_raster,
-            momento == momento_dia(), # es un valor no reactivo
+            tipo_de_raster == tipo_de_raster(),
+            momento == momento_dia, # es un valor no reactivo
             locacion == area()
           )
         
         
         # selecciono un solo dia y tiempo, ya que estoy probando
-        imagen <-  rasterLoader(raster_data = raster_data, 
+         rasterLoader(raster_data = raster_data, 
+                                pool = pool,
                                  #fecha_elegida = reactiveVal({ f_date }),
                                  # momento_dia = reactiveVal({ momento_dia }), # no reactivo
                                  # tipo_de_raster = tipo_de_raster,
-                                  area = area )
+                                  area = area() )
 
       })
 

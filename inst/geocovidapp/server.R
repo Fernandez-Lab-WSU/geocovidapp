@@ -21,6 +21,7 @@ server <- function(input, output, session, r) {
   # Tab movilidad Buenos Aires -----
   # Cargo imagenes raster para cada dia
   imagen <- geocovidapp::FechaMomento_Server("test",
+                                pool = pool,
                                 base_raster = base_raster,
                                 mapa_zoom = elecciones_mapa$mapa_zoom
                             )
@@ -60,6 +61,7 @@ server <- function(input, output, session, r) {
 
   # Histogramas
   HistogramaRaster_Server('hist',
+                          pool = pool,
                           amba_reducido_names =  amba_reducido_names,
                           bsas_comunas = bsas_comunas, # Incluye comunas de CABA
                           base_raster = base_raster,
@@ -70,6 +72,7 @@ server <- function(input, output, session, r) {
                           part = elecciones_usuario_partidos$partido)
 
   HistogramaRaster_Server('hist2',
+                          pool = pool,
                           amba_reducido_names =  amba_reducido_names,
                           bsas_comunas = bsas_comunas,
                           base_raster = base_raster,
@@ -80,6 +83,7 @@ server <- function(input, output, session, r) {
                           part = elecciones_usuario_partidos$partido)
 
   HistogramaRaster_Server('hist3',
+                          pool = pool,
                           amba_reducido_names =  amba_reducido_names,
                           bsas_comunas = bsas_comunas,
                           base_raster = base_raster,
@@ -91,6 +95,7 @@ server <- function(input, output, session, r) {
 
   # Mapas con detalle del partido
   MapaPartido_Server("baires_partidos",
+                     pool = pool,
                      amba_reducido_names =  amba_reducido_names,
                      bsas_comunas = bsas_comunas,
                      base_raster = base_raster,
@@ -102,6 +107,7 @@ server <- function(input, output, session, r) {
                      opacidad = reactive({ input$opacity2 }))
 
   MapaPartido_Server("baires_partidos2",
+                     pool = pool,
                      amba_reducido_names =  amba_reducido_names,
                      bsas_comunas = bsas_comunas,
                      base_raster = base_raster,
@@ -113,6 +119,7 @@ server <- function(input, output, session, r) {
                      opacidad = reactive({ input$opacity2 }))
 
   MapaPartido_Server("baires_partidos3",
+                     pool = pool,
                      amba_reducido_names =  amba_reducido_names,
                      bsas_comunas = bsas_comunas,
                      base_raster = base_raster,

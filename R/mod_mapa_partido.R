@@ -100,11 +100,11 @@ MapaPartido_Server <-  function(id,
                              origin = "1970-01-01"
             ),
             tipo_de_raster == tipo_de_raster(),
-            momento == momento_dia(), # es un valor no reactivo
+            momento == momento_dia, # es un valor no reactivo
             locacion == area()
           )
         
-        rasterLoader(cx_db = pool,
+        rasterLoader(pool = pool,
                      raster_data = raster_data, 
                      area = area() )
 

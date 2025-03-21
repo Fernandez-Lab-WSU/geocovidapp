@@ -7,7 +7,7 @@
 #' @export
 #'
 #' @examples
-rasterLoader <- function(cx_db,
+rasterLoader <- function(pool,
                          raster_data, 
                          area){
   
@@ -24,7 +24,7 @@ rasterLoader <- function(cx_db,
     )
   }
   
-  result <- pool::dbGetQuery(cx_db, query)
+  result <- pool::dbGetQuery(pool, query)
   print(result)
   # Save the binary raster data to a temporary file
   temp_file <- tempfile(fileext = ".tif")
