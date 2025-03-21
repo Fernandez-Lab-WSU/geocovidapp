@@ -44,7 +44,7 @@ HistogramaRaster_UI <- function(id) {
 #' @importFrom graphics hist par
 #' @export
 HistogramaRaster_Server <- function(id,
-                                    pool = pool,
+                                    pool,
                                     amba_reducido_names,
                                     bsas_comunas, base_raster,
                                     area, fecha,
@@ -82,10 +82,7 @@ HistogramaRaster_Server <- function(id,
         # selecciono un solo dia y tiempo, ya que estoy probando
          rasterLoader(raster_data = raster_data, 
                                 pool = pool,
-                                 #fecha_elegida = reactiveVal({ f_date }),
-                                 # momento_dia = reactiveVal({ momento_dia }), # no reactivo
-                                 # tipo_de_raster = tipo_de_raster,
-                                  area = area() )
+                                area = area() )
 
       })
 
@@ -131,11 +128,6 @@ raster_hist <- reactive({
         imagen2
 
         }
-
-
-
-
-
       })
 
 
