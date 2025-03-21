@@ -1,0 +1,12 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.DS_Store
+.Rprofile
+.REnvironment
+inst/geocovidapp/data/
+inst/geocovidapp/config.yml
+config.yml
+tests/
+old_modules/
