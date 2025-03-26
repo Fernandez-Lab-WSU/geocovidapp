@@ -20,99 +20,125 @@ FechaMomentoUI <- function(id, base_raster) {
 
   shiny::tagList(
     shiny::fluidRow(
-      shiny::column(10, # Take most of the row
-                    h4("Cliquea en el mapa")
+      shiny::column(
+        10, 
+        h4("Cliquea en el mapa")
       ),
-      shiny::column(2, # The rest of the row for the help button
-                    shiny::actionButton(ns("help_button"), label = "",
-                                        icon = shiny::icon("question-circle"),
-                                        style = "font-size: 20px; color: lightseagreen; background-color: white; border-color: white;")
+      shiny::column(
+        2, 
+        shiny::actionButton(ns("help_button"),
+          label = "",
+          icon = shiny::icon("question-circle"),
+          style = "font-size: 20px; color: lightseagreen; background-color: white; border-color: black;"
+        )
       )
     ),
     shinyjs::hidden(
-      shiny::div(id = ns("help_tooltip"),
-                 style = "position: absolute; top: 30px; left: 100%; 
-                            transform: translateX(-50%); background-color: #f9f9f9; 
-                            border: 1px solid #ddd; padding: 10px; border-radius: 4px; 
+      shiny::div(
+        id = ns("help_tooltip"),
+        style = "position: absolute; top: 30px; left: 100%;
+                            transform: translateX(-50%); background-color: #f9f9f9;
+                            border: 1px solid #ddd; padding: 10px; border-radius: 4px;
                             font-size: 16px; /* Aumenta el tamaño de la fuente */
                             width: 300px; /* Define el ancho del tooltip */
                             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-                            border-radius: 8px; /* Aumenta el redondeo de los bordes */" , 
-                 "Este es un mapa interactivo. Puedes seleccionar la ubicación, fecha, y otras opciones para visualizar diferentes capas de información."
+                            border-radius: 8px; /* Aumenta el redondeo de los bordes */
+                            pointer-events: none; /* Evita malfuncionamiento del hover sobre el boton */",
+        "Este es un mapa interactivo. Puedes seleccionar la ubicación, fecha, y otras opciones para visualizar diferentes capas de información."
       )
     ),
     shiny::radioButtons(ns("area"),
-                        label = paste(
-                          "Selecciona AMBA para visualizar datos",
-                          "con mayor resolucion en ese area"
-                        ),
-                        choices = c(
-                          "prov. de Buenos Aires" = "baires",
-                          "AMBA" = "amba"
-                        ),
-                        selected = "baires",
-                        inline = TRUE
+      label = paste(
+        "Selecciona AMBA para visualizar datos",
+        "con mayor resolucion en ese area"
+      ),
+      choices = c(
+        "prov. de Buenos Aires" = "baires",
+        "AMBA" = "amba"
+      ),
+      selected = "baires",
+      inline = TRUE
     ),
-    
+    # shinyjs::hidden(
+    #   div(id = "linea1",
+    #   hr(style = "border: 2px solid green;")
+    # )
+    # ),
     shinyjs::hidden(shiny::dateInput(ns("fechas"),
-                                     label = "Fecha",
-                                     min = min(base::unique(base_raster$fecha)), # ojo que va a permitir elegir dias faltantes
-                                     max = max(base::unique(base_raster$fecha)),
-                                     value = base::unique(base_raster$fecha)[1],
-                                     language = "es",
-                                     format = "yyyy-mm-dd"
+      label = "Fecha",
+      min = min(base::unique(base_raster$fecha)), # ojo que va a permitir elegir dias faltantes
+      max = max(base::unique(base_raster$fecha)),
+      value = base::unique(base_raster$fecha)[1],
+      language = "es",
+      format = "yyyy-mm-dd"
     )),
-    shinyjs::hidden(shiny::radioButtons(ns("porcentaje"),
-                                        label = "Cambio porcentual",
-                                        choices = c(
-                                          "Prepandemia" = "pc",
-                                          "Semanal" = "7dpc"
-                                        ),
-                                        inline = TRUE,
-                                        selected = "pc"
-    )),
-    shinyjs::hidden(
-      shiny::radioButtons(ns("momento"),
-                          label = "Momento del día",
-                          choices = c("Mañana" = "mañana", "Tarde" = "tarde", "Noche" = "noche"),
-                          inline = TRUE,
-                          selected = unique(base_raster$momento)[1]
+    shiny::fluidRow(
+      shiny::column(
+        6,
+        shinyjs::hidden(
+          shiny::radioButtons(ns("momento"),
+            label = "Momento del día",
+            choices = c(
+              "Mañana" = "mañana",
+              "Tarde" = "tarde",
+              "Noche" = "noche"
+            ),
+            selected = unique(base_raster$momento)[1]
+          )
+        )
+      ),
+      shiny::column(
+        6,
+        shinyjs::hidden(
+          shiny::radioButtons(ns("porcentaje"),
+            label = "Cambio porcentual",
+            choices = c(
+              "Prepandemia" = "pc",
+              "Semanal" = "7dpc"
+            ),
+            selected = "pc"
+          )
+        ),
+        shiny::div(
+          style = "text-align: left; margin-top: 10px;",
+          shinyjs::hidden(shiny::actionButton(
+            ns("actualiza_mapa"),
+            "Actualizar Mapa"
+          ))
+        )
       )
     ),
-  shiny::tags$div(
-    style = "text-align: center;", 
-    shinyjs::hidden(shiny::actionButton(ns("actualiza_mapa"), 
-                                        "Actualizar Mapa"))
-  ),
-    tags$hr(style = "border: 2px solid green;"),
-    h5("Opciones del mapa"),
+    tags$hr(id = "linea2", style = "border: 2px solid green;"),
+    h5("Opciones de visualización"),
     # Agrupamos basemap y opacity en una misma fila
     shiny::fluidRow(
-      shiny::column(6,
-                    shiny::radioButtons(ns("basemap"),
-                                        label = "Mapa Base",
-                                        choices = c(
-                                          "Relieve" = "relieve",
-                                          "Calles" = "calles"
-                                        ),
-                                        selected = "relieve",
-                                        inline = TRUE
-                    )
+      shiny::column(
+        6,
+        shiny::radioButtons(ns("basemap"),
+          label = "Mapa Base",
+          choices = c(
+            "Relieve" = "relieve",
+            "Calles" = "calles"
+          ),
+          selected = "relieve",
+          inline = TRUE
+        )
       ),
-      shiny::column(6,
-                    shinyjs::hidden(
-                      p(
-                        id = "barra_transparencia",
-                        "Opciones de visualización del mapa"
-                      ),
-                      shiny::sliderInput(ns("opacity"),
-                                         label = "Transparencia",
-                                         min = 0,
-                                         max = 1,
-                                         value = 0.5,
-                                         ticks = FALSE
-                      )
-                    )
+      shiny::column(
+        6,
+        shinyjs::hidden(
+          p(
+            id = "barra_transparencia",
+            "Opciones de visualización del mapa"
+          ),
+          shiny::sliderInput(ns("opacity"),
+            label = "Transparencia",
+            min = 0,
+            max = 1,
+            value = 0.5,
+            ticks = FALSE
+          )
+        )
       )
     )
   )
@@ -139,30 +165,32 @@ FechaMomento_Server <- function(id,
     function(input, output, session) {
       # Reactive to get the filtered date range based on area and porcentaje
       fecha_rango <- shiny::eventReactive(list(input$area, input$porcentaje),
-                                          ignoreNULL = FALSE,{
-        # Filtramos los datos según la locación y tipo de raster seleccionados
-        filtered_data <- base_raster |>
-          dplyr::filter(
-            locacion == input$area,
-            tipo_de_raster == input$porcentaje
-          )
+        ignoreNULL = FALSE,
+        {
+          # Filtramos los datos según la locación y tipo de raster seleccionados
+          filtered_data <- base_raster |>
+            dplyr::filter(
+              locacion == input$area,
+              tipo_de_raster == input$porcentaje
+            )
 
-        # Obtener el rango de fechas mínimo y máximo
-        min_date <- min(filtered_data$fecha, na.rm = TRUE)
-        max_date <- max(filtered_data$fecha, na.rm = TRUE)
+          # Obtener el rango de fechas mínimo y máximo
+          min_date <- min(filtered_data$fecha, na.rm = TRUE)
+          max_date <- max(filtered_data$fecha, na.rm = TRUE)
 
-        list(min = min_date, max = max_date)
-      })
+          list(min = min_date, max = max_date)
+        }
+      )
 
       # Actualizar el dateInput con el rango dinámico de fechas
       observe({
         req(fecha_rango())
         range <- fecha_rango()
-        
-       shiny::updateDateInput(session, "fechas",
+
+        shiny::updateDateInput(session, "fechas",
           min = range$min,
           max = range$max
-         # value = range$min
+          # value = range$min
         ) # Valor predeterminado es el mínimo
       })
 
@@ -170,22 +198,22 @@ FechaMomento_Server <- function(id,
         # Get selected date and moment
         selected_date <- input$fechas
         selected_momento <- input$momento
-        
+
         is_valid <- any(base_raster$locacion == input$area &
           base_raster$tipo_de_raster == input$porcentaje &
           base_raster$fecha == selected_date &
           base_raster$momento == selected_momento)
-       
-        
+
+
         if (!is_valid) {
           showNotification("Combinación inválida de fecha y momento. Intenta con otra combinacion.", type = "error")
           return(terra::rast())
-          }
-        
-        
+        }
+
+
         req(is_valid)
 
-        #Extraigo el raster que eligio el usuario
+        # Extraigo el raster que eligio el usuario
         raster_data <- base_raster |>
           dplyr::filter(
             fecha == as.Date(input$fechas,
@@ -197,7 +225,7 @@ FechaMomento_Server <- function(id,
           )
 
         print(raster_data)
-        
+
         # Los rasters de amba y baires estan en diferentes bases de datos
         if (input$area == "amba") {
           query <- paste0(
@@ -238,14 +266,13 @@ FechaMomento_Server <- function(id,
           shinyjs::show("actualiza_mapa")
         }
       })
-      
+
       # In the server function:
       observe({
-        
         shinyjs::onevent("mouseenter", "help_button", shinyjs::show("help_tooltip"))
         shinyjs::onevent("mouseleave", "help_button", shinyjs::hide("help_tooltip"))
       })
-      
+
       return(
         list(
           area = reactive({
@@ -268,10 +295,10 @@ FechaMomento_Server <- function(id,
           }),
           boton = reactive({
             input$actualiza_mapa
-            }),
+          }),
           basemap = reactive({
             input$basemap
-          }) # ?
+          })
         )
       )
     }

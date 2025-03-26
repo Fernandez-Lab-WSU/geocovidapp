@@ -24,7 +24,7 @@ ui <- function() {
       "input-border-color" = "#406177",
       base_font = bslib::font_collection(
         bslib::font_google("Work Sans",
-          wght = "300",
+          wght = "400",
           local = FALSE
         ),
         "Roboto",
