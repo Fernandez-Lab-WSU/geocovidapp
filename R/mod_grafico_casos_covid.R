@@ -175,8 +175,8 @@ dygraphs::dygraph(data_plot$bsas,
         dygraphs::dyLegend(show = "follow",
                  width = 400
                 ) |>
-        dygraphs::dyCSS(system.file("www/legend.css", 
-                                    package = "geocovidapp"))
+  dygraphs::dyCSS(system.file("geocovidapp/www/legend.css", 
+                              package = "geocovidapp"))
 
       }else{
 
@@ -210,7 +210,7 @@ dygraphs::dygraph(data_plot$bsas,
             show = "follow",
             width = 400
             ) |>
-          dygraphs::dyCSS(system.file("www/legend.css", 
+          dygraphs::dyCSS(system.file("geocovidapp/www/legend.css", 
                                       package = "geocovidapp"))
 
  }
@@ -274,9 +274,8 @@ output$casos_dpto <- dygraphs::renderDygraph({
           show = "follow",
           width = 400
           ) |>
-        dygraphs::dyCSS(system.file("www/legend.css", 
+        dygraphs::dyCSS(system.file("geocovidapp/www/legend.css", 
                                     package = "geocovidapp"))
-
     }
 
 
