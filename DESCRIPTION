@@ -1,0 +1,58 @@
+Package: geocovidapp
+Title: Visualiza la movilidad ciudadana y los casos de COVID-19 en Bs. As., Argentina
+Version: 0.0.1
+Authors@R: 
+    person(given = "Florencia",
+           family = "D'Andrea", 
+           email = "florencia.dandrea@gmail.com", 
+           role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-0041-097X"))
+Description: Tablero que permite visualizar datos de movilidad ciudadana de Meta para el pediodo marzo - dicimebre 2020 junto con casos de COVID-19 reportados para la provincia de Buenos Aires, Argentina.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Imports: 
+    bslib (>= 0.5.1),
+    DBI (>= 1.2.2),
+    dplyr (>= 1.1.2),
+    dygraphs (>= 1.1.1.6),
+    forcats (>= 1.0.0),
+    htmlwidgets (>= 1.6.4),
+    leafem (>= 0.2.3),
+    leaflet (>= 2.2.0),
+    leaflet.extras (>= 1.0.0),
+    lubridate (>= 1.9.2),
+    pkgdown (>= 2.1.1),
+    plotly (>= 4.10.3),
+    pool (>= 1.0.3),
+    rmarkdown (>= 2.24),
+    RPostgres (>= 1.4.5),
+    sf (>= 1.0.14),
+    shiny (>= 1.7.4),
+    shinycssloaders (>= 1.0.0),
+    shinyjs (>= 2.1.0),
+    stringr (>= 1.5.1),
+    terra (>= 1.7.39),
+    tidyr (>= 1.3.0),
+    webshot (>= 0.5.5),
+    webshot2 (>= 0.1.1),
+    xts (>= 0.13.1)
+Depends: 
+    R (>= 4.1)
+LazyData: true
+Suggests: 
+    ggplot2 (>= 3.4.4),
+    here (>= 1.0.1),
+    purrr (>= 1.0.2),
+    shinyloadtest (>= 1.1.0),
+    shinytest2,
+    stars (>= 0.6.4),
+    testthat (>= 3.0.0),
+    tibble (>= 3.2.1),
+    markdown (>= 1.12),
+    rlang (>= 1.1.2),
+    knitr (>= 1.49),
+    chromote (>= 0.4.0),
+    curl (>= 6.2.0)
+Config/testthat/edition: 3

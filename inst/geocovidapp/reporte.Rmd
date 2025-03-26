@@ -1,0 +1,59 @@
+---
+title: "GeoCovid"
+output: word_document
+params:
+  partido: 'AVELLANEDA'
+  fecha: NA
+  tipo_de_raster: 'pc'
+  bsas: NA
+  area: NA
+  base_raster: NA
+  map_path1: NA
+  map_path2: NA
+  map_path3: NA
+  pandoc: NA
+  opacidad: 0.5
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(echo = FALSE,
+                      fig.align = "center")
+
+```
+
+
+## Reporte para `r params$partido` 
+### Fecha: `r params$fecha`
+**Tipo de raster**: `r if(params$tipo_de_raster == 'pc'){'cambio prepandemia'}else{'cambio semanal'}`
+
+**Opacidad**: `r params$opacidad`. 
+*Si quieres cambiar la transparencia del mapa, cambiala en la app y vuelve a
+generar el reporte.*
+
+#### Mañana
+
+```{r mapa_manana}
+
+# Asegúrate de tener la ruta correcta del archivo temporal
+knitr::include_graphics(params$map_path1)
+
+```
+
+
+#### Tarde
+```{r mapa_tarde}
+
+# Asegúrate de tener la ruta correcta del archivo temporal
+knitr::include_graphics(params$map_path2)
+
+```
+
+#### Noche
+```{r mapa_noche}
+
+# Asegúrate de tener la ruta correcta del archivo temporal
+knitr::include_graphics(params$map_path3)
+
+```
+
