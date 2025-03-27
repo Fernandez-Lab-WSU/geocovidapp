@@ -48,6 +48,9 @@ rasterLoader <- function(pool,
                          raster_data, 
                          area){
   
+  con <- pool::poolCheckout(pool)  # Obtienes la conexión
+  on.exit(pool::poolReturn(con))   # Aseguras que se devuelva al pool cuando la función termine
+  
   # Los rasters de amba y baires estan en diferentes tablas dentro de la base
   # porque tienen distintos tamaños
   if (area == "amba") {
@@ -60,9 +63,10 @@ rasterLoader <- function(pool,
       "SELECT ST_AsGDALRaster(rast, 'GTiff') AS rast FROM raster_schema.raster_geo_baires WHERE filename='",
       raster_data$filename, "';"
     )
+
   }
   
-  result <- pool::dbGetQuery(pool, query)
+  result <- pool::dbGetQuery(con, query)
   
   if (nrow(result) == 0) {
     warning("Error: No raster found for the specified filename.")

@@ -180,7 +180,7 @@ FechaMomento_Server <- function(id,
       imagen <- shiny::eventReactive(input$actualiza_mapa,
                                      ignoreNULL = FALSE, {
         
-        es_valido <- raster_valido(base_raster = base_raster,
+        es_valido <- raster_valido(base_raster = geocovidapp::base_raster,
                       area = input$area,
                       porcentaje = input$porcentaje,
                       fecha = input$fechas,
@@ -206,7 +206,7 @@ FechaMomento_Server <- function(id,
         req(es_valido$combinacion_valida)
 
         # Extraer el raster correspondiente
-        raster_data <- base_raster |>
+        raster_data <- geocovidapp::base_raster |>
           dplyr::filter(
             fecha == as.Date(input$fechas,
               origin = "1970-01-01"
