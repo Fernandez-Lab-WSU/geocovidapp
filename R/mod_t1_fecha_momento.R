@@ -148,14 +148,14 @@ FechaMomento_Server <- function(id,
     session = getDefaultReactiveDomain(),
     function(input, output, session) {
       
-      # Filtra el rango de fechas según la área y tipo de cambio porcentual
-      fecha_rango <- shiny::eventReactive(list(input$area, input$porcentaje),
+      # Filtra el rango de fechas según la área 
+      # Notar que esto incluye rasters pc y 7dpc
+      fecha_rango <- shiny::eventReactive(list(input$area),
         ignoreNULL = FALSE,
         {
            filtered_data <- base_raster |>
             dplyr::filter(
-              locacion == input$area,
-              tipo_de_raster == input$porcentaje
+              locacion == input$area
             )
 
           # Obtener el rango de fechas mínimo y máximo
@@ -180,24 +180,27 @@ FechaMomento_Server <- function(id,
       imagen <- shiny::eventReactive(input$actualiza_mapa,
                                      ignoreNULL = FALSE, {
         
-        selected_date <- input$fechas
-        selected_momento <- input$momento
-
-        # Si hay algun raster que cumpla todas las elecciones,
-        # esto dara TRUE
-        is_valid <- any(base_raster$locacion == input$area &
-          base_raster$tipo_de_raster == input$porcentaje &
-          base_raster$fecha == selected_date &
-          base_raster$momento == selected_momento)
-
-        # Si no existe un raster para esta combinacion, 
-        # Imprimira un mensaje en la pantalla
-        if (!is_valid) {
-          showNotification("Combinación inválida de fecha y momento. Intenta con otra combinacion.", type = "error")
-          return(terra::rast())
+        es_valido <- raster_valido(base_raster = base_raster,
+                      area = input$area,
+                      porcentaje = input$porcentaje,
+                      fecha = input$fechas,
+                      momento = input$momento)
+        print('es_valido')
+        print(es_valido)
+        # Si no existe un raster para esta combinación, mostrar la notificación
+        if (!es_valido$combinacion_valida) {
+          
+          # Mostrar una notificación de error
+          showNotification(
+            paste(es_valido$faltan),
+            type = "error"
+          )
+          
+          return(terra::rast()) # Devuelve un raster vacío si no es válido
         }
+        
 
-        req(is_valid)
+        req(es_valido$combinacion_valida)
 
         # Extraer el raster correspondiente
         raster_data <- base_raster |>

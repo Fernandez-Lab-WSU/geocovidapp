@@ -63,6 +63,10 @@ rasterLoader <- function(pool,
   }
   
   result <- pool::dbGetQuery(pool, query)
+  
+  if (nrow(result) == 0) {
+    warning("Error: No raster found for the specified filename.")
+  }
 
   # Guarda el binario a un archivo temporario
   temp_file <- tempfile(fileext = ".tif")
