@@ -14,9 +14,10 @@
 #' @examples
 FechaMomentoUI <- function(id, base_raster) {
   ns <- NS(id)
-
-  momento_del_dia <- as.list(unique(base::unique(base_raster$hora)))
-  names(momento_del_dia) <- unique(base::unique(base_raster$momento))
+ 
+  # Crear lista única de momentos del día y asignar nombres
+  momento_del_dia <- as.list(unique(unique(base_raster$hora)))
+  names(momento_del_dia) <- unique(unique(base_raster$momento))
 
   shiny::tagList(
     shiny::fluidRow(
@@ -54,6 +55,7 @@ Boton_Ayuda_UI(ns('barra-flotante'))
       language = "es",
       format = "yyyy-mm-dd"
     )),
+    # Agrupamos basemap y opacity en una misma fila
     shiny::fluidRow(
       shiny::column(
         6,
@@ -145,12 +147,12 @@ FechaMomento_Server <- function(id,
   moduleServer(id,
     session = getDefaultReactiveDomain(),
     function(input, output, session) {
-      # Reactive to get the filtered date range based on area and porcentaje
+      
+      # Filtra el rango de fechas según la área y tipo de cambio porcentual
       fecha_rango <- shiny::eventReactive(list(input$area, input$porcentaje),
         ignoreNULL = FALSE,
         {
-          # Filtramos los datos según la locación y tipo de raster seleccionados
-          filtered_data <- base_raster |>
+           filtered_data <- base_raster |>
             dplyr::filter(
               locacion == input$area,
               tipo_de_raster == input$porcentaje
@@ -172,30 +174,32 @@ FechaMomento_Server <- function(id,
         shiny::updateDateInput(session, "fechas",
           min = range$min,
           max = range$max
-          # value = range$min
-        ) # Valor predeterminado es el mínimo
+         ) # Valor predeterminado es el mínimo por default
       })
 
-      imagen <- shiny::eventReactive(input$actualiza_mapa, ignoreNULL = FALSE, {
-        # Get selected date and moment
+      imagen <- shiny::eventReactive(input$actualiza_mapa,
+                                     ignoreNULL = FALSE, {
+        
         selected_date <- input$fechas
         selected_momento <- input$momento
 
+        # Si hay algun raster que cumpla todas las elecciones,
+        # esto dara TRUE
         is_valid <- any(base_raster$locacion == input$area &
           base_raster$tipo_de_raster == input$porcentaje &
           base_raster$fecha == selected_date &
           base_raster$momento == selected_momento)
 
-
+        # Si no existe un raster para esta combinacion, 
+        # Imprimira un mensaje en la pantalla
         if (!is_valid) {
           showNotification("Combinación inválida de fecha y momento. Intenta con otra combinacion.", type = "error")
           return(terra::rast())
         }
 
-
         req(is_valid)
 
-        # Extraigo el raster que eligio el usuario
+        # Extraer el raster correspondiente
         raster_data <- base_raster |>
           dplyr::filter(
             fecha == as.Date(input$fechas,
@@ -205,30 +209,11 @@ FechaMomento_Server <- function(id,
             momento == input$momento, # es un valor no reactivo
             locacion == input$area
           )
-
-        print(raster_data)
-
-        # Los rasters de amba y baires estan en diferentes bases de datos
-        if (input$area == "amba") {
-          query <- paste0(
-            "SELECT ST_AsGDALRaster(rast, 'GTiff') AS rast FROM raster_schema.rasters_geo WHERE filename='",
-            raster_data$filename, "';"
-          )
-        } else {
-          query <- paste0(
-            "SELECT ST_AsGDALRaster(rast, 'GTiff') AS rast FROM raster_schema.raster_geo_baires WHERE filename='",
-            raster_data$filename, "';"
-          )
-        }
-
-        result <- pool::dbGetQuery(pool, query)
-        print(result)
-        # Save the binary raster data to a temporary file
-        temp_file <- tempfile(fileext = ".tif")
-        writeBin(result$rast[[1]], temp_file)
-
-        # Load the raster package and read the temporary file
-        terra::rast(temp_file)
+       
+       # Bajo el raster de la base de datos
+       rasterLoader(pool = pool,
+                    raster_data = raster_data,
+                    area = input$area)
       })
 
 

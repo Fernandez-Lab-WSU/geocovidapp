@@ -25,7 +25,7 @@ addBasemapTiles <- function(map) {
 #' Esta función agrega una capa de polígonos representando los partidos de la provincia de Buenos Aires
 #' al mapa Leaflet. Cada polígono tiene un estilo de borde y relleno configurable.
 #'
-#' @param map Mapa Leaflet al que se le añadirán los polígonos.
+#' @param mapa Mapa Leaflet al que se le añadirán los polígonos.
 #' @param data Conjunto de datos de clase `sf` que contiene la geometría de los polígonos.
 #' @param fillopacity_poly Valor numérico entre 0 y 1 que especifica la opacidad de relleno de los polígonos.
 #'
@@ -33,8 +33,8 @@ addBasemapTiles <- function(map) {
 #' @export
 #'
 #' @examples
-addPolygonsLayer <- function(map, data, fillopacity_poly) {
-  map |>
+addPolygonsLayer <- function(mapa, data, fillopacity_poly) {
+  mapa |>
     leaflet::addPolygons(
       data = data,
       layerId = data$partido,
@@ -47,4 +47,51 @@ addPolygonsLayer <- function(map, data, fillopacity_poly) {
       smoothFactor = 0.5                     )
 }
 
+#' Agregar leyenda al mapa raster
+#'
+#' @description
+#' Esta función agrega una imagen raster al mapa interactivo utilizando `leaflet` y agrega una leyenda que muestra el porcentaje de cambio
+#' en los valores del raster. La leyenda es configurada con colores binarios según los valores del raster y se posiciona en la esquina superior derecha.
+#'
+#' @param mapa Mapa Leaflet al que se le añadirán los polígonos.
+#' @param imagen Objeto `raster` que representa la imagen raster a ser agregada al mapa.
+#' @param opacidad Valor de opacidad que controla la transparencia de la imagen raster en el mapa.
+#' @param pal Objeto de tipo `colorBin` o `colorNumeric` de `leaflet` que define la paleta de colores que se usará para la visualización de los valores en el raster.
+#'
+#' @return Un objeto `leaflet` con la imagen raster agregada y una leyenda que muestra el porcentaje de cambio.
+#' 
+#' @export
+#'
+#' @examples
+#' # Ejemplo de uso:
+#' # Supongamos que 'imagen' es un objeto raster previamente cargado y 'opacidad' es un valor entre 0 y 1.
+#' # Definir la paleta de colores:
+#' pal <- leaflet::colorBin(
+#'   palette = c("#0000FF", "#0040FF", "#0080FF", "#00BFFF", "#00FFFF", "#FFFFFF", "#FFCC00", "#FF9900", "#FF6600", "#FF3300", "#FF0000"),
+#'   bins = c(50, 40, 30, 20, 10, 1, -1, -10, -20, -30, -40, -50),
+#'   na.color = "transparent"
+#' )
+#' mapa |> addRasterLegend(imagen = imagen, opacidad = 0.7, pal = pal)
+addRasterLegend <- function(mapa, imagen, opacidad, paleta, etiquetas){
 
+mapa |> 
+leaflet::removeImage(layerId = "raster") |>
+leaflet::addRasterImage(imagen,
+                        colors = paleta,
+                        opacity = opacidad,
+                        group = "basic",
+                        layerId = "raster",
+                        project = FALSE
+) |>
+  leaflet::removeControl("legend") |> # Evita que se duplique la leyenda
+  leaflet::addLegend(
+    pal = paleta, values = terra::values(imagen),
+    title = "Porcentaje de cambio",
+    position = "topright",
+    group = "basic",
+    layerId = "legend",
+    labFormat = function(type, cuts, p) {
+      paste0(etiquetas)
+    }
+  )
+}

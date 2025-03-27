@@ -125,7 +125,7 @@ MapaBaires_Server <- function(id, bsas,
           session = session
         )
 
-
+        # Cambio el mapa de base
         if (basemap() == "calles") {
           lm <- leafprox |>
             leaflet::clearTiles() |>
@@ -133,48 +133,18 @@ MapaBaires_Server <- function(id, bsas,
               group = "OpenStreetMap",
               layerId = "open"
             ) |>
-            leaflet::removeImage(layerId = "raster") |>
-            leaflet::addRasterImage(imagen(),
-              colors = pal,
-              opacity = opacidad(),
-              group = "basic",
-              layerId = "raster",
-              project = FALSE
-            ) |>
-            leaflet::removeControl("legend") |> # Evita que se duplique la leyenda
-            leaflet::addLegend(
-              pal = pal, values = terra::values(imagen()),
-              title = "Porcentaje de cambio",
-              position = "topright",
-              group = "basic",
-              layerId = "legend",
-              labFormat = function(type, cuts, p) {
-                paste0(labels)
-              }
-            )
+            addRasterLegend(imagen = imagen(),
+                            opacidad = opacidad(),
+                            pal = pal)
+
         } else if (basemap() == "relieve") {
           lm <- leafprox |>
             leaflet::clearTiles() |>
             addBasemapTiles() |>
-            leaflet::removeImage(layerId = "raster") |>
-            leaflet::addRasterImage(imagen(),
-              colors = pal,
-              opacity = opacidad(),
-              group = "basic",
-              layerId = "raster",
-              project = FALSE
-            ) |>
-            leaflet::removeControl("legend") |> # Evita que se duplique la leyenda
-            leaflet::addLegend(
-              pal = pal, values = terra::values(imagen()),
-              title = "Porcentaje de cambio",
-              position = "topright",
-              group = "basic",
-              layerId = "legend",
-              labFormat = function(type, cuts, p) {
-                paste0(labels)
-              }
-            )
+            addRasterLegend(imagen = imagen(),
+                            opacidad = opacidad(),
+                            pal = pal,
+                            etiquetas = labels)
         }
       })
 

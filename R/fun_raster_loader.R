@@ -1,17 +1,55 @@
-#' Title
+#' Carga de raster desde la base de datos
 #'
-#' @param raster_data 
-#' @param area 
+#' Esta función se encarga de cargar un archivo raster desde la base de datos según el área especificada 
+#' (AMBA o Buenos Aires). Utiliza una consulta SQL para recuperar el raster como un archivo binario 
+#' y lo guarda temporalmente como un archivo `.tif`, que luego es cargado como un objeto raster 
+#' utilizando el paquete `terra`.
 #'
-#' @returns
+#' @param pool Conexión al pool de base de datos.
+#' @param raster_data Un dataframe que contiene la información del raster, incluyendo el nombre del archivo (filename).
+#' @param area Una cadena de texto que indica el área de interés. Puede ser "amba" o "baires".
+#'
+#' @return Un objeto `rast` del paquete `terra`, que representa el archivo raster cargado desde la base de datos.
 #' @export
 #'
 #' @examples
+#' \donttest{
+#' # Ejemplo de uso en entorno interactivo
+#' # Conecto con la base de datos
+#' db <- config::get("database")
+#'
+#'pool <- pool::dbPool(
+#'  drv = RPostgres::Postgres(),
+#'  dbname = db$dbname,
+#'  user = db$user,
+#'  password = db$password,
+#'  port = db$port,
+#'  host = db$host
+#' )
+#' onStop(function() {
+#'   pool::poolClose(pool)
+#' })
+#' 
+#' raster_data <- base_raster |>
+#' dplyr::filter(
+#'  fecha == as.Date("2020-05-10",
+#'                   origin = "1970-01-01"
+#'  ),
+#'  tipo_de_raster == "pc",
+#'  momento == "noche", 
+#'  locacion == "amba"
+#' )
+#' 
+#' raster <- rasterLoader(pool = pool, 
+#'                        raster_data = raster_data,
+#'                        area = "amba")
+#' }
 rasterLoader <- function(pool,
                          raster_data, 
                          area){
   
-  # Los rasters de amba y baires estan en diferentes bases de datos
+  # Los rasters de amba y baires estan en diferentes tablas dentro de la base
+  # porque tienen distintos tamaños
   if (area == "amba") {
     query <- paste0(
       "SELECT ST_AsGDALRaster(rast, 'GTiff') AS rast FROM raster_schema.rasters_geo WHERE filename='",
@@ -25,11 +63,11 @@ rasterLoader <- function(pool,
   }
   
   result <- pool::dbGetQuery(pool, query)
-  print(result)
-  # Save the binary raster data to a temporary file
+
+  # Guarda el binario a un archivo temporario
   temp_file <- tempfile(fileext = ".tif")
   writeBin(result$rast[[1]], temp_file)
   
-  # Load the raster package and read the temporary file
+  # Carga el raster leyendolo desde el archivo temporario
   return(terra::rast(temp_file))
     }
