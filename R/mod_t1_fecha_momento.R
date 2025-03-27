@@ -27,7 +27,7 @@ FechaMomento_UI <- function(id, base_raster) {
       ),
       shiny::column(
         2, 
-BotonAyuda_UI(ns('barra-flotante'))
+BotonAyuda_UI(ns('tab1_menuflotante'))
       )
     ),
     shiny::radioButtons(ns("area"),
@@ -234,7 +234,7 @@ FechaMomento_Server <- function(id,
         }
       })
 
-      BotonAyuda_Server('barra-flotante')
+      BotonAyuda_Server('tab1_menuflotante')
 
       return(
         list(

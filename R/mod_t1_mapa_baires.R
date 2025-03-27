@@ -18,10 +18,10 @@ MapaBaires_UI <- function(id) {
 
   shiny::tagList(
     shiny::fillPage(
-      leaflet::leafletOutput(ns("leaflet_baires"),
+      leaflet::leafletOutput(ns("tab1_leaflet_baires"),
         height = "90vh"
       ),
-      BarraInferior_UI(ns('t1-mapa-barrainferior')),
+      BarraInferior_UI(ns('tab1_texto_info')),
       header = tags$style(HTML("
                                         .container-fluid{
                                           padding: 0px !important;
@@ -91,7 +91,7 @@ MapaBaires_Server <- function(id, bsas,
       )
 
       # Renderiza el mapa de la provincia de Buenos Aires
-      output$leaflet_baires <- leaflet::renderLeaflet({
+      output$tab1_leaflet_baires <- leaflet::renderLeaflet({
         base_map <- leaflet::leaflet() |>
           addBasemapTiles() |>
           leaflet.extras::addResetMapButton() |>
@@ -116,7 +116,7 @@ MapaBaires_Server <- function(id, bsas,
       # Ahora observo cambios en la opacidad y mapa de base
       shiny::observe({
         leafprox <- leaflet::leafletProxy(
-          mapId = "leaflet_baires",
+          mapId = "tab1_leaflet_baires",
           session = session
         )
 
@@ -145,10 +145,10 @@ MapaBaires_Server <- function(id, bsas,
       })
 
       # Click en el mapa de la provincia de BsAs permite acercarme al mapa
-      shiny::observeEvent(input$inter_mapa_shape_click, {
-        click <- input$inter_mapa_shape_click
+      shiny::observeEvent(input$tab1_leaflet_baires_shape_click, {
+        click <- input$tab1_leaflet_baires_shape_click
 
-        leaflet::leafletProxy("leaflet_baires") |>
+        leaflet::leafletProxy("tab1_leaflet_baires") |>
           leaflet::setView(
             lng = click$lng,
             lat = click$lat,
@@ -157,7 +157,7 @@ MapaBaires_Server <- function(id, bsas,
       })
 
 
-BarraInferior_Server('t1-mapa-barrainferior',
+BarraInferior_Server('tab1_texto_info',
                      boton = boton,
                      area = area,
                      fecha = fecha,
@@ -165,7 +165,7 @@ BarraInferior_Server('t1-mapa-barrainferior',
                      porcentaje = porcentaje )
 
       return(list(mapa_zoom = reactive({
-        input$inter_mapa_zoom
+        input$tab1_leaflet_baires_zoom
       })))
     }
   )

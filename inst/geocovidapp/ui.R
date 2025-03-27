@@ -9,7 +9,7 @@ ui <- function() {
       package = "geocovidapp"
     )),
     shinyjs::useShinyjs(),
-    position = "fixed-top", # el zoom al mapa del tab1 traia problemas sino.
+    position = "fixed-top", # Zoom al mapa del tab1
     tags$style(type = "text/css", ".navbar{padding-left:30px}"),
     lang = "es",
     theme = bslib::bs_theme(
@@ -45,14 +45,14 @@ ui <- function() {
         # me permite que se vean los controles
         # por encima del mapa
         style = "z-index:500;",
-        geocovidapp::FechaMomento_UI("tab1-barraflotante",
+        geocovidapp::FechaMomento_UI("tab1_barraflotante",
           base_raster = base_raster
         ),
         draggable = TRUE,
         width = "350px"
       ),
       shinycssloaders::withSpinner(
-        geocovidapp::MapaBaires_UI("tab1-mapa"),
+        geocovidapp::MapaBaires_UI("tab1_mapa"),
         type = 2,
         color = "lightgrey",
         color.background = "white"
