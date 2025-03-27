@@ -12,7 +12,7 @@
 #' @export
 #'
 #' @examples
-FechaMomentoUI <- function(id, base_raster) {
+FechaMomento_UI <- function(id, base_raster) {
   ns <- NS(id)
  
   # Crear lista única de momentos del día y asignar nombres
@@ -27,7 +27,7 @@ FechaMomentoUI <- function(id, base_raster) {
       ),
       shiny::column(
         2, 
-Boton_Ayuda_UI(ns('barra-flotante'))
+BotonAyuda_UI(ns('barra-flotante'))
       )
     ),
     shiny::radioButtons(ns("area"),
@@ -217,7 +217,7 @@ FechaMomento_Server <- function(id,
       })
 
 
-      # revelo la barra de transparencia cuando el zoom es mayor a 6
+      # revelo opciones cuando el zoom es mayor a 6
       shiny::observeEvent(mapa_zoom(), {
         if (mapa_zoom() <= 6) {
           shinyjs::hide("opacity")
@@ -234,7 +234,7 @@ FechaMomento_Server <- function(id,
         }
       })
 
-      Boton_Ayuda_Server('barra-flotante')
+      BotonAyuda_Server('barra-flotante')
 
       return(
         list(

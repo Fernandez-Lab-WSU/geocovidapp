@@ -1,4 +1,4 @@
-Boton_Ayuda_UI <- function(id) {
+BotonAyuda_UI <- function(id) {
   ns <- NS(id)
   tagList(
     shiny::actionButton(ns("help_button"),
@@ -24,7 +24,7 @@ Boton_Ayuda_UI <- function(id) {
   )
 }
 
-Boton_Ayuda_Server <- function(id) {
+BotonAyuda_Server <- function(id) {
   moduleServer(
     id,
     function(input, output, session) {

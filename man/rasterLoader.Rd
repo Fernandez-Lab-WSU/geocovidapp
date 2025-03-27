@@ -2,15 +2,56 @@
 % Please edit documentation in R/fun_raster_loader.R
 \name{rasterLoader}
 \alias{rasterLoader}
-\title{Title}
+\title{Carga de raster desde la base de datos}
 \usage{
 rasterLoader(pool, raster_data, area)
 }
 \arguments{
-\item{raster_data}{}
+\item{pool}{Conexión al pool de base de datos.}
 
-\item{area}{}
+\item{raster_data}{Un dataframe que contiene la información del raster, incluyendo el nombre del archivo (filename).}
+
+\item{area}{Una cadena de texto que indica el área de interés. Puede ser "amba" o "baires".}
+}
+\value{
+Un objeto \code{rast} del paquete \code{terra}, que representa el archivo raster cargado desde la base de datos.
 }
 \description{
-Title
+Esta función se encarga de cargar un archivo raster desde la base de datos según el área especificada
+(AMBA o Buenos Aires). Utiliza una consulta SQL para recuperar el raster como un archivo binario
+y lo guarda temporalmente como un archivo \code{.tif}, que luego es cargado como un objeto raster
+utilizando el paquete \code{terra}.
+}
+\examples{
+\donttest{
+# Ejemplo de uso en entorno interactivo
+# Conecto con la base de datos
+db <- config::get("database")
+
+pool <- pool::dbPool(
+ drv = RPostgres::Postgres(),
+ dbname = db$dbname,
+ user = db$user,
+ password = db$password,
+ port = db$port,
+ host = db$host
+)
+onStop(function() {
+  pool::poolClose(pool)
+})
+
+raster_data <- base_raster |>
+dplyr::filter(
+ fecha == as.Date("2020-05-10",
+                  origin = "1970-01-01"
+ ),
+ tipo_de_raster == "pc",
+ momento == "noche", 
+ locacion == "amba"
+)
+
+raster <- rasterLoader(pool = pool, 
+                       raster_data = raster_data,
+                       area = "amba")
+}
 }

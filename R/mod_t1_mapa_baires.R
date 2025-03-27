@@ -18,10 +18,10 @@ MapaBaires_UI <- function(id) {
 
   shiny::tagList(
     shiny::fillPage(
-      leaflet::leafletOutput(ns("inter_mapa"),
+      leaflet::leafletOutput(ns("leaflet_baires"),
         height = "90vh"
       ),
-      BarraInferior_UI(ns('tab1-mapa-baires')),
+      BarraInferior_UI(ns('t1-mapa-barrainferior')),
       header = tags$style(HTML("
                                         .container-fluid{
                                           padding: 0px !important;
@@ -91,7 +91,7 @@ MapaBaires_Server <- function(id, bsas,
       )
 
       # Renderiza el mapa de la provincia de Buenos Aires
-      output$inter_mapa <- leaflet::renderLeaflet({
+      output$leaflet_baires <- leaflet::renderLeaflet({
         base_map <- leaflet::leaflet() |>
           addBasemapTiles() |>
           leaflet.extras::addResetMapButton() |>
@@ -116,7 +116,7 @@ MapaBaires_Server <- function(id, bsas,
       # Ahora observo cambios en la opacidad y mapa de base
       shiny::observe({
         leafprox <- leaflet::leafletProxy(
-          mapId = "inter_mapa",
+          mapId = "leaflet_baires",
           session = session
         )
 
@@ -148,7 +148,7 @@ MapaBaires_Server <- function(id, bsas,
       shiny::observeEvent(input$inter_mapa_shape_click, {
         click <- input$inter_mapa_shape_click
 
-        leaflet::leafletProxy("inter_mapa") |>
+        leaflet::leafletProxy("leaflet_baires") |>
           leaflet::setView(
             lng = click$lng,
             lat = click$lat,
@@ -157,7 +157,7 @@ MapaBaires_Server <- function(id, bsas,
       })
 
 
-BarraInferior_Server('tab1-mapa-baires',
+BarraInferior_Server('t1-mapa-barrainferior',
                      boton = boton,
                      area = area,
                      fecha = fecha,

@@ -4,10 +4,10 @@
 \alias{addPolygonsLayer}
 \title{Agrega polígonos de un conjunto de datos al mapa Leaflet}
 \usage{
-addPolygonsLayer(map, data, fillopacity_poly)
+addPolygonsLayer(mapa, data, fillopacity_poly)
 }
 \arguments{
-\item{map}{Mapa Leaflet al que se le añadirán los polígonos.}
+\item{mapa}{Mapa Leaflet al que se le añadirán los polígonos.}
 
 \item{data}{Conjunto de datos de clase \code{sf} que contiene la geometría de los polígonos.}
 
