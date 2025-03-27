@@ -48,8 +48,8 @@ rasterLoader <- function(pool,
                          raster_data, 
                          area){
   
-  con <- pool::poolCheckout(pool)  # Obtienes la conexión
-  on.exit(pool::poolReturn(con))   # Aseguras que se devuelva al pool cuando la función termine
+ # con <- pool::poolCheckout(pool)  # Obtienes la conexión
+ # on.exit(pool::poolReturn(con))   # Aseguras que se devuelva al pool cuando la función termine
   
   # Los rasters de amba y baires estan en diferentes tablas dentro de la base
   # porque tienen distintos tamaños
