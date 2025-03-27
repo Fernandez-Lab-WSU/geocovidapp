@@ -28,9 +28,9 @@ raster_valido <- function(area, porcentaje, fecha, momento, base_raster) {
   # Voy a extraer tambien cuales son los rasters faltantes 
   # con respecto al tipo de cambio porcentual
   faltantes <- base_raster |> 
-    filter(locacion == area,
-           fecha == fecha,
-           momento == momento)
+    dplyr::filter(.data$locacion == area,
+           .data$fecha == as.Date(fecha, format = "%Y-%m-%d"),
+           .data$momento == momento)
   
 
   if (nrow(faltantes) == 0) {

@@ -185,21 +185,24 @@ FechaMomento_Server <- function(id,
                       porcentaje = input$porcentaje,
                       fecha = input$fechas,
                       momento = input$momento)
+        
         print('es_valido')
         print(es_valido)
+
         # Si no existe un raster para esta combinación, mostrar la notificación
         if (!es_valido$combinacion_valida) {
           
           # Mostrar una notificación de error
           showNotification(
             paste(es_valido$faltan),
-            type = "error"
+            type = "error",
+            closeButton = TRUE,  # Cierra el mensaje
+            duration = NULL      # Set to NULL to keep the notification open indefinitely
           )
           
           return(terra::rast()) # Devuelve un raster vacío si no es válido
         }
         
-
         req(es_valido$combinacion_valida)
 
         # Extraer el raster correspondiente
@@ -212,6 +215,9 @@ FechaMomento_Server <- function(id,
             momento == input$momento, # es un valor no reactivo
             locacion == input$area
           )
+        
+      print('raster_data')
+      print(raster_data)
        
        # Bajo el raster de la base de datos
        rasterLoader(pool = pool,
