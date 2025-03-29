@@ -1,6 +1,6 @@
 ---
 title: "GeoCovid"
-output: html_document
+output: word_document
 params:
   partido: 'AVELLANEDA'
   fecha: NA
@@ -19,7 +19,6 @@ params:
 library(knitr)
 knitr::opts_chunk$set(echo = FALSE,
                       fig.align = "center")
-library(leaflet)
 
 ```
 
@@ -37,8 +36,8 @@ generar el reporte.*
 ```{r mapa_manana}
 
 # Asegúrate de tener la ruta correcta del archivo temporal
-#knitr::include_graphics(params$map_path1)
-params$map_path1
+knitr::include_graphics(params$map_path1)
+
 ```
 
 
@@ -46,15 +45,14 @@ params$map_path1
 ```{r mapa_tarde}
 
 # Asegúrate de tener la ruta correcta del archivo temporal
-#knitr::include_graphics(params$map_path2)
-params$map_path2
+knitr::include_graphics(params$map_path2)
+
 ```
 
 #### Noche
 ```{r mapa_noche}
 
 # Asegúrate de tener la ruta correcta del archivo temporal
-#knitr::include_graphics(params$map_path3)
-params$map_path3
-```
+knitr::include_graphics(params$map_path3)
 
+```

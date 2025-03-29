@@ -36,13 +36,9 @@ ReporteUI <- function(id) {
 #' @return Devuelve un reporte en base a las selecciones en el tab2.
 #' @export
 ReporteServer <- function(id,
-                          part, 
-                          fecha,
-                          base_raster, 
-                          bsas, 
-                          area,
-                          tipo_de_raster, 
-                          opacidad,
+                          part, fecha,
+                          base_raster, bsas, area,
+                          tipo_de_raster, opacidad,
                           mapa_partido_manana,
                           mapa_partido_tarde,
                           mapa_partido_noche) {
@@ -51,18 +47,18 @@ ReporteServer <- function(id,
     function(input, output, session) {
       
       #https://forum.posit.co/t/how-to-properly-configure-google-chrome-on-shinyapps-io-because-of-webshot2/109020/4
-     # message(curl::curl_version) # check curl is installed
-     # if (identical(Sys.getenv("R_CONFIG_ACTIVE"), "shinyapps")) {
-     #   chromote::set_default_chromote_object(
-     #     chromote::Chromote$new(chromote::Chrome$new(
-     #       args = c("--disable-gpu",
-     #                "--no-sandbox",
-     #                "--disable-dev-shm-usage", # required bc the target easily crashes
-     #                c("--force-color-profile", "srgb"))
-     #     ))
-     #   )
-     # }
-
+      # message(curl::curl_version) # check curl is installed
+      # if (identical(Sys.getenv("R_CONFIG_ACTIVE"), "shinyapps")) {
+      #   chromote::set_default_chromote_object(
+      #     chromote::Chromote$new(chromote::Chrome$new(
+      #       args = c("--disable-gpu",
+      #                "--no-sandbox",
+      #                "--disable-dev-shm-usage", # required bc the target easily crashes
+      #                c("--force-color-profile", "srgb"))
+      #     ))
+      #   )
+      # }
+      
       fecha_val <- reactive({
         f <- fecha()
 
@@ -73,32 +69,31 @@ ReporteServer <- function(id,
           as.Date(f)  # Extraigo la fecha solamente
         }
       })
-
-            output$reporte <- downloadHandler(
+      
+      output$reporte <- downloadHandler(
         # https://community.rstudio.com/t/retain-formatting-on-a-pdf-output-from-shiny-downloadhandler/36410
         filename = function(){
-          paste0("GeoCovid_", part(), "_", as.character(fecha_val()), ".pdf")
-          },
+          paste0("GeoCovid_", part(), "_", as.character(fecha_val()), ".docx")
+        },
         content = function(file) {
-
+          
           my_tempdir <- tempdir()
           path_report <- file.path(my_tempdir,
                                    "reporte.Rmd")
           
-
-         # Copy the reporte.Rmd from the inst folder of the package to the temporary directory
+          
+          # Copy the reporte.Rmd from the inst folder of the package to the temporary directory
           reporte_path <- system.file("geocovidapp/reporte.Rmd", package = "geocovidapp")
           if (reporte_path == "") stop("reporte.Rmd not found in package.")
           
           file.copy(reporte_path, path_report, overwrite = TRUE)
-
+          
           # Como quiero obtener los mapas en un docx tengo que convertirlos en imagen
           # un mapa leaflet es un widget html y no se puede renderizar en un docx
-         # map_path1 <- guarda_imagen_leaflet(mapa_partido_manana(), "mapa_manana")
-         # map_path2 <- guarda_imagen_leaflet(mapa_partido_tarde(), "mapa_tarde")
-         # map_path3 <- guarda_imagen_leaflet(mapa_partido_noche(), "mapa_noche")
-   print('mapa_partido_manana()')
-   print(mapa_partido_manana())
+          map_path1 <- guarda_imagen_leaflet(mapa_partido_manana(), "mapa_manana")
+          map_path2 <- guarda_imagen_leaflet(mapa_partido_tarde(), "mapa_tarde")
+          map_path3 <- guarda_imagen_leaflet(mapa_partido_noche(), "mapa_noche")
+          
           params <- list(
             partido = part(),
             fecha = fecha_val(),
@@ -107,35 +102,31 @@ ReporteServer <- function(id,
             base_raster = base_raster,
             bsas = bsas,
             area = area(),
-            map_path1 = mapa_partido_manana(), #map_path1,
-            map_path2 = mapa_partido_tarde(), #map_path2,
-            map_path3 = mapa_partido_noche(), #map_path3,
+            map_path1 = map_path1,
+            map_path2 = map_path2,
+            map_path3 = map_path3,
             pandoc = rmarkdown::pandoc_version()
           )
           
           # Ensure cleanup after use
-          # on.exit({
-          #   file.remove(map_path1, map_path2, map_path3)
-          # }, add = TRUE)
-          # 
-
+          on.exit({
+            file.remove(map_path1, map_path2, map_path3)
+          }, add = TRUE)
+          
+          
           id <- showNotification(
             "Preparando reporte...",
             duration = 5,
             closeButton = FALSE
           )
           on.exit(removeNotification(id), add = TRUE)
-
-          html_file <- file.path(my_tempdir, "reporte.html")
+          
           rmarkdown::render(path_report, # es el path al directorio temporario
-                            output_file = html_file,
-                            output_format = rmarkdown::html_document(), #rmarkdown::word_document(),#reference_docx = tempTemplate
+                            output_file = file,
+                            output_format = rmarkdown::word_document(),#reference_docx = tempTemplate
                             params = params,
                             envir = new.env(parent = globalenv())
           )
-          
-          # Convierte el HTML a PDF con pagedown
-          pagedown::chrome_print(input = html_file, output = file)
         }
       )
     }
