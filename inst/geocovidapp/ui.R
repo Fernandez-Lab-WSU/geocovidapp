@@ -125,7 +125,7 @@ ui <- function() {
             bslib::card_header("Porcentaje de cambio"),
             shiny::tags$div(
               style = "padding:0px;margin-top:0px",
-              includeHTML("www/legend_leaflet.html")
+              includeHTML("www/leyenda_leaflet.html")
             )
           )
         )

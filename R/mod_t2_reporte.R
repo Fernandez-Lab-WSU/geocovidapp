@@ -92,11 +92,13 @@ ReporteServer <- function(id,
           
           # Como quiero obtener los mapas en un docx tengo que convertirlos en imagen
           # un mapa leaflet es un widget html y no se puede renderizar en un docx
-          map_path1 <- guarda_imagen_leaflet(mapa_partido_manana(), "mapa_manana")
-          map_path2 <- guarda_imagen_leaflet(mapa_partido_tarde(), "mapa_tarde")
-          map_path3 <- guarda_imagen_leaflet(mapa_partido_noche(), "mapa_noche")
-          graf_path1 <- guarda_imagen_leaflet(grafico_casos_prov(), "casos_prov")
-          graf_path2 <- guarda_imagen_leaflet(grafico_casos_dpto(), "casos_dpto")
+          map_path1 <- guarda_imagen_html(mapa_partido_manana(), "mapa_manana")
+          map_path2 <- guarda_imagen_html(mapa_partido_tarde(), "mapa_tarde")
+          map_path3 <- guarda_imagen_html(mapa_partido_noche(), "mapa_noche")
+          graf_path1 <- guarda_imagen_html(grafico_casos_prov(), "casos_prov")
+          graf_path2 <- guarda_imagen_html(grafico_casos_dpto(), "casos_dpto")
+          leyenda <- guarda_imagen_html(system.file("geocovidapp/www/leyenda_leaflet.html", 
+                                                    package = "geocovidapp"), "leyenda")
           
           
           params <- list(
@@ -112,18 +114,20 @@ ReporteServer <- function(id,
             map_path3 = map_path3,
             graf_path1 = graf_path1,
             graf_path2 = graf_path2,
+            leyenda = leyenda,
             pandoc = rmarkdown::pandoc_version()
           )
           
           # Ensure cleanup after use
           on.exit({
-            file.remove(map_path1, map_path2, map_path3)
+            file.remove(map_path1, map_path2, map_path3,
+                        graf_path1, graf_path2, leyenda)
           }, add = TRUE)
           
           
           id <- showNotification(
             "Preparando reporte...",
-            duration = 5,
+            duration = 10,
             closeButton = FALSE
           )
           on.exit(removeNotification(id), add = TRUE)

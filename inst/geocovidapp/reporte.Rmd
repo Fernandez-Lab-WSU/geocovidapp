@@ -13,6 +13,7 @@ params:
   graf_path1: NA
   graf_path2: NA
   map_path3: NA
+  leyenda: NA
   pandoc: NA
   opacidad: 0.5
 ---
@@ -22,7 +23,6 @@ library(knitr)
 knitr::opts_chunk$set(echo = FALSE)
 
 ```
-
 
 ## Reporte para `r params$partido` 
 ### Fecha: `r params$fecha`
@@ -46,7 +46,16 @@ knitr::include_graphics(params$graf_path2)
 ```
 
 ### Mapas
+
+
 #### Mañana
+
+```{r mapa_manana}
+
+# Asegúrate de tener la ruta correcta del archivo temporal
+knitr::include_graphics(params$leyenda)
+
+```
 
 ```{r mapa_manana}
 
