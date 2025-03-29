@@ -140,151 +140,160 @@ data_xts_caba <- xts::xts(dcaba,
 
  })
 
+grafico_casos_prov <- reactive({ 
+  if(part() %in% amba_reducido_names &
+     stringr::str_detect(as.character(part()),
+                         pattern = '^Comuna') | # si quiero ver datos de comuna
+     dim(dplyr::filter(data_sisa,
+                       .data$residencia_departamento_nombre == part()))[1] == 0){ # si no hay casos en el partido
+    
+    data_plot <- data_xts()
+    
+    dygraphs::dygraph(data_plot$bsas,
+                      group = 'A')  |>
+      dygraphs::dySeries("BsAs",
+                         color = '#186E8B') |>
+      dygraphs::dyAxis("y",
+                       label = "Nro. de casos") |>
+      dygraphs::dyOptions(labelsUTC = TRUE,
+                          drawGrid = FALSE
+      ) |>
+      dygraphs::dyHighlight(highlightCircleSize = 3,
+                            highlightSeriesBackgroundAlpha = 0.4,
+                            hideOnMouseOut = TRUE) |>
+      dygraphs::dyCrosshair(direction = "vertical")  |>
+      dygraphs::dyEvent("2020-04-13", 
+                        "Managed isolation",
+                        labelLoc = "bottom")|>
+      dygraphs::dyEvent("2020-04-26", 
+                        "Geographic segmentation",
+                        labelLoc = "bottom") |>
+      dygraphs::dyEvent("2020-05-10", 
+                        "Progressive reopening",
+                        labelLoc = "bottom") |>
+      dygraphs::dyLegend(show = "follow",
+                         width = 400
+      ) |>
+      dygraphs::dyCSS(system.file("geocovidapp/www/legend.css", 
+                                  package = "geocovidapp"))
+    
+  }else{
+    
+    data_plot <- data_xts()
+    
+    dygraphs::dygraph(data_plot$cabaybsas,
+                      group = 'A')  |>
+      dygraphs::dySeries("BsAs",
+                         color = '#186E8B') |>
+      dygraphs::dySeries("CABA",
+                         color = '#301A4B') |>
+      dygraphs::dyAxis("y",
+                       label = "Nro. de casos") |>
+      dygraphs::dyOptions(labelsUTC = TRUE,
+                          drawGrid = FALSE
+      ) |>
+      dygraphs::dyHighlight(highlightCircleSize = 3,
+                            highlightSeriesBackgroundAlpha = 0.4,
+                            hideOnMouseOut = TRUE) |>
+      dygraphs::dyCrosshair(direction = "vertical")  |>
+      dygraphs::dyEvent("2020-04-13", 
+                        "Managed isolation",
+                        labelLoc = "bottom")|>
+      dygraphs::dyEvent("2020-04-26",
+                        "Geographic segmentation",
+                        labelLoc = "bottom") |>
+      dygraphs::dyEvent("2020-05-10", 
+                        "Progressive reopening",
+                        labelLoc = "bottom") |>
+      dygraphs::dyLegend(
+        show = "follow",
+        width = 400
+      ) |>
+      dygraphs::dyCSS(system.file("geocovidapp/www/legend.css", 
+                                  package = "geocovidapp"))
+    
+  }
+  })
+
   output$casos_prov <- dygraphs::renderDygraph({
 
-    if(part() %in% amba_reducido_names &
-       stringr::str_detect(as.character(part()),
-                           pattern = '^Comuna') | # si quiero ver datos de comuna
-       dim(dplyr::filter(data_sisa,
-                         .data$residencia_departamento_nombre == part()))[1] == 0){ # si no hay casos en el partido
-
-      data_plot <- data_xts()
-
-dygraphs::dygraph(data_plot$bsas,
-              group = 'A')  |>
-        dygraphs::dySeries("BsAs",
-                 color = '#186E8B') |>
-        dygraphs::dyAxis("y",
-               label = "Nro. de casos") |>
-        dygraphs::dyOptions(labelsUTC = TRUE,
-                  drawGrid = FALSE
-        ) |>
-        dygraphs::dyHighlight(highlightCircleSize = 3,
-                    highlightSeriesBackgroundAlpha = 0.4,
-                    hideOnMouseOut = TRUE) |>
-        dygraphs::dyCrosshair(direction = "vertical")  |>
-        dygraphs::dyEvent("2020-04-13", 
-                          "Managed isolation",
-                labelLoc = "bottom")|>
-        dygraphs::dyEvent("2020-04-26", 
-                          "Geographic segmentation",
-                labelLoc = "bottom") |>
-        dygraphs::dyEvent("2020-05-10", 
-                          "Progressive reopening",
-                labelLoc = "bottom") |>
-        dygraphs::dyLegend(show = "follow",
-                 width = 400
-                ) |>
-  dygraphs::dyCSS(system.file("geocovidapp/www/legend.css", 
-                              package = "geocovidapp"))
-
-      }else{
-
-        data_plot <- data_xts()
-
-        dygraphs::dygraph(data_plot$cabaybsas,
-                group = 'A')  |>
-          dygraphs::dySeries("BsAs",
-                   color = '#186E8B') |>
-          dygraphs::dySeries("CABA",
-                   color = '#301A4B') |>
-          dygraphs::dyAxis("y",
-                 label = "Nro. de casos") |>
-          dygraphs::dyOptions(labelsUTC = TRUE,
-                    drawGrid = FALSE
-          ) |>
-          dygraphs::dyHighlight(highlightCircleSize = 3,
-                      highlightSeriesBackgroundAlpha = 0.4,
-                      hideOnMouseOut = TRUE) |>
-          dygraphs::dyCrosshair(direction = "vertical")  |>
-          dygraphs::dyEvent("2020-04-13", 
-                            "Managed isolation",
-                  labelLoc = "bottom")|>
-          dygraphs::dyEvent("2020-04-26",
-                            "Geographic segmentation",
-                  labelLoc = "bottom") |>
-          dygraphs::dyEvent("2020-05-10", 
-                            "Progressive reopening",
-                  labelLoc = "bottom") |>
-          dygraphs::dyLegend(
-            show = "follow",
-            width = 400
-            ) |>
-          dygraphs::dyCSS(system.file("geocovidapp/www/legend.css", 
-                                      package = "geocovidapp"))
-
- }
+   grafico_casos_prov()
 
 })
 
+grafico_casos_dpto <-  reactive({
+  data_plot <- data_xts()
+  
+  if(as.character(area()) == 'amba' &
+     stringr::str_detect(as.character(part()),
+                         pattern = '^Comuna') || # si quiero ver datos de comuna
+     dim(dplyr::filter(data_sisa,
+                       .data$residencia_departamento_nombre == part()))[1] == 0){ # si no hay casos en el partido
+    
+    
+    dygraphs::dygraph(data_plot$caba,
+                      group = 'A')  |>
+      dygraphs::dySeries("CABA",
+                         color = '#301A4B') |>
+      dygraphs::dyAxis("y",
+                       label = "Nro. de casos") |>
+      dygraphs::dyOptions(labelsUTC = TRUE,
+                          drawGrid = FALSE
+      ) |>
+      dygraphs::dyHighlight(highlightCircleSize = 3,
+                            highlightSeriesBackgroundAlpha = 0.4,
+                            hideOnMouseOut = TRUE) |>
+      dygraphs::dyEvent("2020-04-13")|>
+      dygraphs::dyEvent("2020-04-26") |>
+      dygraphs::dyEvent("2020-05-10") |>
+      dygraphs::dyLegend(
+        show = "follow",
+        width = 400
+      ) |>
+      dygraphs::dyCSS(system.file("www/legend.css", 
+                                  package = "geocovidapp"))
+    
+    
+  }else{
+    
+    
+    dygraphs::dygraph(data_plot$partido,
+                      group = 'A') |>
+      dygraphs::dySeries(colnames(data_plot$partido)[2], # nombre del partido
+                         color = '#6C9AC6') |>
+      dygraphs::dyAxis("y",
+                       label = "Nro. de casos") |>
+      dygraphs::dyOptions(labelsUTC = TRUE,
+                          drawGrid = FALSE
+      ) |>
+      dygraphs::dyHighlight(highlightCircleSize = 3,
+                            highlightSeriesBackgroundAlpha = 0.4,
+                            hideOnMouseOut = TRUE) |>
+      dygraphs::dyEvent("2020-04-13")|>
+      dygraphs::dyEvent("2020-04-26") |>
+      dygraphs::dyEvent("2020-05-10") |>
+      dygraphs::dyLegend(
+        show = "follow",
+        width = 400
+      ) |>
+      dygraphs::dyCSS(system.file("geocovidapp/www/legend.css", 
+                                  package = "geocovidapp"))
+  }
+               })
+  
 output$casos_dpto <- dygraphs::renderDygraph({
 
-
-    data_plot <- data_xts()
-
-    if(as.character(area()) == 'amba' &
-       stringr::str_detect(as.character(part()),
-                           pattern = '^Comuna') || # si quiero ver datos de comuna
-       dim(dplyr::filter(data_sisa,
-                   .data$residencia_departamento_nombre == part()))[1] == 0){ # si no hay casos en el partido
-
-
-      dygraphs::dygraph(data_plot$caba,
-                  group = 'A')  |>
-        dygraphs::dySeries("CABA",
-                  color = '#301A4B') |>
-        dygraphs::dyAxis("y",
-                  label = "Nro. de casos") |>
-        dygraphs::dyOptions(labelsUTC = TRUE,
-                  drawGrid = FALSE
-        ) |>
-        dygraphs::dyHighlight(highlightCircleSize = 3,
-                    highlightSeriesBackgroundAlpha = 0.4,
-                    hideOnMouseOut = TRUE) |>
-        dygraphs::dyEvent("2020-04-13")|>
-        dygraphs::dyEvent("2020-04-26") |>
-        dygraphs::dyEvent("2020-05-10") |>
-        dygraphs::dyLegend(
-          show = "follow",
-          width = 400
-          ) |>
-        dygraphs::dyCSS(system.file("www/legend.css", 
-                                    package = "geocovidapp"))
-
-
-    }else{
-
-
-      dygraphs::dygraph(data_plot$partido,
-                  group = 'A') |>
-        dygraphs::dySeries(colnames(data_plot$partido)[2], # nombre del partido
-                  color = '#6C9AC6') |>
-        dygraphs::dyAxis("y",
-               label = "Nro. de casos") |>
-        dygraphs::dyOptions(labelsUTC = TRUE,
-                  drawGrid = FALSE
-        ) |>
-        dygraphs::dyHighlight(highlightCircleSize = 3,
-                    highlightSeriesBackgroundAlpha = 0.4,
-                    hideOnMouseOut = TRUE) |>
-        dygraphs::dyEvent("2020-04-13")|>
-        dygraphs::dyEvent("2020-04-26") |>
-        dygraphs::dyEvent("2020-05-10") |>
-        dygraphs::dyLegend(
-          show = "follow",
-          width = 400
-          ) |>
-        dygraphs::dyCSS(system.file("geocovidapp/www/legend.css", 
-                                    package = "geocovidapp"))
-    }
-
+  grafico_casos_dpto()
 
   })
 
-  return(
-    list(
-      casos_covid = reactive({ input$casos_prov_click$x  })
-       ))
+return(
+  list(
+    casos_covid = reactive({ input$casos_prov_click$x }),
+    grafico_casos_prov = reactive({ grafico_casos_prov() }),
+    grafico_casos_dpto = reactive({ grafico_casos_dpto() })
+  )
+)
 
 })}
 

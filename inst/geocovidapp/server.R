@@ -145,7 +145,9 @@ server <- function(input, output, session, r) {
                 mapa_partido_tarde = mapa_tarde$mapa_partido,
                 mapa_partido_noche = mapa_noche$mapa_partido,
                 tipo_de_raster = reactive({ input$porcentaje2 }),
-                opacidad = reactive({ input$opacity2 })
+                opacidad = reactive({ input$opacity2 }),
+                grafico_casos_prov = eleccion_fecha$grafico_casos_prov,
+                grafico_casos_dpto = eleccion_fecha$grafico_casos_dpto
                 )
 
   # Tab 3: casos covid -----

@@ -10,6 +10,8 @@ params:
   base_raster: NA
   map_path1: NA
   map_path2: NA
+  graf_path1: NA
+  graf_path2: NA
   map_path3: NA
   pandoc: NA
   opacidad: 0.5
@@ -31,6 +33,20 @@ knitr::opts_chunk$set(echo = FALSE,
 *Si quieres cambiar la transparencia del mapa, cambiala en la app y vuelve a
 generar el reporte.*
 
+### Casos COVID-19
+```{r casos_covid}
+
+knitr::include_graphics(params$graf_path1)
+
+```
+
+```{r casos_dpto}
+
+knitr::include_graphics(params$graf_path2)
+
+```
+
+### Mapas
 #### Mañana
 
 ```{r mapa_manana}

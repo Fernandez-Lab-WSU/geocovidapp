@@ -41,7 +41,9 @@ ReporteServer <- function(id,
                           tipo_de_raster, opacidad,
                           mapa_partido_manana,
                           mapa_partido_tarde,
-                          mapa_partido_noche) {
+                          mapa_partido_noche,
+                          grafico_casos_prov,
+                          grafico_casos_dpto) {
   moduleServer(
     id,
     function(input, output, session) {
@@ -93,6 +95,9 @@ ReporteServer <- function(id,
           map_path1 <- guarda_imagen_leaflet(mapa_partido_manana(), "mapa_manana")
           map_path2 <- guarda_imagen_leaflet(mapa_partido_tarde(), "mapa_tarde")
           map_path3 <- guarda_imagen_leaflet(mapa_partido_noche(), "mapa_noche")
+          graf_path1 <- guarda_imagen_leaflet(grafico_casos_prov(), "casos_prov")
+          graf_path2 <- guarda_imagen_leaflet(grafico_casos_dpto(), "casos_dpto")
+          
           
           params <- list(
             partido = part(),
@@ -105,6 +110,8 @@ ReporteServer <- function(id,
             map_path1 = map_path1,
             map_path2 = map_path2,
             map_path3 = map_path3,
+            graf_path1 = graf_path1,
+            graf_path2 = graf_path2,
             pandoc = rmarkdown::pandoc_version()
           )
           
