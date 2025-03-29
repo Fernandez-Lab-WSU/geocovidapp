@@ -44,6 +44,40 @@ flowchart TB
 
 ```
 
+## Tab 2 
+
+```mermaid
+flowchart TB
+
+  subgraph ui
+    Partidos_UI
+    Dygraph_UI
+    HistogramaRaster_UI
+    MapaPartidos_UI
+    Reporte_UI
+  end
+
+  subgraph server
+    Partidos_Server
+    Dygraph_Server
+    HistogramaRaster_Server
+    MapaPartidos_Server
+    Reporte_Server
+  end
+
+  Partidos_UI -- "elecciones usuario" -->  Partidos_Server
+  Partidos_Server-- "elecciones usuario" -->  Dygraph_Server
+  Partidos_Server-- "elecciones usuario" -->  HistogramaRaster_Server
+  Partidos_Server-- "elecciones usuario" -->  MapaPartidos_Server
+  Partidos_Server-- "elecciones usuario" -->  Reporte_Server
+  Dygraph_Server -- "eleccion fecha" --> HistogramaRaster_Server
+  Dygraph_Server -- "eleccion fecha" -->  MapaPartidos_Server
+  Dygraph_Server -- "grafico casos covid" --> Dygraph_UI
+  MapaPartidos_Server -- "mapa partido con raster" --> MapaPartidos_UI
+  HistogramaRaster_Server -- "histograma pixeles raster" -->  HistogramaRaster_UI
+  Reporte_UI -- "generacion de reporte" --> Reporte_Server
+```
+
 ## Licencias
 
 El código contenido en este repositorio se encuentra bajo una [licencia
