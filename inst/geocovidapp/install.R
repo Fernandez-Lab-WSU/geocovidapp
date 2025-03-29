@@ -29,4 +29,4 @@ if (!requireNamespace("config", quietly = TRUE)) {
 # 
 # # Specify the path to Chromium on shinyapps.io
 # options(webshot2.chrome = "/usr/bin/chromium")
-Sys.setenv(CHROMOTE_CHROME = "/usr/bin/chromium-browser")
+# Sys.setenv(CHROMOTE_CHROME = "/usr/bin/chromium-browser")

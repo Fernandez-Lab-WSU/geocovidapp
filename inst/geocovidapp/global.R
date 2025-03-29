@@ -10,17 +10,6 @@
  load("data/base_raster.rda")
  load("data/data_sisa.rda")
 
-#load(system.file("geocovidapp", "data", "bsas.rda",
-#                 package = "geocovidapp"))
-#load(system.file("geocovidapp", "data", "bsas_comunas.rda",
-#                 package = "geocovidapp"))
-#load(system.file("geocovidapp", "data", "centroides_mapa.rda",
-#                 package = "geocovidapp"))
-#load(system.file("geocovidapp", "data", "base_raster.rda",
-#                 package = "geocovidapp"))
-#load(system.file("geocovidapp", "data", "data_sisa.rda",
-#                 package = "geocovidapp"))
-
 # Para chequar la reactividad, descomentar
 #library(reactlog)
 #reactlog_enable()

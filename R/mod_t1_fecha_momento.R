@@ -23,7 +23,7 @@ FechaMomento_UI <- function(id, base_raster) {
     shiny::fluidRow(
       shiny::column(
         10, 
-        h4("Cliquea en el mapa")
+        h4("Mapa de Movilidad Humana")
       ),
       shiny::column(
         2, 
