@@ -36,9 +36,13 @@ ReporteUI <- function(id) {
 #' @return Devuelve un reporte en base a las selecciones en el tab2.
 #' @export
 ReporteServer <- function(id,
-                          part, fecha,
-                          base_raster, bsas, area,
-                          tipo_de_raster, opacidad,
+                          part, 
+                          fecha,
+                          base_raster, 
+                          bsas, 
+                          area,
+                          tipo_de_raster, 
+                          opacidad,
                           mapa_partido_manana,
                           mapa_partido_tarde,
                           mapa_partido_noche) {
@@ -61,8 +65,6 @@ ReporteServer <- function(id,
 
       fecha_val <- reactive({
         f <- fecha()
-        print('length(f)')
-     print(f)
 
         if (is.null(f)) { # Tiene que elegir un valor en el mapa
           as.Date('2020-05-03') # tiene que ser una fecha que tenga raster para todas las opciones
@@ -75,7 +77,7 @@ ReporteServer <- function(id,
             output$reporte <- downloadHandler(
         # https://community.rstudio.com/t/retain-formatting-on-a-pdf-output-from-shiny-downloadhandler/36410
         filename = function(){
-          paste0("GeoCovid_", part(), "_", as.character(fecha_val()), ".docx")
+          paste0("GeoCovid_", part(), "_", as.character(fecha_val()), ".pdf")
           },
         content = function(file) {
 
@@ -92,10 +94,11 @@ ReporteServer <- function(id,
 
           # Como quiero obtener los mapas en un docx tengo que convertirlos en imagen
           # un mapa leaflet es un widget html y no se puede renderizar en un docx
-          map_path1 <- guarda_imagen_leaflet(mapa_partido_manana(), "mapa_manana")
-          map_path2 <- guarda_imagen_leaflet(mapa_partido_tarde(), "mapa_tarde")
-          map_path3 <- guarda_imagen_leaflet(mapa_partido_noche(), "mapa_noche")
-   
+         # map_path1 <- guarda_imagen_leaflet(mapa_partido_manana(), "mapa_manana")
+         # map_path2 <- guarda_imagen_leaflet(mapa_partido_tarde(), "mapa_tarde")
+         # map_path3 <- guarda_imagen_leaflet(mapa_partido_noche(), "mapa_noche")
+   print('mapa_partido_manana()')
+   print(mapa_partido_manana())
           params <- list(
             partido = part(),
             fecha = fecha_val(),
@@ -104,17 +107,17 @@ ReporteServer <- function(id,
             base_raster = base_raster,
             bsas = bsas,
             area = area(),
-            map_path1 = map_path1,
-            map_path2 = map_path2,
-            map_path3 = map_path3,
+            map_path1 = mapa_partido_manana(), #map_path1,
+            map_path2 = mapa_partido_tarde(), #map_path2,
+            map_path3 = mapa_partido_noche(), #map_path3,
             pandoc = rmarkdown::pandoc_version()
           )
           
           # Ensure cleanup after use
-          on.exit({
-            file.remove(map_path1, map_path2, map_path3)
-          }, add = TRUE)
-          
+          # on.exit({
+          #   file.remove(map_path1, map_path2, map_path3)
+          # }, add = TRUE)
+          # 
 
           id <- showNotification(
             "Preparando reporte...",
@@ -123,12 +126,16 @@ ReporteServer <- function(id,
           )
           on.exit(removeNotification(id), add = TRUE)
 
+          html_file <- file.path(my_tempdir, "reporte.html")
           rmarkdown::render(path_report, # es el path al directorio temporario
-                            output_file = file,
-                            output_format = rmarkdown::word_document(),#reference_docx = tempTemplate
+                            output_file = html_file,
+                            output_format = rmarkdown::html_document(), #rmarkdown::word_document(),#reference_docx = tempTemplate
                             params = params,
                             envir = new.env(parent = globalenv())
           )
+          
+          # Convierte el HTML a PDF con pagedown
+          pagedown::chrome_print(input = html_file, output = file)
         }
       )
     }

@@ -41,7 +41,9 @@ raster_valido <- function(area, porcentaje, fecha, momento, base_raster) {
     faltan <- "Solo el raster de tipo de cambio PREPANDEMIA está disponible para esta fecha"
   } else if (nrow(faltantes) == 1 && dplyr::pull(faltantes, tipo_de_raster) == '7dpc') {
     faltan <- "Solo el raster de tipo de cambio SEMANAL está disponible para esta fecha"
-  } 
+  } else {
+    faltan <- paste(faltantes)
+  }
   
   # Devuelve TRUE si la combinación es válida, de lo contrario FALSE
   return(list(
