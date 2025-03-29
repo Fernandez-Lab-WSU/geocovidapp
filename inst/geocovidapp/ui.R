@@ -125,9 +125,7 @@ ui <- function() {
             bslib::card_header("Porcentaje de cambio"),
             shiny::tags$div(
               style = "padding:0px;margin-top:0px",
-              shiny::HTML(
-                "<i class=\"added-legend\" style=\"background:#FF0000;margin-bottom:0px\"></i><font size='-1'> Aumento más de 40</font><br><i class=\"added-legend\" style=\"background:#FF3300;opacity:0.5\"></i> <font size='-1'>40 - 30</font><br><i class=\"added-legend\" style=\"background:#FF6600;opacity:0.5\"></i><font size='-1'> 30 - 20</font><br><i class=\"added-legend\" style=\"background:#FF9900;opacity:0.5\"></i><font size='-1'> 20 - 10</font><br><i class=\"added-legend\" style=\"background:#FFCC00;opacity:0.5\"></i><font size='-1'> 10 - 1</font><br><i class=\"added-legend\" style=\"background:#FFFFFF;opacity:0.5;border:black;border-width:1px; border-style:solid;\"></i><font size='-1'> Sin cambio</font><br><i class=\"added-legend\" style=\"background:#00FFFF;opacity:0.5\"></i><font size='-1'> -1 - -10</font><br><i class=\"added-legend\" style=\"background:#00BFFF;opacity:0.5\"></i><font size='-1'> -10 - -20</font><br><i class=\"added-legend\" style=\"background:#0080FF;opacity:0.5\"></i><font size='-1'> -20 - -30</font><br><i class=\"added-legend\" style=\"background:#0040FF;opacity:0.5\"></i><font size='-1'> -30 - -40</font><br><i class=\"added-legend\" style=\"background:#0000FF;opacity:0.5\"></i><font size='-1'> Dismunuyo bajo -40</font><br>"
-              )
+              includeHTML("www/legend_leaflet.html")
             )
           )
         )

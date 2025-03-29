@@ -1,0 +1,47 @@
+<style>
+    .legend {
+        background: rgba(255, 255, 255, 0.8);
+        padding: 10px;
+        border-radius: 5px;
+        width: 180px;
+        font-family: Arial, sans-serif;
+        font-size: 12px; /* Tamaño de fuente reducido */
+    }
+    .legend-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0px; /* Elimina espacio entre filas */
+    }
+    .color-box {
+        width: 18px; /* Aumenta el tamaño de los cuadros */
+        height: 18px;
+        margin-right: 5px;
+        opacity: 0.5; /* Aplica la transparencia */
+        display: inline-block;
+    }
+    .increase-40 { background: #FF0000; opacity: 1; } /* Aumento más de 40 (sin transparencia) */
+    .increase-30-40 { background: #FF3300; }
+    .increase-20-30 { background: #FF6600; }
+    .increase-10-20 { background: #FF9900; }
+    .increase-1-10 { background: #FFCC00; }
+    .no-change { background: #FFFFFF; border: 1px solid black; } /* Mantiene el borde negro */
+    .decrease-1-10 { background: #00FFFF; }
+    .decrease-10-20 { background: #00BFFF; }
+    .decrease-20-30 { background: #0080FF; }
+    .decrease-30-40 { background: #0040FF; }
+    .decrease-below-40 { background: #0000FF; }
+</style>
+
+<div class="legend">
+    <div class="legend-item"><div class="color-box increase-40"></div><span> Aumento más de 40</span></div>
+    <div class="legend-item"><div class="color-box increase-30-40"></div><span> 40 - 30</span></div>
+    <div class="legend-item"><div class="color-box increase-20-30"></div><span> 30 - 20</span></div>
+    <div class="legend-item"><div class="color-box increase-10-20"></div><span> 20 - 10</span></div>
+    <div class="legend-item"><div class="color-box increase-1-10"></div><span> 10 - 1</span></div>
+    <div class="legend-item"><div class="color-box no-change"></div><span> Sin cambio</span></div>
+    <div class="legend-item"><div class="color-box decrease-1-10"></div><span> -1 - -10</span></div>
+    <div class="legend-item"><div class="color-box decrease-10-20"></div><span> -10 - -20</span></div>
+    <div class="legend-item"><div class="color-box decrease-20-30"></div><span> -20 - -30</span></div>
+    <div class="legend-item"><div class="color-box decrease-30-40"></div><span> -30 - -40</span></div>
+    <div class="legend-item"><div class="color-box decrease-below-40"></div><span> Disminuyó bajo -40</span></div>
+</div>
