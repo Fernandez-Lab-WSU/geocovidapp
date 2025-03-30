@@ -78,6 +78,28 @@ flowchart TB
   Reporte_UI -- "generacion de reporte" --> Reporte_Server
 ```
 
+## Tab3
+
+```mermaid
+
+flowchart TB
+
+  subgraph server
+    MapaCovidElecciones_Server
+    MapaCovidDepartamentos_Server
+  end
+
+  subgraph ui
+    MapaCovidElecciones_UI
+    MapaCovidDepartamentos_UI
+  end
+
+  MapaCovidElecciones_UI -- "elecciones usuario" --> MapaCovidElecciones_Server
+  MapaCovidElecciones_Server -- "elecciones usuario" --> MapaCovidDepartamentos_Server
+  MapaCovidDepartamentos_Server -- "mapa" --> MapaCovidDepartamentos_UI
+
+```
+
 ## Licencias
 
 El código contenido en este repositorio se encuentra bajo una [licencia
