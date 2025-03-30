@@ -25,24 +25,8 @@ geocovidapp::runapp()
 ## Tabs
 
 ### Tab 1
-```mermaid
-flowchart TB
+<img width="1248" alt="image" src="https://github.com/user-attachments/assets/94b6a5a9-5862-4f7d-a8c7-a11a98bfedab"/>
 
-  subgraph server
-    FechaMomentoServer
-    MapaBuenosAiresServer
-  end
-
-  subgraph ui
-    FechaMomentoUI
-    MapaBuenosAiresUI
-  end
-
-  FechaMomentoUI -- "elecciones usuario" --> FechaMomentoServer
-  FechaMomentoServer -- "raster" --> MapaBuenosAiresServer
-  MapaBuenosAiresServer -- "mapa" --> MapaBuenosAiresUI
-
-```
 
 ## Tab 2 
 
