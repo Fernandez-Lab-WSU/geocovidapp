@@ -2,86 +2,98 @@
 #' dinámica.
 #'
 #' @param id Module name
-#' @param amba_reducido_names String. Vector con los nombres de los partidos 
+#' @param amba_reducido_names String. Vector con los nombres de los partidos
 #' que conforman el AMBA.
-#' @param base_raster Dataframe que lista todos los rasters y desagrega en 
-#' sus columnas características de interes, como si son rasters de 
-#' AMBA o Buenos Aires, si el cambio porcentual es semanal o prepandemia 
-#' o el momento del día que representan. 
+#' @param base_raster Dataframe que lista todos los rasters y desagrega en
+#' sus columnas características de interes, como si son rasters de
+#' AMBA o Buenos Aires, si el cambio porcentual es semanal o prepandemia
+#' o el momento del día que representan.
 #'
-#' @return Elementos de la IU para que se seleccione partidos de AMBA o de 
+#' @return Elementos de la IU para que se seleccione partidos de AMBA o de
 #' BsAs de forma condicional.
 #' @export
 Partidos_UI <- function(id, amba_reducido_names, base_raster) {
-   ns <- NS(id)
+  ns <- NS(id)
 
-   shiny::tagList(
-
-      tags$div(#style='margin-left:20px',
-          fluidRow(column(6,
-             shiny::radioButtons(ns("area"),
-                         label = 'Selecciona el area',
-                         choices = c("prov. de Buenos Aires" = 'baires',
-                                     "AMBA" = 'amba'),
-                         selected = 'amba')),
-             column(6,
-              shiny::selectInput(ns("partidos"),
-                        label = "Selecciona el partido",
-                        choices = amba_reducido_names,
-                        selected = amba_reducido_names[1],
-                        width = '75%')))))
-
- }
+  shiny::tagList(
+    tags$div( 
+      fluidRow(
+        column(
+          6,
+          shiny::radioButtons(ns("area"),
+            label = "Selecciona el area",
+            choices = c(
+              "prov. de Buenos Aires" = "baires",
+              "AMBA" = "amba"
+            ),
+            selected = "amba"
+          )
+        ),
+        column(
+          6,
+          shiny::selectInput(ns("partidos"),
+            label = "Selecciona el partido",
+            choices = amba_reducido_names,
+            selected = amba_reducido_names[1],
+            width = "75%"
+          )
+        )
+      )
+    )
+  )
+}
 
 #' Servidor: Seleccion de departamentos de provincia de Buenos Aires con IU
 #' dinámica.
 #'
 #' @param id Module name
 #' @param bsas Dataset de clase sf con los partidos de Buenos Aires.
-#' @param amba_reducido_names String. Vector con los nombres de los partidos 
+#' @param amba_reducido_names String. Vector con los nombres de los partidos
 #' que conforman el AMBA.
 #'
 #' @return El area y el partido seleccionado.
 #' @export
-Partidos_Server <- function(id, 
-                            bsas, 
+Partidos_Server <- function(id,
+                            bsas,
                             amba_reducido_names) {
-   moduleServer(
-     id,
-     function(input, output, session){
+  moduleServer(
+    id,
+    function(input, output, session) {
+  
+      choices <- reactive({
+        req(input$area)
+        
+        if (input$area == "amba") {
+          sort(amba_reducido_names)
+        } else if (input$area == "baires") {
+          prov <- dplyr::filter(
+            bsas,
+            !partido %in% amba_reducido_names
+          )
+          sort(unique(prov$partido))
+        }
+      })
 
-   choices <-  reactive({
-
-     if(input$area == 'amba'){
-
-        sort(amba_reducido_names)
-
-
-       }else if(input$area == 'baires'){
-
-      prov <-  dplyr::filter(bsas,
-                             !partido %in% amba_reducido_names)
-      sort(unique(prov$partido)) }
-   })
-
-
-shiny::observe({
-
-
-  shiny::updateSelectInput(session,
-                    inputId = 'partidos',
-                    choices = choices(),
-                    selected = choices()[1])
-
-})
+      # Actualiza opciones de partidos en base a la eleccion de area
+      shiny::observe({
+        shiny::updateSelectInput(session,
+          inputId = "partidos",
+          choices = choices(),
+          selected = choices()[1]
+        )
+      })
 
 
-return(
-   list(
-      area = reactive({ input$area }),
-      partido = reactive({ input$partidos })
-   )
-)
+      return(
+        list(
+          area = reactive({
+            input$area
+          }),
+          partido = reactive({
+            input$partidos
+          })
+        )
+      )
+    }
+  )
 }
- )
-   }

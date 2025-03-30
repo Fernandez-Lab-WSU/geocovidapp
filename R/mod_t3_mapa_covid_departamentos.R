@@ -151,7 +151,7 @@ MapaCovidDepartamentos_Server <- function(id,
       fechas <- Dygraph_Server("casos_covid_interno",
         amba = amba_caba,
         data_sisa = data_sisa,
-        base_raster = base_raster,
+        base_raster = geocovidapp::base_raster,
         part = reactive({
           input$partidos
         }),
@@ -159,7 +159,6 @@ MapaCovidDepartamentos_Server <- function(id,
           "baires"
         })
       )
-
 
       # Datos de movilidad por partido como media de los pixeles
       px_data <- shiny::reactive({
@@ -182,10 +181,6 @@ MapaCovidDepartamentos_Server <- function(id,
 
       output$raster_analisis <- dygraphs::renderDygraph({
         pxdy <- px_data()
-
-        #     pxd_baires <- pxd_baires |>
-        #       dplyr::filter(.data$fecha < '2020-05-15' &
-        #                     .data$fecha > '2020-05-08') # sera replazado con los datos finales
 
         a <- pxdy[, c("fecha", "px_mean_dianoche")]
         b <- pxdy[, c("fecha", "mañana_8")]
