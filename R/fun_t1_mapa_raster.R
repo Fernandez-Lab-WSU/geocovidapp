@@ -80,8 +80,8 @@ leaflet::addRasterImage(imagen,
                         colors = paleta,
                         opacity = opacidad,
                         group = "basic",
-                        layerId = "raster",
-                        project = FALSE
+                        layerId = "raster"
+                        #project = FALSE
 ) |>
   leaflet::removeControl("legend") |> # Evita que se duplique la leyenda
   leaflet::addLegend(
