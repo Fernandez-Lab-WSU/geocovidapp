@@ -15,7 +15,12 @@ ReporteServer(
   opacidad,
   mapa_partido_manana,
   mapa_partido_tarde,
-  mapa_partido_noche
+  mapa_partido_noche,
+  zoom_mapa_partido_manana,
+  zoom_mapa_partido_tarde,
+  zoom_mapa_partido_noche,
+  grafico_casos_prov,
+  grafico_casos_dpto
 )
 }
 \arguments{

@@ -1,3 +1,12 @@
+#' Mapa reporte
+#'
+#' @param part 
+#' @param imagen 
+#'
+#' @returns
+#' @export
+#'
+#' @examples
 mapa_reporte <- function(part, imagen) {
   shape_partido <- geocovidapp::bsas_comunas |> 
     dplyr::filter(partido == part) |>
