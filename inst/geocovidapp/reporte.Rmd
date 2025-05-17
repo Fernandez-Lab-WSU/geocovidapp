@@ -20,7 +20,7 @@ params:
 ```{r setup, include=FALSE}
 library(knitr)
 knitr::opts_chunk$set(echo = FALSE)
-source("../R/fun_t2_mapa_raster_reporte.R") # shinyapps.io
+library(geocovidapp) # shinyapps.io
 ```
 
 ## Reporte para `r params$partido` 
@@ -58,7 +58,7 @@ generar el reporte.*
 
 ```{r mapa_manana}
 
-mapa_reporte(part = params$partido, imagen = params$imagen_manana)
+geocovidapp::mapa_reporte(part = params$partido, imagen = params$imagen_manana)
 
 ```
 
@@ -66,15 +66,13 @@ mapa_reporte(part = params$partido, imagen = params$imagen_manana)
 #### Tarde
 ```{r mapa_tarde}
 
-
-mapa_reporte(part = params$partido, imagen = params$imagen_tarde)
+geocovidapp::mapa_reporte(part = params$partido, imagen = params$imagen_tarde)
 
 ```
 
 #### Noche
 ```{r mapa_noche}
 
-
-mapa_reporte(part = params$partido, imagen = params$imagen_noche)
+geocovidapp::mapa_reporte(part = params$partido, imagen = params$imagen_noche)
 
 ```
