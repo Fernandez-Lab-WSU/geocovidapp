@@ -60,7 +60,6 @@ MapaPartido_Server <- function(id,
     id,
     session = getDefaultReactiveDomain(),
     function(input, output, session) {
-
       imagen <- shiny::reactive({
         # Agrego un dia por default para que renderice si no hay otras fechas.
         if (is.null(fecha())) {
@@ -95,8 +94,7 @@ MapaPartido_Server <- function(id,
 
 
       filter_partido <- shiny::reactive({
-        if (part() %in% amba_reducido_names) { 
-
+        if (part() %in% amba_reducido_names) {
           # ver Partidos_Input.R
           amba <- dplyr::filter(
             bsas_comunas,
@@ -197,11 +195,14 @@ MapaPartido_Server <- function(id,
           )
       })
 
-
-
-      return(list(mapa_partido = reactive({
-        mapa_leaflet()
-      })))
+      return(list(
+        mapa_partido = reactive({ # Esto va al reporte
+          imagen() # Estoy devolviendo el raster seleccionado, NO el mapa de leaflet
+        }),
+        zoom_mapa_partido = reactive({
+          input$mapa_partido_zoom
+        })
+      ))
     }
   )
 }

@@ -26,13 +26,23 @@ Dygraph_UI <- function(id) {
       color = 'lightgrey',
       color.background = 'white')),
     column(3,
-        textOutput(ns('l1')),
-        br(),
-        br(),
-        br(),
-        br(),
-        br(),
-        textOutput(ns('l2'))
+        # textOutput(ns('l1')),
+        # br(),
+        # br(),
+        # br(),
+        # br(),
+        # br(),
+        # textOutput(ns('l2'))
+        htmltools::tags$div(
+          style = "margin-top: 10px; font-size: 14px;",
+          htmltools::tags$ol(
+            htmltools::tags$li("Aislamiento estricto"),
+            htmltools::tags$li("Aislamiento preventivo"),
+            htmltools::tags$li("Aislamiento por segmentacion geografica"),
+            htmltools::tags$li("Aislamiento con reapertura progresiva"),
+            htmltools::tags$li("Nueva normalidad*")
+          )
+        )
   )))
 }
 
@@ -162,18 +172,26 @@ grafico_casos_prov <- reactive({
                             highlightSeriesBackgroundAlpha = 0.4,
                             hideOnMouseOut = TRUE) |>
       dygraphs::dyCrosshair(direction = "vertical")  |>
-      dygraphs::dyEvent("2020-04-13", 
-                        "Managed isolation",
+      dygraphs::dyEvent("2020-04-13",
+                        "2",
                         labelLoc = "bottom")|>
-      dygraphs::dyEvent("2020-04-26", 
-                        "Geographic segmentation",
+      dygraphs::dyEvent("2020-04-26",
+                        "3",
                         labelLoc = "bottom") |>
-      dygraphs::dyEvent("2020-05-10", 
-                        "Progressive reopening",
+      dygraphs::dyEvent("2020-05-10",
+                        "4",
+                        labelLoc = "bottom") |>
+      dygraphs::dyEvent("2020-06-07",
+                        "5",
                         labelLoc = "bottom") |>
       dygraphs::dyLegend(show = "follow",
                          width = 400
       ) |>
+      dygraphs::dyCrosshair(direction = "vertical") |>
+    dygraphs::dyAnnotation("2020-04-13", text = "2", tooltip = "Inicio de medidas X") |> 
+    dygraphs::dyAnnotation("2020-04-26", text = "3", tooltip = "Cambios en fase Y") |> 
+    dygraphs::dyAnnotation("2020-05-10", text = "4", tooltip = "Ajustes en Z") |> 
+    dygraphs::dyAnnotation("2020-06-07", text = "5", tooltip = "Reapertura parcial") |> 
       dygraphs::dyCSS(system.file("geocovidapp/www/legend.css", 
                                   package = "geocovidapp"))
     
@@ -197,14 +215,22 @@ grafico_casos_prov <- reactive({
                             hideOnMouseOut = TRUE) |>
       dygraphs::dyCrosshair(direction = "vertical")  |>
       dygraphs::dyEvent("2020-04-13", 
-                        "Managed isolation",
-                        labelLoc = "bottom")|>
-      dygraphs::dyEvent("2020-04-26",
-                        "Geographic segmentation",
-                        labelLoc = "bottom") |>
+                        "2",
+                        labelLoc = "top")|>
+      dygraphs::dyEvent("2020-04-26", 
+                        "3",
+                        labelLoc = "top") |>
       dygraphs::dyEvent("2020-05-10", 
-                        "Progressive reopening",
-                        labelLoc = "bottom") |>
+                        "4",
+                        labelLoc = "top") |>
+      dygraphs::dyEvent("2020-06-07", 
+                        "5",
+                        labelLoc = "top") |>
+      dygraphs::dyCrosshair(direction = "vertical") |>
+      dygraphs::dyAnnotation("2020-04-13", text = "2", tooltip = "Inicio de medidas X") |> 
+     dygraphs::dyAnnotation("2020-04-26", text = "3", tooltip = "Cambios en fase Y") |> 
+     dygraphs::dyAnnotation("2020-05-10", text = "4", tooltip = "Ajustes en Z") |> 
+     dygraphs::dyAnnotation("2020-06-07", text = "5", tooltip = "Reapertura parcial") |> 
       dygraphs::dyLegend(
         show = "follow",
         width = 400
