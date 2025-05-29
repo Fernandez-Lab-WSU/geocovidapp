@@ -69,3 +69,15 @@ sf::st_geometry(amba) <- "geometry"
 amba_bbox <- sf::st_bbox(amba)
 
 usethis::use_data(amba_bbox, overwrite = TRUE)
+
+# base datos sisa modificada tab 3 -----------
+
+ casos_covid_dpto <- tibble::as_tibble(data_sisa) |>
+  dplyr::group_by(.data$fecha_enfermo, 
+                  .data$residencia_provincia_nombre) |>
+  dplyr::summarize(n = dplyr::n()) |>
+  dplyr::filter(.data$fecha_enfermo >= min(as.Date(geocovidapp::base_raster$fecha)),
+                .data$fecha_enfermo <= max(as.Date(geocovidapp::base_raster$fecha))) |>
+  dplyr::mutate(fecha_enfermo = as.Date(.data$fecha_enfermo))
+
+use_data(casos_covid_dpto, overwrite = TRUE)
