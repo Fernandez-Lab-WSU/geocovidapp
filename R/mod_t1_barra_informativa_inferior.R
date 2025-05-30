@@ -1,3 +1,12 @@
+#' UI Component for Informational Bottom Bar
+#'
+#' Creates a UI element that displays dynamic informational text
+#' at the bottom of the Shiny app interface.
+#'
+#' @param id Character string used to namespace the UI elements.
+#'
+#' @return A UI element (tagList) containing a styled text output div.
+#' @export
 BarraInferior_UI <- function(id) {
   ns <- NS(id)
   tagList(
@@ -10,6 +19,20 @@ BarraInferior_UI <- function(id) {
   )
 }
 
+#' Server Logic for Informational Bottom Bar
+#'
+#' Server-side logic for managing the informational text displayed in the
+#' bottom bar. Reacts to user interaction and input changes to update the message.
+#'
+#' @param id Character string used to identify the module namespace.
+#' @param boton Reactive expression for the update button (e.g., `input$update_map`).
+#' @param fecha Reactive expression returning the selected date as a string.
+#' @param area Reactive expression indicating the selected area (e.g., "amba").
+#' @param momento Reactive expression indicating the time of day (e.g., "mañana", "tarde").
+#' @param porcentaje Reactive expression indicating the data type (e.g., "pc" for prepandemia).
+#'
+#' @return No return value. Called for side effects to update UI text dynamically.
+#' @export
 BarraInferior_Server <- function(id,
                                  boton,
                                  fecha,

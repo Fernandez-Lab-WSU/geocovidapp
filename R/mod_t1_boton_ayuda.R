@@ -1,3 +1,12 @@
+#' UI Component for Help Button with Tooltip
+#'
+#' Creates a help button with an associated tooltip that appears on hover.
+#' This module is intended to be used within a Shiny UI.
+#'
+#' @param id Character string used to namespace the UI elements.
+#'
+#' @return A UI element (tagList) containing a help button and a hidden tooltip.
+#' @export
 BotonAyuda_UI <- function(id) {
   ns <- NS(id)
   tagList(
@@ -24,6 +33,15 @@ BotonAyuda_UI <- function(id) {
   )
 }
 
+#' Server Logic for Help Button with Tooltip
+#'
+#' Server-side logic for the help button module. Shows and hides
+#' the tooltip on mouse hover using `shinyjs`.
+#'
+#' @param id Character string used to identify the module namespace.
+#'
+#' @return No return value. This function is called for its side effects (UI behavior).
+#' @export
 BotonAyuda_Server <- function(id) {
   moduleServer(
     id,

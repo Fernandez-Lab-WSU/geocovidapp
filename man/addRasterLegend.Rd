@@ -22,14 +22,3 @@ Un objeto \code{leaflet} con la imagen raster agregada y una leyenda que muestra
 Esta función agrega una imagen raster al mapa interactivo utilizando \code{leaflet} y agrega una leyenda que muestra el porcentaje de cambio
 en los valores del raster. La leyenda es configurada con colores binarios según los valores del raster y se posiciona en la esquina superior derecha.
 }
-\examples{
-# Ejemplo de uso:
-# Supongamos que 'imagen' es un objeto raster previamente cargado y 'opacidad' es un valor entre 0 y 1.
-# Definir la paleta de colores:
-pal <- leaflet::colorBin(
-  palette = c("#0000FF", "#0040FF", "#0080FF", "#00BFFF", "#00FFFF", "#FFFFFF", "#FFCC00", "#FF9900", "#FF6600", "#FF3300", "#FF0000"),
-  bins = c(50, 40, 30, 20, 10, 1, -1, -10, -20, -30, -40, -50),
-  na.color = "transparent"
-)
-mapa |> addRasterLegend(imagen = imagen, opacidad = 0.7, pal = pal)
-}

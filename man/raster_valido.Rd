@@ -28,5 +28,7 @@ que coincida con todos estos valores.
 \examples{
 # Supongamos que tenemos el dataframe `base_raster`
 # Verificar si existe una combinación válida de área, porcentaje, fecha y momento
+/dontrun{
 raster_valido("baires", "pc", as.Date("2023-12-01"), "mañana", base_raster)
+}
 }

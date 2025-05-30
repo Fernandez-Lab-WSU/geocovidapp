@@ -2,15 +2,19 @@
 % Please edit documentation in R/fun_t2_mapa_raster_reporte.R
 \name{mapa_reporte}
 \alias{mapa_reporte}
-\title{Mapa reporte}
+\title{Generar Mapa para Reporte}
 \usage{
 mapa_reporte(part, imagen)
 }
 \arguments{
-\item{part}{}
+\item{part}{Nombre del partido a visualizar. Debe coincidir con la columna \code{partido} del objeto \code{geocovidapp::bsas_comunas}.}
 
-\item{imagen}{}
+\item{imagen}{Objeto raster de clase \code{SpatRaster} (de la librería \code{terra}) que contiene los datos a mapear.}
+}
+\value{
+Un objeto \code{ggplot} que muestra el mapa temático del área seleccionada.
 }
 \description{
-Mapa reporte
+Crea un mapa con un raster reclasificado y coloreado por rangos de porcentaje de cambio.
+El área mostrada corresponde al partido especificado. Se utiliza \code{ggplot2} y \code{tidyterra} para la visualización.
 }

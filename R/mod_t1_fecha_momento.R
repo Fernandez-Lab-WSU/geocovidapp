@@ -10,8 +10,6 @@
 #' @return Elementos de interfaz de usuario para la barra flotante en el tab Mapa Buenos Aires.
 #'
 #' @export
-#'
-#' @examples
 FechaMomento_UI <- function(id, base_raster) {
   ns <- NS(id)
  
@@ -153,7 +151,7 @@ FechaMomento_Server <- function(id,
       fecha_rango <- shiny::eventReactive(list(input$area),
         ignoreNULL = FALSE,
         {
-           filtered_data <- base_raster |>
+           filtered_data <- geocovidapp::base_raster |>
             dplyr::filter(
               locacion == input$area
             )
@@ -185,9 +183,6 @@ FechaMomento_Server <- function(id,
                       porcentaje = input$porcentaje,
                       fecha = input$fechas,
                       momento = input$momento)
-        
-        print('es_valido')
-        print(es_valido)
 
         # Si no existe un raster para esta combinación, mostrar la notificación
         if (!es_valido$combinacion_valida) {
@@ -216,10 +211,7 @@ FechaMomento_Server <- function(id,
             locacion == input$area
           )
         
-      print('raster_data')
-      print(raster_data)
-       
-       # Bajo el raster de la base de datos
+     # Bajo el raster de la base de datos
        rasterLoader(pool = pool,
                     raster_data = raster_data,
                     area = input$area)
