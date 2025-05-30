@@ -3,3 +3,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$
+^\\.github$
+^config.yml$
+^helper_.*\\.R$
