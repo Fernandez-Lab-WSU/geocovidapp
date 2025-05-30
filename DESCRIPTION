@@ -28,6 +28,7 @@ Imports:
     maptiles (>= 0.10.0),
     plotly (>= 4.10.3),
     pool (>= 1.0.3),
+    progress (>= 1.2.3),
     rmarkdown (>= 2.24),
     RPostgres (>= 1.4.5),
     sf (>= 1.0.14),
