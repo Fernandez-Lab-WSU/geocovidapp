@@ -13,13 +13,6 @@
 #' @return `TRUE` si existe una fila en `base_raster` que cumpla con todas las condiciones especificadas; de lo contrario, `FALSE`.
 #'
 #' @export
-#'
-#' @examples
-#' # Supongamos que tenemos el dataframe `base_raster`
-#' # Verificar si existe una combinación válida de área, porcentaje, fecha y momento
-#' /dontrun{
-#' raster_valido("baires", "pc", as.Date("2023-12-01"), "mañana", base_raster)
-#' }
 raster_valido <- function(area, porcentaje, fecha, momento, base_raster) {
   # Verifica si existe una fila en base_raster que cumpla con las condiciones
   combinacion_valida <- any(base_raster[["locacion"]] == area &

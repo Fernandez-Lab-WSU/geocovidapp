@@ -22,36 +22,3 @@ Esta funci√≥n se encarga de cargar un archivo raster desde la base de datos seg√
 y lo guarda temporalmente como un archivo \code{.tif}, que luego es cargado como un objeto raster
 utilizando el paquete \code{terra}.
 }
-\examples{
-\donttest{
-# Ejemplo de uso en entorno interactivo
-# Conecto con la base de datos
-db <- config::get("database")
-
-pool <- pool::dbPool(
- drv = RPostgres::Postgres(),
- dbname = db$dbname,
- user = db$user,
- password = db$password,
- port = db$port,
- host = db$host
-)
-onStop(function() {
-  pool::poolClose(pool)
-})
-
-raster_data <- base_raster |>
-dplyr::filter(
- fecha == as.Date("2020-05-10",
-                  origin = "1970-01-01"
- ),
- tipo_de_raster == "pc",
- momento == "noche", 
- locacion == "amba"
-)
-
-raster <- rasterLoader(pool = pool, 
-                       raster_data = raster_data,
-                       area = "amba")
-}
-}

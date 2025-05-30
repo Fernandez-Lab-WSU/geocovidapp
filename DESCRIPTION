@@ -51,5 +51,7 @@ Suggests:
     tibble (>= 3.2.1),
     markdown (>= 1.12),
     rlang (>= 1.1.2),
-    knitr (>= 1.49)
+    knitr (>= 1.49),
+    config,
+    htmltools
 Config/testthat/edition: 3

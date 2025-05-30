@@ -11,39 +11,6 @@
 #'
 #' @return Un objeto `rast` del paquete `terra`, que representa el archivo raster cargado desde la base de datos.
 #' @export
-#'
-#' @examples
-#' \donttest{
-#' # Ejemplo de uso en entorno interactivo
-#' # Conecto con la base de datos
-#' db <- config::get("database")
-#'
-#'pool <- pool::dbPool(
-#'  drv = RPostgres::Postgres(),
-#'  dbname = db$dbname,
-#'  user = db$user,
-#'  password = db$password,
-#'  port = db$port,
-#'  host = db$host
-#' )
-#' onStop(function() {
-#'   pool::poolClose(pool)
-#' })
-#' 
-#' raster_data <- base_raster |>
-#' dplyr::filter(
-#'  fecha == as.Date("2020-05-10",
-#'                   origin = "1970-01-01"
-#'  ),
-#'  tipo_de_raster == "pc",
-#'  momento == "noche", 
-#'  locacion == "amba"
-#' )
-#' 
-#' raster <- rasterLoader(pool = pool, 
-#'                        raster_data = raster_data,
-#'                        area = "amba")
-#' }
 rasterLoader <- function(pool,
                          raster_data, 
                          area){
