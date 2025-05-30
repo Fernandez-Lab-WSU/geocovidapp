@@ -2,7 +2,7 @@
 output: github_document
 ---
 
-# GeoCovid App <img src="inst/www/imagenes/geocovid_logo.png" align="right" height="150" />
+# GeoCovid App <img src="inst/geocovidapp/www/geocovid_logo.png" align="right" height="150" />
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -18,7 +18,8 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/Fernandez-Lab-WSU/geocovidapp/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Fernandez-Lab-WSU/geocovidapp/actions/workflows/rmd-check.yaml)
+[![RMD Check](https://github.com/Fernandez-Lab-WSU/geocovidapp/actions/workflows/rmd-check.yaml/badge.svg)](https://github.com/Fernandez-Lab-WSU/geocovidapp/actions/workflows/rmd-check.yaml)
+[![Coverage status](https://codecov.io/gh/Fernandez-Lab-WSU/geocovidapp/branch/main/graph/badge.svg)](https://codecov.io/gh/Fernandez-Lab-WSU/geocovidapp)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
