@@ -1,12 +1,13 @@
-#' Mapa reporte
+#' Generar Mapa para Reporte
 #'
-#' @param part 
-#' @param imagen 
+#' Crea un mapa con un raster reclasificado y coloreado por rangos de porcentaje de cambio.
+#' El área mostrada corresponde al partido especificado. Se utiliza `ggplot2` y `tidyterra` para la visualización.
 #'
-#' @returns
+#' @param part Nombre del partido a visualizar. Debe coincidir con la columna `partido` del objeto `geocovidapp::bsas_comunas`.
+#' @param imagen Objeto raster de clase `SpatRaster` (de la librería `terra`) que contiene los datos a mapear.
+#'
+#' @return Un objeto `ggplot` que muestra el mapa temático del área seleccionada.
 #' @export
-#'
-#' @examples
 mapa_reporte <- function(part, imagen) {
   shape_partido <- geocovidapp::bsas_comunas |> 
     dplyr::filter(partido == part) |>

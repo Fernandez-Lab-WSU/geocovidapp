@@ -1,14 +1,15 @@
-#' Title
+#' Obtener Mapa Base con Tiles
 #'
-#' @param part 
-#' @param zoom 
+#' Descarga un mapa base en formato raster (tiles) para un partido especificado.
+#' Usa la extensión geográfica del partido como área de recorte. Ideal para usar como capa de fondo en visualizaciones con `ggplot2` o `terra`.
 #'
-#' @returns
+#' @param part Nombre del partido a visualizar. Debe coincidir con la columna `partido` del objeto `geocovidapp::bsas_comunas`.
+#' @param zoom Nivel de zoom (entero) para los tiles del mapa. Valores más altos generan más detalle.
+#'
+#' @return Un objeto `SpatRaster` que contiene los tiles del mapa base para la región especificada.
 #' @export
 #'
-#' @examples
-#'
-# a la fecha de hoy es imposible usar otro metodo
+#' @note A la fecha de hoy es imposible usar otro método para obtener un mapa base que respete la extensión precisa del área de interés.
 mapa_base_ggplot <- function(part, zoom) {
 
   shape_partido <- geocovidapp::bsas_comunas |> 

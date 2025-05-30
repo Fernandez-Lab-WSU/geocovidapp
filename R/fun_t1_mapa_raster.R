@@ -8,8 +8,6 @@
 #' 
 #' @return El mapa Leaflet con el mapa base añadido.
 #' @export
-#'
-#' @examples
 addBasemapTiles <- function(map) {
   map |>
     leaflet::addProviderTiles("Esri.WorldImagery",
@@ -31,8 +29,6 @@ addBasemapTiles <- function(map) {
 #'
 #' @return El mapa Leaflet con la capa de polígonos añadida.
 #' @export
-#'
-#' @examples
 addPolygonsLayer <- function(mapa, data, fillopacity_poly) {
   mapa |>
     leaflet::addPolygons(
@@ -61,17 +57,6 @@ addPolygonsLayer <- function(mapa, data, fillopacity_poly) {
 #' @return Un objeto `leaflet` con la imagen raster agregada y una leyenda que muestra el porcentaje de cambio.
 #' 
 #' @export
-#'
-#' @examples
-#' # Ejemplo de uso:
-#' # Supongamos que 'imagen' es un objeto raster previamente cargado y 'opacidad' es un valor entre 0 y 1.
-#' # Definir la paleta de colores:
-#' pal <- leaflet::colorBin(
-#'   palette = c("#0000FF", "#0040FF", "#0080FF", "#00BFFF", "#00FFFF", "#FFFFFF", "#FFCC00", "#FF9900", "#FF6600", "#FF3300", "#FF0000"),
-#'   bins = c(50, 40, 30, 20, 10, 1, -1, -10, -20, -30, -40, -50),
-#'   na.color = "transparent"
-#' )
-#' mapa |> addRasterLegend(imagen = imagen, opacidad = 0.7, pal = pal)
 addRasterLegend <- function(mapa, imagen, opacidad, paleta, etiquetas){
 
 mapa |> 

@@ -17,22 +17,23 @@
 #' @examples
 #' # Supongamos que tenemos el dataframe `base_raster`
 #' # Verificar si existe una combinación válida de área, porcentaje, fecha y momento
+#' /dontrun{
 #' raster_valido("baires", "pc", as.Date("2023-12-01"), "mañana", base_raster)
+#' }
 raster_valido <- function(area, porcentaje, fecha, momento, base_raster) {
   # Verifica si existe una fila en base_raster que cumpla con las condiciones
   combinacion_valida <- any(base_raster[["locacion"]] == area &
-                                  base_raster[["tipo_de_raster"]] == porcentaje &
-                                  base_raster[["fecha"]] == fecha &
-                                  base_raster[["momento"]] == momento)
+                              base_raster[["tipo_de_raster"]] == porcentaje &
+                              base_raster[["fecha"]] == fecha &
+                              base_raster[["momento"]] == momento)
   
   # Voy a extraer tambien cuales son los rasters faltantes 
   # con respecto al tipo de cambio porcentual
   faltantes <- base_raster |> 
-    dplyr::filter(.data$locacion == area,
-           .data$fecha == as.Date(fecha, format = "%Y-%m-%d"),
-           .data$momento == momento)
+    dplyr::filter(locacion == area,
+           fecha == as.Date(fecha, format = "%Y-%m-%d"),
+           momento == momento)
   
-
   if (nrow(faltantes) == 0) {
     faltan <- "No hay rasters disponibles para esta fecha"
   } else if (nrow(faltantes) == 2) {
@@ -42,7 +43,7 @@ raster_valido <- function(area, porcentaje, fecha, momento, base_raster) {
   } else if (nrow(faltantes) == 1 && dplyr::pull(faltantes, tipo_de_raster) == '7dpc') {
     faltan <- "Solo el raster de tipo de cambio SEMANAL está disponible para esta fecha"
   } else {
-    faltan <- paste(faltantes)
+    faltan <- "Error"
   }
   
   # Devuelve TRUE si la combinación es válida, de lo contrario FALSE
