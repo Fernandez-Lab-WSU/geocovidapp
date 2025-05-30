@@ -19,8 +19,6 @@ Imports:
     dygraphs (>= 1.1.1.6),
     forcats (>= 1.0.0),
     ggplot2 (>= 3.5.1),
-    ggspatial (>= 1.1.9),
-    htmlwidgets (>= 1.6.4),
     leafem (>= 0.2.3),
     leaflet (>= 2.2.0),
     leaflet.extras (>= 1.0.0),
@@ -28,7 +26,6 @@ Imports:
     maptiles (>= 0.10.0),
     plotly (>= 4.10.3),
     pool (>= 1.0.3),
-    progress (>= 1.2.3),
     rmarkdown (>= 2.24),
     RPostgres (>= 1.4.5),
     sf (>= 1.0.14),
@@ -39,13 +36,13 @@ Imports:
     terra (>= 1.8.21),
     tidyr (>= 1.3.0),
     tidyterra (>= 0.7.2),
-    webshot2 (>= 0.1.1),
     xts (>= 0.13.1)
 Depends: 
     R (>= 4.1)
 LazyData: true
 Suggests: 
     here (>= 1.0.1),
+    progress (>= 1.2.3),
     purrr (>= 1.0.2),
     shinyloadtest (>= 1.1.0),
     shinytest2,

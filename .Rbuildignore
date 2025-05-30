@@ -5,4 +5,5 @@
 ^LICENSE\.md$
 ^\\.github$
 ^config.yml$
-^helper_.*\\.R$
+^old_modules$
+^tools$
