@@ -65,7 +65,7 @@ server <- function(input, output, session, r) {
   
   # Carga rasters tanto para los histogramas como los mapas
   
-  imagen <- geocovid::selectormapaServer("selector_partido",
+  imagen <- geocovidapp::selectormapaServer("selector_partido",
                                 act_mapas = reactive({input$act_mapas}),
                                 fecha = eleccion_fecha$casos_covid)
     
@@ -74,7 +74,6 @@ server <- function(input, output, session, r) {
   geocovidapp::HistogramaRaster_Server('hist',
                           pool = pool,
                           imagen = imagen$imagen,
-                          act_mapas = reactive({input$act_mapas}),
                           amba_reducido_names = amba_reducido_names,
                           bsas_comunas = bsas_comunas, # Incluye comunas de CABA
                           base_raster = base_raster,
@@ -87,7 +86,6 @@ server <- function(input, output, session, r) {
   geocovidapp::HistogramaRaster_Server('hist2',
                           pool = pool,
                           imagen = imagen$imagen,
-                          act_mapas = reactive({input$act_mapas}),
                           amba_reducido_names =  amba_reducido_names,
                           bsas_comunas = bsas_comunas,
                           base_raster = base_raster,

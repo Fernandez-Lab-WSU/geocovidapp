@@ -1,3 +1,8 @@
+#' Title
+#'
+#' @param id 
+#'
+#' @export
 selectormapaUI <- function(id) {
   ns <- NS(id)
   tagList(
@@ -37,6 +42,13 @@ selectormapaUI <- function(id) {
   )
 }
 
+#' Title
+#'
+#' @param id 
+#' @param act_mapas 
+#' @param fecha 
+#'
+#' @export
 selectormapaServer <- function(id,
                                act_mapas, fecha) {
   moduleServer(
