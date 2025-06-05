@@ -81,7 +81,7 @@ selectormapaServer <- function(id, amba_reducido_names, area, partido) {
             ),
             tipo_de_raster == tipo_de_raster(),
             momento == momento_dia, # es un valor no reactivo
-            locacion == partido$area
+            locacion == area_val
           )
         
         if (nrow(raster_data) == 0) {
@@ -91,7 +91,7 @@ selectormapaServer <- function(id, amba_reducido_names, area, partido) {
           rasterLoader(
             pool = pool,
             raster_data = raster_data,
-            area = partido$area
+            area = area_val
           )
         }
       })
@@ -99,8 +99,8 @@ selectormapaServer <- function(id, amba_reducido_names, area, partido) {
       return(
         list(
           imagen = reactive({ imagen() }),
-          partido = reactive({ partido$partido }),
-          area = reactive({ partido$area })
+          partido = reactive({ partido_val }),
+          area = reactive({ area_val })
         )
       )
     }
