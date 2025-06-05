@@ -8,7 +8,6 @@ MapaPartido_Server(
   id,
   pool,
   amba_reducido_names,
-  base_raster,
   bsas_comunas,
   area,
   fecha,
@@ -24,11 +23,6 @@ MapaPartido_Server(
 \item{amba_reducido_names}{String. Vector con los nombres de los partidos
 que conforman el AMBA.}
 
-\item{base_raster}{Dataframe que lista todos los rasters y desagrega en
-sus columnas características de interes, como si son rasters de
-AMBA o Buenos Aires, si el cambio porcentual es semanal o prepandemia
-o el momento del día que representan.}
-
 \item{area}{El raster puede corresponder a Buenos Aires provincia o a AMBA.}
 
 \item{fecha}{Fecha seleccionada.}
@@ -43,6 +37,11 @@ módulo.}
 
 \item{momento_dia}{Entero. Hora del dia representada en el raster, puede ser
 0am, 8 am o 4 pm.}
+
+\item{base_raster}{Dataframe que lista todos los rasters y desagrega en
+sus columnas características de interes, como si son rasters de
+AMBA o Buenos Aires, si el cambio porcentual es semanal o prepandemia
+o el momento del día que representan.}
 
 \item{bsas}{Dataset de clase sf con los partidos de Buenos Aires.}
 }
