@@ -49,9 +49,9 @@ HistogramaRaster_UI <- function(id) {
 #' @export
 HistogramaRaster_Server <- function(id,
                                     pool,
+                                    imagen,
                                     amba_reducido_names,
                                     bsas_comunas, 
-                                    base_raster,
                                     area, 
                                     fecha,
                                     tipo_de_raster,
@@ -61,41 +61,8 @@ HistogramaRaster_Server <- function(id,
     id,
     function(input, output, session) {
       # Este elemento reactivo podria unificarlo con el de MapaPartido
-      imagen <- shiny::reactive({
-        # Si la fecha es nula, cargo una fecha por defecto
-        if (is.null(fecha())) {
-          f_date <- format("2020-05-03", format = "%Y-%m-%d")
-        } else {
-          # Convierto a formato "YYYY-MM-DD"
-          f_date <- formatted_date(fecha())
-        }
-
-        # Extraigo el raster que eligio el usuario
-        raster_data <- geocovidapp::base_raster |>
-          dplyr::filter(
-            fecha == as.Date(f_date,
-              origin = "1970-01-01"
-            ),
-            tipo_de_raster == tipo_de_raster(),
-            momento == momento_dia, # es un valor no reactivo
-            locacion == area()
-          )
-
-        print("raster_data")
-        print(nrow(raster_data))
-
-        if (nrow(raster_data) == 0) {
-          # showNotification("No hay datos disponibles para la fecha seleccionada.", type = "warning")
-          return(NULL)
-        } else {
-          rasterLoader(
-            pool = pool,
-            raster_data = raster_data,
-            area = area()
-          )
-        }
-      })
-
+      imagen <- imagen()
+      
       raster_hist <- reactive({
         req(imagen())
 

@@ -62,10 +62,19 @@ server <- function(input, output, session, r) {
       paste('Movilidad ciudadana el', format(lubridate::ymd_hms(fecha),
                                              format = "%Y-%m-%d"))}
   })
+  
+  # Carga rasters tanto para los histogramas como los mapas
+  
+  imagen <- geocovid::selectormapaServer("selector_partido",
+                                act_mapas = reactive({input$act_mapas}),
+                                fecha = eleccion_fecha$casos_covid)
+    
 
   # Histogramas
   geocovidapp::HistogramaRaster_Server('hist',
                           pool = pool,
+                          imagen = imagen$imagen,
+                          act_mapas = reactive({input$act_mapas}),
                           amba_reducido_names = amba_reducido_names,
                           bsas_comunas = bsas_comunas, # Incluye comunas de CABA
                           base_raster = base_raster,
@@ -77,6 +86,8 @@ server <- function(input, output, session, r) {
 
   geocovidapp::HistogramaRaster_Server('hist2',
                           pool = pool,
+                          imagen = imagen$imagen,
+                          act_mapas = reactive({input$act_mapas}),
                           amba_reducido_names =  amba_reducido_names,
                           bsas_comunas = bsas_comunas,
                           base_raster = base_raster,
@@ -88,9 +99,10 @@ server <- function(input, output, session, r) {
 
   geocovidapp::HistogramaRaster_Server('hist3',
                           pool = pool,
+                          imagen = imagen$imagen,
+                          act_mapas = reactive({input$act_mapas}),
                           amba_reducido_names =  amba_reducido_names,
                           bsas_comunas = bsas_comunas,
-                          base_raster = base_raster,
                           area = elecciones_usuario_partidos$area,
                           tipo_de_raster = reactive({ input$porcentaje2 }),
                           fecha = eleccion_fecha$casos_covid,
@@ -100,9 +112,9 @@ server <- function(input, output, session, r) {
   # Mapas con detalle del partido
   mapa_manana <- geocovidapp::MapaPartido_Server("baires_partidos",
                      pool = pool,
+                     imagen = imagen$imagen,
                      amba_reducido_names =  amba_reducido_names,
                      bsas_comunas = bsas_comunas,
-                     base_raster = base_raster,
                      area = elecciones_usuario_partidos$area,
                      tipo_de_raster = reactive({ input$porcentaje2 }),
                      fecha = eleccion_fecha$casos_covid,
@@ -112,9 +124,9 @@ server <- function(input, output, session, r) {
 
   mapa_tarde <- geocovidapp::MapaPartido_Server("baires_partidos2",
                      pool = pool,
+                     imagen = imagen$imagen,
                      amba_reducido_names =  amba_reducido_names,
                      bsas_comunas = bsas_comunas,
-                     base_raster = base_raster,
                      area = elecciones_usuario_partidos$area,
                      tipo_de_raster = reactive({ input$porcentaje2 }),
                      fecha = eleccion_fecha$casos_covid,
@@ -124,9 +136,9 @@ server <- function(input, output, session, r) {
 
   mapa_noche <-geocovidapp::MapaPartido_Server("baires_partidos3",
                      pool = pool,
+                     imagen = imagen$imagen,
                      amba_reducido_names =  amba_reducido_names,
                      bsas_comunas = bsas_comunas,
-                     base_raster = base_raster,
                      area = elecciones_usuario_partidos$area,
                      tipo_de_raster = reactive({ input$porcentaje2 }),
                      fecha = eleccion_fecha$casos_covid,
@@ -137,7 +149,6 @@ server <- function(input, output, session, r) {
   # Reporte
   geocovidapp::ReporteServer("desc_reporte",
                 bsas = bsas,
-                base_raster = base_raster,
                 area = elecciones_usuario_partidos$area,
                 part = elecciones_usuario_partidos$partido, # Partidos_Input.R
                 fecha = eleccion_fecha$casos_covid,

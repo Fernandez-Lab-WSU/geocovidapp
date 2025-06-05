@@ -49,7 +49,6 @@ MapaPartido_UI <- function(id) {
 MapaPartido_Server <- function(id,
                                pool,
                                amba_reducido_names,
-                               base_raster,
                                bsas_comunas,
                                area,
                                fecha,
@@ -60,38 +59,7 @@ MapaPartido_Server <- function(id,
     id,
     session = getDefaultReactiveDomain(),
     function(input, output, session) {
-      imagen <- shiny::reactive({
-        # Agrego un dia por default para que renderice si no hay otras fechas.
-        if (is.null(fecha())) {
-          f_date <- format("2020-05-03", format = "%Y-%m-%d")
-        } else {
-          f_date <- formatted_date(fecha = fecha())
-        }
-
-        # Extraigo el raster que eligio el usuario
-        raster_data <- geocovidapp::base_raster |>
-          dplyr::filter(
-            fecha == as.Date(f_date,
-              origin = "1970-01-01"
-            ),
-            tipo_de_raster == tipo_de_raster(),
-            momento == momento_dia, # es un valor no reactivo
-            locacion == area()
-          )
-
-        if (nrow(raster_data) == 0) {
-          # showNotification("No hay datos disponibles para la fecha seleccionada.", type = "warning")
-          return(NULL)
-        } else {
-          # Lee el raster desde la base de datos
-          rasterLoader(
-            pool = pool,
-            raster_data = raster_data,
-            area = area()
-          )
-        }
-      })
-
+      imagen <- imagen()
 
       filter_partido <- shiny::reactive({
         if (part() %in% amba_reducido_names) {

@@ -11,7 +11,7 @@ ui <- function() {
     shinyjs::useShinyjs(),
     position = "fixed-top", # Zoom al mapa del tab1
     tags$style(type = "text/css", ".navbar{padding-left:30px}"),
-    lang = "es",
+    # lang = "es",
     theme = bslib::bs_theme(
       version = 5,
       bootswatch = "flatly",
@@ -32,7 +32,7 @@ ui <- function() {
       )
     ),
     windowTitle = "geocovid app",
-    shiny::tabPanel(
+    shiny::tabPanel( ## TAB 1
       title = "Movilidad Buenos Aires",
       value = "mov_bsas",
       tags$style(
@@ -57,7 +57,7 @@ ui <- function() {
         color = "lightgrey",
         color.background = "white"
       )
-    ),
+    ), ## TAB 2
     shiny::tabPanel(
       title = "Por partido",
       value = "mov_partido",
@@ -67,7 +67,7 @@ ui <- function() {
       ),
       shiny::fluidRow(
         shiny::column(
-          10,
+          9,
           shiny::br(),
           tags$h5(paste(
             "Casos de COVID-19 diarios",
@@ -79,56 +79,24 @@ ui <- function() {
               title = "Por partido",
               sidebar = bslib::sidebar(
                 id = "tab2-sidebar",
-                width = 500,
-                geocovidapp::Partidos_UI(
-                  "seleccion_partido",
-                  amba_reducido_names,
-                  base_raster
-                ),
-                shiny::fluidRow(
-                  shiny::column(
-                    6,
-                    shiny::radioButtons("porcentaje2",
-                      label = "Cambio porcentual",
-                      choices = c(
-                        "Prepandemia" = "pc",
-                        "Semanal" = "7dpc"
-                      ),
-                      selected = "7dpc"
-                    )
-                  ),
-                  shiny::column(
-                    6,
-                    shiny::sliderInput("opacity2",
-                      label = "Transparencia",
-                      min = 0,
-                      max = 1,
-                      value = 0.5,
-                      width = "75%",
-                      ticks = FALSE
-                    )
-                  ),
-                  shiny::hr(),
-                  geocovidapp::ReporteUI("desc_reporte")
-                )
+                width = 400,
+                geocovidapp::selectormapaUI("selector_partido"),
               ), # cierra sidebar
-
-              shiny::tags$h6("Click en el primer grafico para seleccionar la fecha de los mapas"),
-              geocovidapp::Dygraph_UI("casos_covid")
-            )
-          )
+            shiny::tags$h6("Click en el primer grafico para seleccionar la fecha de los mapas"),
+              geocovidapp::Dygraph_UI("casos_covid")))
         ),
         shiny::column(
-          2,
+          3,
           shiny::br(),
+          bslib::card(
+          bslib::card_header("Reporte"),
+          geocovidapp::ReporteUI("desc_reporte")),
           bslib::card(
             bslib::card_header("Porcentaje de cambio"),
             shiny::tags$div(
               style = "padding:0px;margin-top:0px",
               includeHTML("www/leyenda_leaflet.html")
-            )
-          )
-        )
+            )))
       ),
       tags$h5(textOutput("titulo")),
       shiny::fluidRow(
@@ -196,7 +164,7 @@ ui <- function() {
         )
       )
     ),
-    shiny::tabPanel(title ="Panorama Buenos Aires",
+    shiny::tabPanel(title ="Panorama Buenos Aires", ## TAB 3
                     value = "cov_bsas",
                     tags$style(type="text/css", "body {margin-top: 50px;}"),
                     geocovidapp::MapaCovidDepartamentos_UI('casos_covid')

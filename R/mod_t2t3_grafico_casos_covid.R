@@ -10,7 +10,7 @@ Dygraph_UI <- function(id) {
     fluidRow(
       shinycssloaders::withSpinner(
         dygraphs::dygraphOutput(ns("casos_prov"),
-          width = 600,
+          width = 700,
           height = 120
         ),
         type = 2,
@@ -19,7 +19,7 @@ Dygraph_UI <- function(id) {
       ),
       shinycssloaders::withSpinner(
         dygraphs::dygraphOutput(ns("casos_dpto"),
-          width = 600,
+          width = 700,
           height = 100
         ),
         type = 2,
