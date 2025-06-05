@@ -49,7 +49,7 @@ selectormapaUI <- function(id) {
 #' @param fecha 
 #'
 #' @export
-selectormapaServer <- function(id, amba_reducido_names, area, partido) {
+selectormapaServer <- function(id, act_mapas, fecha, amba_reducido_names, area, partido) {
   moduleServer(
     id,
     function(input, output, session) {
