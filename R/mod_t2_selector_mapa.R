@@ -7,7 +7,7 @@ selectormapaUI <- function(id) {
   ns <- NS(id)
   tagList(
     geocovidapp::Partidos_UI( # mod_t2_partidos_input.R
-      "seleccion_partido",
+      "seleccion_dinamica",
       amba_reducido_names,
       base_raster
     ),
@@ -49,12 +49,22 @@ selectormapaUI <- function(id) {
 #' @param fecha 
 #'
 #' @export
-selectormapaServer <- function(id,
-                               act_mapas, fecha) {
+selectormapaServer <- function(id, amba_reducido_names, area, partido) {
   moduleServer(
     id,
     function(input, output, session) {
+      
+     partido <- geocovidapp::Partidos_Server(  # mod_t2_partidos_input.R
+        "seleccion_dinamica",
+        amba_reducido_names = amba_reducido_names
+      )
+      
       imagen <- shiny::eventReactive(act_mapas(),{
+        
+        # Valores por defecto
+        area_val <- if (is.null(area()) || area() == "") "baires" else area()
+        partido_val <- if (is.null(partido()) || partido() == "") "Avellaneda" else partido()
+        
         # Si la fecha es nula, cargo una fecha por defecto
         if (is.null(fecha())) {
           f_date <- format("2020-05-03", format = "%Y-%m-%d")
@@ -71,7 +81,7 @@ selectormapaServer <- function(id,
             ),
             tipo_de_raster == tipo_de_raster(),
             momento == momento_dia, # es un valor no reactivo
-            locacion == area()
+            locacion == partido$area
           )
         
         if (nrow(raster_data) == 0) {
@@ -81,14 +91,16 @@ selectormapaServer <- function(id,
           rasterLoader(
             pool = pool,
             raster_data = raster_data,
-            area = area()
+            area = partido$area
           )
         }
       })
       
       return(
         list(
-          imagen = reactive({ imagen() })
+          imagen = reactive({ imagen() }),
+          partido = reactive({ partido$partido }),
+          area = reactive({ partido$area })
         )
       )
     }
