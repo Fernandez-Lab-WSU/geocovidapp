@@ -49,17 +49,17 @@ MapaPartido_UI <- function(id) {
 MapaPartido_Server <- function(id,
                                pool,
                                amba_reducido_names,
+                               imagen,
                                bsas_comunas,
                                area,
                                fecha,
                                tipo_de_raster,
-                               opacidad, part,
+                               opacidad, partido,
                                momento_dia) {
   moduleServer(
     id,
     session = getDefaultReactiveDomain(),
     function(input, output, session) {
-      imagen <- imagen()
 
       filter_partido <- shiny::reactive({
         if (part() %in% amba_reducido_names) {
@@ -71,9 +71,9 @@ MapaPartido_Server <- function(id,
 
           sf::st_as_sf(base::subset(
             amba,
-            partido == part()
+            partido == partido()
           ))
-        } else if (!(part() %in% amba_reducido_names)) { # baires
+        } else if (!(partido() %in% amba_reducido_names)) { # baires
 
           # ver Partidos_Input.R
           prov <- dplyr::filter(
@@ -84,7 +84,7 @@ MapaPartido_Server <- function(id,
           # recorto por poligono
           sf::st_as_sf(base::subset(
             prov,
-            partido == part()
+            partido == partido()
           ))
         }
       })

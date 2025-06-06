@@ -54,18 +54,17 @@ HistogramaRaster_Server <- function(id,
                                     bsas_comunas, 
                                     fecha,
                                     tipo_de_raster,
-                                    part,
+                                    partido,
                                     momento_dia) {
   moduleServer(
     id,
     function(input, output, session) {
       # Este elemento reactivo podria unificarlo con el de MapaPartido
-      imagen <- imagen()
       
       raster_hist <- reactive({
         req(imagen())
 
-        if (part() %in% amba_reducido_names) {
+        if (partido() %in% amba_reducido_names) {
           # ver Patidos_Input.R
           amba <- dplyr::filter(
             bsas_comunas,
@@ -75,7 +74,7 @@ HistogramaRaster_Server <- function(id,
           # recorto por poligono
           poli <- sf::st_as_sf(subset(
             amba,
-            partido == part()
+            partido == partido()
           ))
 
           # Me aseguro que el CRS sea el mismo para el poligono y el raster
@@ -99,7 +98,7 @@ HistogramaRaster_Server <- function(id,
           # recorto por poligono
           poli <- sf::st_as_sf(subset(
             prov,
-            partido == part()
+            partido == partido()
           ))
 
           # Me aseguro que el CRS sea el mismo para el poligono y el raster

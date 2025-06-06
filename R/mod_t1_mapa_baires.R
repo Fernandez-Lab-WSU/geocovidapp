@@ -92,8 +92,9 @@ MapaBaires_Server <- function(id, bsas,
 
       # Renderiza el mapa de la provincia de Buenos Aires
       output$tab1_leaflet_baires <- leaflet::renderLeaflet({
+        
         base_map <- leaflet::leaflet() |>
-          addBasemapTiles() |>
+          geocovidapp::addBasemapTiles() |>
           leaflet.extras::addResetMapButton() |>
           leaflet::addMeasure(
             position = "bottomleft",
@@ -104,7 +105,7 @@ MapaBaires_Server <- function(id, bsas,
           leaflet.extras::addFullscreenControl() |>
           leaflet::addScaleBar(position = "topright") |>
           leafem::addMouseCoordinates() |>
-          addPolygonsLayer(bsas, fillopacity_poly = 0.05) |>
+          geocovidapp::addPolygonsLayer(bsas, fillopacity_poly = 0.05) |>
           leaflet::setView(
             lat = ifelse(area() == "baires", -36.94, -34.72),
             lng = ifelse(area() == "baires", -63.94, -59.12),

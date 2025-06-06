@@ -45,7 +45,7 @@ Dygraph_UI <- function(id) {
 #' AMBA o Buenos Aires, si el cambio porcentual es semanal o prepandemia
 #' o el momento del día que representan.
 #' @param area El raster puede corresponder a Buenos Aires provincia o a AMBA.
-#' @param part Partido de la provincia de Buenos Aires, seleccionado en otro
+#' @param partido Partido de la provincia de Buenos Aires, seleccionado en otro
 #' módulo.
 #'
 #' @return La fecha seleccionada por el usuario en el grafico de COVID-19
@@ -53,9 +53,8 @@ Dygraph_UI <- function(id) {
 Dygraph_Server <- function(id,
                            data_sisa,
                            amba_reducido_names,
-                           base_raster,
                            area,
-                           part) {
+                           partido) {
   shiny::moduleServer(
     id,
     function(input, output, session) {
@@ -82,13 +81,13 @@ Dygraph_Server <- function(id,
         # Ya que no hay muchos datos de covid reportados por comuna, consideramos CABA en general
         # Pero, se va apoder visualizar la comuna en el mapa si se quiere
 
-        if (part() %in% amba_reducido_names &
-          stringr::str_detect(part(),
+        if (partido() %in% amba_reducido_names &
+          stringr::str_detect(partido(),
             pattern = "^Comuna"
           ) | # si quiero visualizar la comuna
           dim(dplyr::filter(
             data_sisa,
-            .data$residencia_departamento_nombre == part()
+            .data$residencia_departamento_nombre == partido()
           ))[1] == 0) { # si no hay casos en el partido
 
           list(
@@ -98,16 +97,16 @@ Dygraph_Server <- function(id,
           )
         } else {
           dpartido <- data_sisa |>
-            dplyr::filter(.data$residencia_departamento_nombre == part()) |>
+            dplyr::filter(.data$residencia_departamento_nombre == partido()) |>
             dplyr::count(.data$fecha_enfermo) |>
             dplyr::filter(
-              .data$fecha_enfermo >= base::min(as.Date(base_raster$fecha, origin = "1970-01-01")),
-              .data$fecha_enfermo <= base::max(as.Date(base_raster$fecha, origin = "1970-01-01"))
+              .data$fecha_enfermo >= base::min(as.Date(geocovidapp::base_raster$fecha, origin = "1970-01-01")),
+              .data$fecha_enfermo <= base::max(as.Date(geocovidapp::base_raster$fecha, origin = "1970-01-01"))
             ) |>
             dplyr::mutate(fecha_enfermo = as.Date(.data$fecha_enfermo))
 
           # Que en la leyenda aparezca el nombre del partido
-          base::colnames(dpartido)[2] <- as.character(part())
+          base::colnames(dpartido)[2] <- as.character(partido())
 
           data_xts_partido <- xts::xts(dpartido,
             order.by = dpartido$fecha_enfermo
@@ -125,13 +124,13 @@ Dygraph_Server <- function(id,
 
       # Primer grafico: Casos por provincia y/o por CABA
       grafico_casos_prov <- reactive({
-        if (part() %in% amba_reducido_names &
-          stringr::str_detect(as.character(part()),
+        if (partido() %in% amba_reducido_names &
+          stringr::str_detect(as.character(partido()),
             pattern = "^Comuna"
           ) | # si quiero ver datos de comuna
           dim(dplyr::filter(
             data_sisa,
-            .data$residencia_departamento_nombre == part()
+            .data$residencia_departamento_nombre == partido()
           ))[1] == 0) { # si no hay casos en el partido
 
           data_plot <- data_xts()
@@ -160,12 +159,12 @@ Dygraph_Server <- function(id,
       # Segundo grafico: Casos por departamento
       grafico_casos_dpto <- reactive({
         if (as.character(area()) == "amba" &
-          stringr::str_detect(as.character(part()),
+          stringr::str_detect(as.character(partido()),
             pattern = "^Comuna"
           ) || # si quiero ver datos de comuna
           dim(dplyr::filter(
             data_sisa,
-            .data$residencia_departamento_nombre == part()
+            .data$residencia_departamento_nombre == partido()
           ))[1] == 0) { # si no hay casos en el partido
 
           dygraphs::dygraph(data_xts()$caba,

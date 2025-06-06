@@ -142,16 +142,15 @@ MapaCovidDepartamentos_UI <- function(id) {
 MapaCovidDepartamentos_Server <- function(id,
                                           pool,
                                           data_sisa,
-                                          base_raster,
                                           bsas,
                                           amba_caba) {
   moduleServer(
     id,
     function(input, output, session) {
+      # Filtro los partidos de Buenos Aires
       fechas <- Dygraph_Server("casos_covid_interno",
         amba = amba_caba,
         data_sisa = data_sisa,
-        base_raster = geocovidapp::base_raster,
         part = reactive({
           input$partidos
         }),
