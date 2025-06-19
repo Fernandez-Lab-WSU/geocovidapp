@@ -30,6 +30,9 @@ do.}
 \item{tipo_de_raster}{String. Si el raster corresponde a el cambio porcentual
 prepandemia (pc) o semanal (7dpc).}
 
+\item{partido}{Partido de la provincia de Buenos Aires, seleccionado en otro
+módulo.}
+
 \item{momento_dia}{Entero. Hora del dia representada en el raster, puede ser
 0am, 8 am o 4 pm.}
 
@@ -39,9 +42,6 @@ AMBA o Buenos Aires, si el cambio porcentual es semanal o prepandemia
 o el momento del día que representan.}
 
 \item{area}{El raster puede corresponder a Buenos Aires provincia o a AMBA.}
-
-\item{part}{Partido de la provincia de Buenos Aires, seleccionado en otro
-módulo.}
 }
 \value{
 Histograma de la movilidad ciudadana por partido, respetando la

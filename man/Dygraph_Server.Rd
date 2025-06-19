@@ -4,12 +4,10 @@
 \alias{Dygraph_Server}
 \title{Servidor: Gráficos de casos de covid por provincia y departamento}
 \usage{
-Dygraph_Server(id, data_sisa, amba_reducido_names, area, partido)
+Dygraph_Server(id, amba_reducido_names, area, partido)
 }
 \arguments{
 \item{id}{Module name}
-
-\item{data_sisa}{Dataframe con los casos diarios reportados de COVID-19.}
 
 \item{amba_reducido_names}{String. Vector con los nombres de los partidos
 que conforman el AMBA.}
@@ -18,6 +16,8 @@ que conforman el AMBA.}
 
 \item{partido}{Partido de la provincia de Buenos Aires, seleccionado en otro
 módulo.}
+
+\item{data_sisa}{Dataframe con los casos diarios reportados de COVID-19.}
 
 \item{base_raster}{Dataframe que lista todos los rasters y desagrega en
 sus columnas características de interes, como si son rasters de

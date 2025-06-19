@@ -37,7 +37,7 @@ HistogramaRaster_UI <- function(id) {
 #' @param tipo_de_raster String. Si el raster corresponde a el cambio porcentual
 #' prepandemia (pc) o semanal (7dpc).
 #' @param area El raster puede corresponder a Buenos Aires provincia o a AMBA.
-#' @param part Partido de la provincia de Buenos Aires, seleccionado en otro
+#' @param partido Partido de la provincia de Buenos Aires, seleccionado en otro
 #' módulo.
 #' @param momento_dia Entero. Hora del dia representada en el raster, puede ser
 #' 0am, 8 am o 4 pm.
