@@ -48,6 +48,7 @@ MapaPartido_UI <- function(id) {
 #' @export
 MapaPartido_Server <- function(id,
                                pool,
+                               act_mapas,
                                amba_reducido_names,
                                imagen,
                                bsas_comunas,
@@ -67,7 +68,9 @@ MapaPartido_Server <- function(id,
         imagen()[[momento_dia]]
       })
 
-      filter_partido <- shiny::reactive({
+      filter_partido <- eventReactive(act_mapas(), ignoreNULL = TRUE, {
+    
+        
         if (partido() %in% amba_reducido_names) {
           # ver Partidos_Input.R
           amba <- dplyr::filter(
@@ -80,7 +83,7 @@ MapaPartido_Server <- function(id,
             partido == partido()
           ))
         } else if (!(partido() %in% amba_reducido_names)) { # baires
-
+       
           # ver Partidos_Input.R
           prov <- dplyr::filter(
             bsas,

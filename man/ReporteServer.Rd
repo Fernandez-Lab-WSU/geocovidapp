@@ -6,7 +6,7 @@
 \usage{
 ReporteServer(
   id,
-  part,
+  partido,
   fecha,
   base_raster,
   bsas,
@@ -26,7 +26,7 @@ ReporteServer(
 \arguments{
 \item{id}{Module name}
 
-\item{part}{Partido de la provincia de Buenos Aires, seleccionado en otro
+\item{partido}{Partido de la provincia de Buenos Aires, seleccionado en otro
 módulo.}
 
 \item{fecha}{Fecha seleccionada.}

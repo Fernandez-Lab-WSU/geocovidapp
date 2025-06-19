@@ -28,7 +28,7 @@ Dygraph_UI <- function(id) {
       ),
       htmltools::tags$p(
         style = "font-size: 12px; color: #666; margin-top: 10px;",
-        HTML("<br> a - Aislamiento por segmentacion geografica, <br> b - Aislamiento con reapertura progresiva, <br> c - Nueva normalidad.")
+        HTML("<br> a - Aislamiento con reapertura progresiva, <br> b - Nueva normalidad.")
       )
     )
   )
@@ -93,7 +93,7 @@ Dygraph_Server <- function(id,
           list(
             caba = data_xts_caba,
             bsas = data_xts_bsas,
-            cabaybsas = data_xts_combined
+            cabaybsas = data_xts_combinado
           )
         } else {
           dpartido <- data_sisa |>

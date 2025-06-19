@@ -19,7 +19,7 @@ ReporteUI <- function(id) {
 #' Este módulo se encuentra en el tab 2: 'Por partido' de GeoCovid app
 #'
 #' @param id Module name
-#' @param part Partido de la provincia de Buenos Aires, seleccionado en otro 
+#' @param partido Partido de la provincia de Buenos Aires, seleccionado en otro 
 #' módulo.
 #' @param fecha Fecha seleccionada.
 #' @param imagen Imagen raster representando la movilidad ciudadana.
@@ -36,7 +36,7 @@ ReporteUI <- function(id) {
 #' @return Devuelve un reporte en base a las selecciones en el tab2.
 #' @export
 ReporteServer <- function(id,
-                          part, fecha,
+                          partido, fecha,
                           base_raster, bsas, area,
                           tipo_de_raster, opacidad,
                           mapa_partido_manana,
@@ -65,7 +65,7 @@ ReporteServer <- function(id,
       output$reporte <- downloadHandler(
         # https://community.rstudio.com/t/retain-formatting-on-a-pdf-output-from-shiny-downloadhandler/36410
         filename = function(){
-          paste0("GeoCovid_", part(), "_", as.character(fecha_val()), ".docx")
+          paste0("GeoCovid_", partido(), "_", as.character(fecha_val()), ".docx")
         },
         content = function(file) {
           
@@ -82,7 +82,7 @@ ReporteServer <- function(id,
           
           # Como quiero obtener los mapas en un docx tengo que convertirlos en imagen
           # un mapa leaflet es un widget html y no se puede renderizar en un docx
-          map_path1 <- mapa_base_ggplot(part = part(), zoom = zoom_mapa_partido_manana())
+          map_path1 <- mapa_base_ggplot(part = partido(), zoom = zoom_mapa_partido_manana())
          # map_path2 <- mapa_ggplot(raster = mapa_partido_tarde(), opacidad = opacidad(), zoom = zoom_mapa_partido_tarde())
          # map_path3 <- mapa_ggplot(raster = mapa_partido_noche(), opacidad = opacidad(), zoom = zoom_mapa_partido_noche())
          # graf_path1 <- mapa_ggplot(grafico_casos_prov(), "casos_prov")
@@ -92,7 +92,7 @@ ReporteServer <- function(id,
           
           
           params <- list(
-            partido = part(),
+            partido = partido(),
             fecha = fecha_val(),
             tipo_de_raster = tipo_de_raster(),
             opacidad = opacidad(),

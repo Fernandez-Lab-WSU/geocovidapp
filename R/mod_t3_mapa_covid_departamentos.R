@@ -127,12 +127,6 @@ MapaCovidDepartamentos_UI <- function(id) {
 #' Este mapa se encuentra en el tab 3 de GeoCovid app.
 #'
 #' @param id Module name
-#' @param data_sisa Dataframe con los casos diarios reportados de COVID-19.
-#' @param base_raster Dataframe que lista todos los rasters y desagrega en
-#' sus columnas características de interes, como si son rasters de
-#' AMBA o Buenos Aires, si el cambio porcentual es semanal o prepandemia
-#' o el momento del día que representan.
-#' @param bsas Dataset de clase sf con los partidos de Buenos Aires.
 #' @param amba_caba String. Vector con los nombres de los partidos
 #' que conforman el AMBA sin las comunas de Provincia de Buenos Aires.
 #'

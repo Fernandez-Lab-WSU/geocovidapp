@@ -49,6 +49,7 @@ HistogramaRaster_UI <- function(id) {
 #' @export
 HistogramaRaster_Server <- function(id,
                                     pool,
+                                    act_mapas,
                                     imagen,
                                     amba_reducido_names,
                                     bsas_comunas, 
@@ -66,11 +67,11 @@ HistogramaRaster_Server <- function(id,
       })
       
       
-      raster_hist <- reactive({
-        req(imagen_momento())
+      raster_hist <- eventReactive(act_mapas(), ignoreNULL = TRUE, {
+        
 
         if (partido() %in% amba_reducido_names) {
-          # ver Patidos_Input.R
+          # ver Partidos_Input.R
           amba <- dplyr::filter(
             bsas_comunas,
             partido %in% amba_reducido_names
@@ -93,7 +94,7 @@ HistogramaRaster_Server <- function(id,
           imagen2[imagen2 > 50] <- 50
           imagen2[imagen2 < -50] <- -50
           imagen2
-        } else if (!(part() %in% amba_reducido_names)) {
+        } else if (!(partido() %in% amba_reducido_names)) {
           # ver Patidos_Input.R
           prov <- dplyr::filter(
             bsas_comunas,
@@ -113,7 +114,7 @@ HistogramaRaster_Server <- function(id,
             terra::mask(poli) |>
             terra::crop(poli)
 
-          # no quiero que considere valores por arriba de 50 o debajo de 50
+          # No quiero que considere valores por arriba de 50 o debajo de 50
           imagen2[imagen2 > 50] <- 50
           imagen2[imagen2 < -50] <- -50
           imagen2
@@ -122,8 +123,8 @@ HistogramaRaster_Server <- function(id,
 
 
 
-      output$histograma <- renderPlot(
-        {
+      output$histograma <- renderPlot({
+        req(imagen_momento())
           validate(need(!is.null(raster_hist()), "No hay datos disponibles para la fecha seleccionada."))
 
           par(mar = c(4, 1, 3, 1)) # bottom, left, top, right

@@ -71,14 +71,11 @@ dygraphs_events <- function(plot){
                           highlightSeriesBackgroundAlpha = 0.4,
                           hideOnMouseOut = TRUE) |>
     dygraphs::dyCrosshair(direction = "vertical")  |>
-    dygraphs::dyEvent("2020-04-26",
+    dygraphs::dyEvent("2020-05-10",
                       "a",
                       labelLoc = "bottom") |>
-    dygraphs::dyEvent("2020-05-10",
-                      "b",
-                      labelLoc = "bottom") |>
     dygraphs::dyEvent("2020-06-07",
-                      "c",
+                      "b",
                       labelLoc = "bottom") |>
     dygraphs::dyLegend(show = "follow",
                        width = 400

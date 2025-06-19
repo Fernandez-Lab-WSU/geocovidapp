@@ -60,8 +60,7 @@ server <- function(input, output, session, r) {
                                                 partido = elecciones_usuario$partido)
   
   datos_raster <- reactive({
-    req(elecciones_usuario$porcentaje(), elecciones_usuario$area(), eleccion_fecha$casos_covid())
-    
+   
     fecha_final <- if (is.null(eleccion_fecha$casos_covid())) {
       as.Date("2020-05-03")
     } else {
@@ -78,7 +77,7 @@ server <- function(input, output, session, r) {
     d
   })
   
-  imagen_partido <- eventReactive(input$act_mapas, ignoreInit = FALSE, {
+  imagen_partido <- eventReactive(input$act_mapas, ignoreNULL = FALSE, {
     raster_data <- datos_raster()
     area_valor <- isolate(elecciones_usuario$area())
 
@@ -116,6 +115,7 @@ server <- function(input, output, session, r) {
   # Histogramas
   geocovidapp::HistogramaRaster_Server('hist',
                           pool = pool,
+                          act_mapas = reactive({input$act_mapas}),
                           imagen = imagen_partido,
                           amba_reducido_names = amba_reducido_names,
                           bsas_comunas = bsas_comunas, # Incluye comunas de CABA
@@ -126,6 +126,7 @@ server <- function(input, output, session, r) {
 
   geocovidapp::HistogramaRaster_Server('hist2',
                           pool = pool,
+                          act_mapas = reactive({input$act_mapas}),
                           imagen = imagen_partido,
                           amba_reducido_names =  amba_reducido_names,
                           bsas_comunas = bsas_comunas,
@@ -136,6 +137,7 @@ server <- function(input, output, session, r) {
 
   geocovidapp::HistogramaRaster_Server('hist3',
                           pool = pool,
+                          act_mapas = reactive({input$act_mapas}),
                           imagen = imagen_partido,
                           amba_reducido_names =  amba_reducido_names,
                           bsas_comunas = bsas_comunas,
@@ -147,6 +149,7 @@ server <- function(input, output, session, r) {
   # Mapas con detalle del partido
   mapa_manana <- geocovidapp::MapaPartido_Server("baires_partidos",
                      pool = pool,
+                     act_mapas = reactive({input$act_mapas}),
                      imagen = imagen_partido,
                      amba_reducido_names =  amba_reducido_names,
                      bsas_comunas = bsas_comunas,
@@ -159,6 +162,7 @@ server <- function(input, output, session, r) {
 
   mapa_tarde <- geocovidapp::MapaPartido_Server("baires_partidos2",
                      pool = pool,
+                     act_mapas = reactive({input$act_mapas}),
                      imagen = imagen_partido,
                      amba_reducido_names =  amba_reducido_names,
                      bsas_comunas = bsas_comunas,
@@ -171,6 +175,7 @@ server <- function(input, output, session, r) {
 
   mapa_noche <-geocovidapp::MapaPartido_Server("baires_partidos3",
                      pool = pool,
+                     act_mapas = reactive({input$act_mapas}),
                      imagen = imagen_partido,
                      amba_reducido_names =  amba_reducido_names,
                      bsas_comunas = bsas_comunas,
@@ -185,7 +190,7 @@ server <- function(input, output, session, r) {
   geocovidapp::ReporteServer("desc_reporte",
                 bsas = bsas,
                 area = elecciones_usuario$area,
-                part = elecciones_usuario$partido, # Partidos_Input.R
+                partido = elecciones_usuario$partido, # Partidos_Input.R
                 fecha = eleccion_fecha$casos_covid,
                 mapa_partido_manana = mapa_manana$mapa_partido,
                 mapa_partido_tarde = mapa_tarde$mapa_partido,

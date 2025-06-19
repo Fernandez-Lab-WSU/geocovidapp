@@ -11,15 +11,6 @@ MapaCovidDepartamentos_Server(id, pool, amba_caba)
 
 \item{amba_caba}{String. Vector con los nombres de los partidos
 que conforman el AMBA sin las comunas de Provincia de Buenos Aires.}
-
-\item{data_sisa}{Dataframe con los casos diarios reportados de COVID-19.}
-
-\item{base_raster}{Dataframe que lista todos los rasters y desagrega en
-sus columnas características de interes, como si son rasters de
-AMBA o Buenos Aires, si el cambio porcentual es semanal o prepandemia
-o el momento del día que representan.}
-
-\item{bsas}{Dataset de clase sf con los partidos de Buenos Aires.}
 }
 \value{
 Mapas y gráficos del tab 3.
