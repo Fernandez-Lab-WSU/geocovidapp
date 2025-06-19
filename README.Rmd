@@ -34,7 +34,7 @@ podes hacerlo ejecutando el siguiente código en R:
 ```r
 # install.packages("devtools")
 devtools::install_github("Fernandez-Lab-WSU/geocovidapp")
-geocovidapp::runapp()
+geocovidapp::run_app()
 ```
 
 ## Tabs
@@ -43,7 +43,7 @@ La aplicación cuenta con 4 tabs:
 
 1. **Mapa**: En este tab se muestra un mapa de la provincia de Buenos Aires con los casos de Covid-19.
 
-
+TBD
 
 ## Licencias
 

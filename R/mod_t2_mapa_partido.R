@@ -60,9 +60,15 @@ MapaPartido_Server <- function(id,
     id,
     session = getDefaultReactiveDomain(),
     function(input, output, session) {
+      
+      # Accedés al raster según el momento indicado
+      imagen_momento <- reactive({
+        req(imagen())
+        imagen()[[momento_dia]]
+      })
 
       filter_partido <- shiny::reactive({
-        if (part() %in% amba_reducido_names) {
+        if (partido() %in% amba_reducido_names) {
           # ver Partidos_Input.R
           amba <- dplyr::filter(
             bsas_comunas,
@@ -92,17 +98,17 @@ MapaPartido_Server <- function(id,
 
       # Hago esto porque necesito sacar el mapa para el reporte
       mapa_leaflet <- reactive({
-        req(imagen())
+        req(imagen_momento())
 
         mapa_partido(
           partido = filter_partido(),
-          raster = imagen(),
+          raster = imagen_momento(),
           opacidad = opacidad()
         )
       })
 
       output$mapa_partido <- leaflet::renderLeaflet({
-        if (is.null(imagen())) {
+        if (is.null(imagen_momento())) {
           leaflet::leaflet() |>
             leaflet::addTiles() |>
             leaflet::addPopups(
@@ -136,7 +142,7 @@ MapaPartido_Server <- function(id,
 
 
         leaflet::leafletProxy("mapa_partido") |>
-          leaflet::addRasterImage(imagen(),
+          leaflet::addRasterImage(imagen_momento(),
             colors = pal,
             opacity = opacidad(),
             group = "basic",
@@ -165,7 +171,7 @@ MapaPartido_Server <- function(id,
 
       return(list(
         mapa_partido = reactive({ # Esto va al reporte
-          imagen() # Estoy devolviendo el raster seleccionado, NO el mapa de leaflet
+          imagen_momento() # Estoy devolviendo el raster seleccionado, NO el mapa de leaflet
         }),
         zoom_mapa_partido = reactive({
           input$mapa_partido_zoom

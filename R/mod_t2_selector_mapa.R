@@ -49,12 +49,12 @@ selectormapaUI <- function(id) {
 #' @param fecha 
 #'
 #' @export
-selectormapaServer <- function(id, act_mapas, fecha, amba_reducido_names, area) {
+selectormapaServer <- function(id, act_mapas, fecha, amba_reducido_names) {
   moduleServer(
     id,
     function(input, output, session) {
       
-     partido <- geocovidapp::Partidos_Server(  # mod_t2_partidos_input.R
+     eleccion <- geocovidapp::Partidos_Server(  # mod_t2_partidos_input.R
         "seleccion_dinamica",
         amba_reducido_names = amba_reducido_names
       )
@@ -77,12 +77,12 @@ selectormapaServer <- function(id, act_mapas, fecha, amba_reducido_names, area) 
             ),
             tipo_de_raster == tipo_de_raster(),
             momento == momento_dia, # es un valor no reactivo
-            locacion == partido$area
+            locacion == eleccion$area
           )
         
         print("cucaracha")
-        print(partido$area)
-        print(partido$partido)
+        print(eleccion$area)
+        print(eleccion$partido)
         
         if (nrow(raster_data) == 0) {
           # showNotification("No hay datos disponibles para la fecha seleccionada.", type = "warning")
@@ -91,7 +91,7 @@ selectormapaServer <- function(id, act_mapas, fecha, amba_reducido_names, area) 
           rasterLoader(
             pool = pool,
             raster_data = raster_data,
-            area = partido$area
+            area = eleccion$area
           )
         }
       })
@@ -99,8 +99,8 @@ selectormapaServer <- function(id, act_mapas, fecha, amba_reducido_names, area) 
       return(
         list(
           imagen = reactive({ imagen() }),
-          partido = reactive({ partido$partido }),
-          area = reactive({ partido$area })
+          partido = reactive({ eleccion$partido }),
+          area = reactive({ eleccion$area })
         )
       )
     }

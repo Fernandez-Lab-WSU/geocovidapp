@@ -51,7 +51,6 @@ Dygraph_UI <- function(id) {
 #' @return La fecha seleccionada por el usuario en el grafico de COVID-19
 #' @export
 Dygraph_Server <- function(id,
-                           data_sisa,
                            amba_reducido_names,
                            area,
                            partido) {
@@ -60,6 +59,9 @@ Dygraph_Server <- function(id,
     function(input, output, session) {
       # Convierto los datos al formato que necesita dygraph
       data_xts <- reactive({
+        req(partido())
+       
+        
         data_xts_bsas <- convertir_xts_serie(
           serie = "Buenos Aires",
           nombre_serie = "BsAs"
@@ -70,12 +72,10 @@ Dygraph_Server <- function(id,
           nombre_serie = "CABA"
         )
 
-
         # Creo una version que combine las series de caba y baires
         data_xts_combinado <- cbind(data_xts_caba, data_xts_bsas)
         data_xts_combinado$fecha_enfermo <- NULL # Remuevo las fechas duplicadas
         data_xts_combinado$fecha_enfermo.1 <- NULL
-
 
         # Si el usuario elige una comuna, no se va a visualizar una tercera linea
         # Ya que no hay muchos datos de covid reportados por comuna, consideramos CABA en general
@@ -139,7 +139,7 @@ Dygraph_Server <- function(id,
             group = "A"
           ) |>
             dygraphs::dySeries("BsAs", color = "#186E8B") |>
-            dygraphs_events()
+            geocovidapp::dygraphs_events()
         } else {
           data_plot <- data_xts()
           # Si no es un dato de comuna, que muestre tambien una linea para CABA
@@ -148,7 +148,7 @@ Dygraph_Server <- function(id,
           ) |>
             dygraphs::dySeries("BsAs", color = "#186E8B") |>
             dygraphs::dySeries("CABA", color = "#301A4B") |>
-            dygraphs_events()
+            geocovidapp::dygraphs_events()
         }
       })
 
@@ -173,7 +173,7 @@ Dygraph_Server <- function(id,
             dygraphs::dySeries("CABA",
               color = "#301A4B"
             ) |>
-            dygraphs_events()
+            geocovidapp::dygraphs_events()
         } else {
           dygraphs::dygraph(data_xts()$partido,
             group = "A"
@@ -181,7 +181,7 @@ Dygraph_Server <- function(id,
             dygraphs::dySeries(colnames(data_xts()$partido)[2], # nombre del partido
               color = "#6C9AC6"
             ) |>
-            dygraphs_events()
+            geocovidapp::dygraphs_events()
         }
       })
 

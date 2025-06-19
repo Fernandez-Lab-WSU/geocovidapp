@@ -8,12 +8,13 @@ MapaPartido_Server(
   id,
   pool,
   amba_reducido_names,
+  imagen,
   bsas_comunas,
   area,
   fecha,
   tipo_de_raster,
   opacidad,
-  part,
+  partido,
   momento_dia
 )
 }
@@ -32,9 +33,6 @@ prepandemia (pc) o semanal (7dpc).}
 
 \item{opacidad}{Double. Valor de opacidad del raster.}
 
-\item{part}{Partido de la provincia de Buenos Aires, seleccionado en otro
-módulo.}
-
 \item{momento_dia}{Entero. Hora del dia representada en el raster, puede ser
 0am, 8 am o 4 pm.}
 
@@ -44,6 +42,9 @@ AMBA o Buenos Aires, si el cambio porcentual es semanal o prepandemia
 o el momento del día que representan.}
 
 \item{bsas}{Dataset de clase sf con los partidos de Buenos Aires.}
+
+\item{part}{Partido de la provincia de Buenos Aires, seleccionado en otro
+módulo.}
 }
 \value{
 Mapa raster por partido creado con leaflet.

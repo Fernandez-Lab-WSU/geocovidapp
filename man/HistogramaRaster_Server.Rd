@@ -10,10 +10,9 @@ HistogramaRaster_Server(
   imagen,
   amba_reducido_names,
   bsas_comunas,
-  area,
   fecha,
   tipo_de_raster,
-  part,
+  partido,
   momento_dia
 )
 }
@@ -26,15 +25,10 @@ que conforman el AMBA.}
 \item{bsas_comunas}{Mapa vectorial de la provincia de Buenos Aires simplifica
 do.}
 
-\item{area}{El raster puede corresponder a Buenos Aires provincia o a AMBA.}
-
 \item{fecha}{Fecha seleccionada.}
 
 \item{tipo_de_raster}{String. Si el raster corresponde a el cambio porcentual
 prepandemia (pc) o semanal (7dpc).}
-
-\item{part}{Partido de la provincia de Buenos Aires, seleccionado en otro
-módulo.}
 
 \item{momento_dia}{Entero. Hora del dia representada en el raster, puede ser
 0am, 8 am o 4 pm.}
@@ -43,6 +37,11 @@ módulo.}
 sus columnas características de interes, como si son rasters de
 AMBA o Buenos Aires, si el cambio porcentual es semanal o prepandemia
 o el momento del día que representan.}
+
+\item{area}{El raster puede corresponder a Buenos Aires provincia o a AMBA.}
+
+\item{part}{Partido de la provincia de Buenos Aires, seleccionado en otro
+módulo.}
 }
 \value{
 Histograma de la movilidad ciudadana por partido, respetando la

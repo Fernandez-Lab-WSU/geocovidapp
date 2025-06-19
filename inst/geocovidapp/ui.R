@@ -80,7 +80,15 @@ ui <- function() {
               sidebar = bslib::sidebar(
                 id = "tab2-sidebar",
                 width = 400,
-                geocovidapp::selectormapaUI("selector_partido"),
+                geocovidapp::Partidos_UI("selector_dinamico",
+                                         amba_reducido_names = amba_reducido_names,
+                                         base_raster = base_raster),
+                shiny::hr(),
+                shiny::actionButton(
+                  "act_mapas",
+                  "Actualizar el mapa",
+                  class = "btn btn-secondary btn-sm"
+                )
               ), # cierra sidebar
             shiny::tags$h6("Click en el primer grafico para seleccionar la fecha de los mapas"),
               geocovidapp::Dygraph_UI("casos_covid")))

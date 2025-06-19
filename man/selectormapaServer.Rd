@@ -4,7 +4,7 @@
 \alias{selectormapaServer}
 \title{Title}
 \usage{
-selectormapaServer(id, act_mapas, fecha)
+selectormapaServer(id, act_mapas, fecha, amba_reducido_names)
 }
 \arguments{
 \item{id}{}

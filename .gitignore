@@ -10,3 +10,4 @@ inst/geocovidapp/config.yml
 config.yml
 tests/
 old_modules/
+*sysdata.R

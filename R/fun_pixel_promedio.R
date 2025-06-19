@@ -10,20 +10,7 @@ pixel_loader <- function(partido, tipo_de_raster){
     port = db$port,
     host = db$host
   )
-  # onStop(function() {
-  #   pool::poolClose(pool)
-  # })
 
-  
-  # pxd_baires <- pxd_baires |>
-  #   dplyr::filter(.data$fecha < '2020-05-15' &
-  #                   .data$fecha > '2020-05-08') # sera replazado con los datos finales
-  # 
-  # pxdy <-  pxd_baires |>
-  #   dplyr::filter(.data$partido == input$partidos,
-  #                 .data$tipo_de_raster == input$tipo_tab)
-  
-  
   query <- paste(
     "
   select * from px_prom",
@@ -36,9 +23,9 @@ pixel_loader <- function(partido, tipo_de_raster){
                        DBI::Id(schema="px_prom", table = "px_prom")) 
 
 
-use_data(data_px)
-
-print("PXXXX")
-print(data_px)
+# use_data(data_px)
+# 
+# print("PXXXX")
+# print(data_px)
 return(data_px)
 }

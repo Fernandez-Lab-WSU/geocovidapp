@@ -63,12 +63,12 @@ usethis::use_data(bsas, overwrite = TRUE)
 st_geometry(bsas_comunas) <- "geometry"
 usethis::use_data(bsas_comunas, overwrite = TRUE)
 
-# bbox amba ------------
-amba <- bsas[bsas$partido %in% amba_reducido_names, ]
-sf::st_geometry(amba) <- "geometry"
-amba_bbox <- sf::st_bbox(amba)
-
-usethis::use_data(amba_bbox, overwrite = TRUE)
+# data_sisa -----------
+# No dejo disponible este dataset, ya que el usuario deberia 
+# referirse a las fuentes oficiales disponibles online
+# para evitar usar datos desactualizados o con potenciales
+# correcciones.
+use_data(data_sisa, internal = TRUE)
 
 # base datos sisa modificada tab 3 -----------
 

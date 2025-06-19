@@ -141,8 +141,6 @@ MapaCovidDepartamentos_UI <- function(id) {
 #' @export
 MapaCovidDepartamentos_Server <- function(id,
                                           pool,
-                                          data_sisa,
-                                          bsas,
                                           amba_caba) {
   moduleServer(
     id,
@@ -150,7 +148,6 @@ MapaCovidDepartamentos_Server <- function(id,
       # Filtro los partidos de Buenos Aires
       fechas <- Dygraph_Server("casos_covid_interno",
         amba = amba_caba,
-        data_sisa = data_sisa,
         part = reactive({
           input$partidos
         }),
@@ -167,7 +164,7 @@ MapaCovidDepartamentos_Server <- function(id,
         # Filtro las condiciones antes de la query
         # Bajar la base de datos completa tarda mucho tiempo.
         query <- paste0(
-          "SELECT * FROM px_prom.px_prom WHERE ",
+          "SELECT * FROM px_promedio.px_promedio WHERE ",
           "partido = '", partidos_input, "' AND ",
           "tipo_de_raster = '", tipo_tab_input, "'"
         )
@@ -247,7 +244,8 @@ MapaCovidDepartamentos_Server <- function(id,
           formatted_date(fecha = fecha)
         }
       })
-
+      
+      # Texto que se ve en la panatalla por sobre el mapa
       output$diaselec <- renderText({
         paste(
           "Movilidad ciudadana",
@@ -290,9 +288,6 @@ MapaCovidDepartamentos_Server <- function(id,
 
         # 3. Grafico
         # uso un left_join porque ya casos_darios_partido no es un sf data.frame
-
-
-
         sisa <- casos_diarios |>
           dplyr::left_join(centroides_mapa,
             by = c("partido")
@@ -317,7 +312,7 @@ MapaCovidDepartamentos_Server <- function(id,
         sisa
       })
 
-
+     # Extraigo la informacion de SQL
       px_data_mapa <- shiny::reactive({
         fecha_input <- fecha_formato() # Esto es output de dygraph
         tipo_tab_input <- input$tipo_tab
@@ -329,18 +324,15 @@ MapaCovidDepartamentos_Server <- function(id,
           "fecha = '", fecha_input, "' AND ",
           "tipo_de_raster = '", tipo_tab_input, "'"
         )
-
-        # Run the query using st_read
         sf::st_read(pool, query = query)
       })
 
+       # Uso los datos de covid para estimar los valores
       burbujas_plot <- shiny::reactive({
         tam_burb <- sisa() |>
           dplyr::group_by(.data$crit_covid) |>
           dplyr::arrange(dplyr::desc(.data$n_casos))
 
-        print(tam_burb)
-        print("tam_burb")
         # Rangos para n_casos que se corresponden con los tamaños de las burbujas
         q <- quantile(tam_burb$n_casos,
           probs = c(0.5, 0.9)
@@ -349,13 +341,7 @@ MapaCovidDepartamentos_Server <- function(id,
         size_small <- as.integer(q[[1]])
         size_medium <- as.integer(q[[2]])
 
-        print("tam_burb")
-        print(tam_burb)
-
-        print("size_small")
-        print(size_small)
-
-        # Create three separate data frames based on the ranges of n_casos
+        # Genero dataset separados para n_casos
         tam_burb_small <- subset(
           tam_burb,
           n_casos <= size_small
@@ -375,7 +361,7 @@ MapaCovidDepartamentos_Server <- function(id,
         px_data_mapa <- px_data_mapa()
 
         # fun_mapa_bsas_covid_burbujas.R
-        mapa_burbujas(
+        geocovidapp::mapa_burbujas(
           data_sf = px_data_mapa,
           color_var = input$momento,
           data_burb_peq = tam_burb_small,
@@ -389,11 +375,15 @@ MapaCovidDepartamentos_Server <- function(id,
           burb_med = size_medium
         )
       })
+      
+      # Mapa de burbujas.
+      # Lo saque de esta seccion para poder reutilizarlo
+      # En zoom_map
       output$burbujas_map <- plotly::renderPlotly({
         burbujas_plot()
       })
 
-
+      # Detalle del mapa que se ve a un costado
       output$zoom_map <- plotly::renderPlotly({
         bsas_part <- bsas |>
           dplyr::filter(.data$partido == input$partidos)
@@ -406,6 +396,7 @@ MapaCovidDepartamentos_Server <- function(id,
           t = 0
         )
 
+        # Reuso la base del mapa ya creado
         burbujas_plot() |>
           plotly::add_sf(
             stroke = I("#004643"),

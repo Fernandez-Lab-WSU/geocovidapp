@@ -18,7 +18,7 @@ Partidos_UI <- function(id, amba_reducido_names, base_raster) {
   shiny::tagList(
     tags$div( 
       fluidRow(
-        column(
+        shiny::column(
           6,
           shiny::radioButtons(ns("area"),
             label = "Selecciona el area",
@@ -29,7 +29,7 @@ Partidos_UI <- function(id, amba_reducido_names, base_raster) {
             selected = "amba"
           )
         ),
-        column(
+        shiny::column(
           6,
           shiny::selectInput(ns("partidos"),
             label = "Selecciona el partido",
@@ -37,6 +37,26 @@ Partidos_UI <- function(id, amba_reducido_names, base_raster) {
             selected = amba_reducido_names[1],
             width = "75%"
           )
+        ),
+        shiny::column(
+          6,
+          shiny::radioButtons(ns("porcentaje"),
+                              label = "Cambio porcentual",
+                              choices = c(
+                                "Prepandemia" = "pc",
+                                "Semanal" = "7dpc"
+                              ),
+                              selected = "7dpc")
+        ),
+        shiny::column(
+          6,
+          shiny::sliderInput(ns("opacity"),
+                             label = "Transparencia",
+                             min = 0,
+                             max = 1,
+                             value = 0.5,
+                             width = "75%",
+                             ticks = FALSE)
         )
       )
     )
@@ -67,12 +87,13 @@ Partidos_Server <- function(id,
           sort(amba_reducido_names)
         } else if (input$area == "baires") {
           prov <- dplyr::filter(
-            bsas,
+            geocovidapp::bsas,
             !partido %in% amba_reducido_names
           )
           sort(unique(prov$partido))
         }
       })
+      
 
       # Actualiza opciones de partidos en base a la eleccion de area
       shiny::observe({
@@ -91,6 +112,12 @@ Partidos_Server <- function(id,
           }),
           partido = reactive({
             input$partidos
+          }),
+          porcentaje = reactive({
+            input$porcentaje
+          }),
+          opacidad = reactive({
+            input$opacity
           })
         )
       )

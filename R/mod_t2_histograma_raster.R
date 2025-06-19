@@ -59,10 +59,15 @@ HistogramaRaster_Server <- function(id,
   moduleServer(
     id,
     function(input, output, session) {
-      # Este elemento reactivo podria unificarlo con el de MapaPartido
+      # Evitamos conflicto con el nombre `imagen`
+      imagen_momento <- reactive({
+        req(imagen())
+        imagen()[[momento_dia]]
+      })
+      
       
       raster_hist <- reactive({
-        req(imagen())
+        req(imagen_momento())
 
         if (partido() %in% amba_reducido_names) {
           # ver Patidos_Input.R
@@ -78,9 +83,9 @@ HistogramaRaster_Server <- function(id,
           ))
 
           # Me aseguro que el CRS sea el mismo para el poligono y el raster
-          poli <- sf::st_transform(poli, terra::crs(imagen()))
+          poli <- sf::st_transform(poli, terra::crs(imagen_momento()))
 
-          imagen2 <- imagen() |>
+          imagen2 <- imagen_momento() |>
             terra::mask(poli) |>
             terra::crop(poli)
 
@@ -102,9 +107,9 @@ HistogramaRaster_Server <- function(id,
           ))
 
           # Me aseguro que el CRS sea el mismo para el poligono y el raster
-          poli <- sf::st_transform(poli, terra::crs(imagen()))
+          poli <- sf::st_transform(poli, terra::crs(imagen_momento()))
 
-          imagen2 <- imagen() |>
+          imagen2 <- imagen_momento() |>
             terra::mask(poli) |>
             terra::crop(poli)
 
