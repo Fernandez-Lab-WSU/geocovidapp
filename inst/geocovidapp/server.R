@@ -32,6 +32,12 @@ server <- function(input, output, session, r) {
   
 
   # Tab2: Por partido -----
+  
+  # Simula clic inicial para que act_mapas se dispare al cargar
+  observe({
+    shinyjs::click("act_mapas")  # simula un clic real
+  })
+  
 
   # # el ususario selecciona opciones del mapa
   # elecciones_usuario_partidos <- geocovidapp::Partidos_Server('seleccion_partido',
@@ -77,9 +83,9 @@ server <- function(input, output, session, r) {
     d
   })
   
-  imagen_partido <- eventReactive(input$act_mapas, ignoreNULL = FALSE, {
+  imagen_partido <- eventReactive(input$act_mapas, ignoreInit = FALSE, ignoreNULL = FALSE, {
     raster_data <- datos_raster()
-    area_valor <- isolate(elecciones_usuario$area())
+    area_valor <- elecciones_usuario$area()
 
     # Chequear
     raster_outputs <- lapply(

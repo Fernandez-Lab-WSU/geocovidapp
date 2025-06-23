@@ -111,6 +111,7 @@ MapaPartido_Server <- function(id,
       })
 
       output$mapa_partido <- leaflet::renderLeaflet({
+        # Mensaje si no existen rasters disponibles
         if (is.null(imagen_momento())) {
           leaflet::leaflet() |>
             leaflet::addTiles() |>
