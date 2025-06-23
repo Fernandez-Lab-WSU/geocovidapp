@@ -92,7 +92,7 @@ server <- function(input, output, session, r) {
       setNames(split(raster_data, raster_data$momento), 
                raster_data$momento),
       function(r) {
-        rasterLoader(
+        geocovidapp::rasterLoader(
           pool = pool,
           raster_data = r,
           area = area_valor
@@ -102,19 +102,23 @@ server <- function(input, output, session, r) {
     raster_outputs
   })
   
+  fecha_titulo <- eventReactive(input$act_mapas, ignoreInit = FALSE, ignoreNULL = FALSE,{
+    
+  if(is.null(eleccion_fecha$casos_covid())){
+    
+    fecha = as.Date('2020-05-12', origin = "1970-01-01")
+    paste('Movilidad ciudadana el', format(fecha,
+                                           format = "%Y-%m-%d"))
+    
+  }else{
+    fecha <- eleccion_fecha$casos_covid()
+    paste('Movilidad ciudadana el', format(lubridate::ymd_hms(fecha),
+                                           format = "%Y-%m-%d"))}
+  })
   
   output$titulo <- renderText({
-   
-    if(is.null(eleccion_fecha$casos_covid())){
-
-      fecha = as.Date('2020-05-12', origin = "1970-01-01")
-      paste('Movilidad ciudadana el', format(fecha,
-                                             format = "%Y-%m-%d"))
-
-    }else{
-      fecha <- eleccion_fecha$casos_covid()
-      paste('Movilidad ciudadana el', format(lubridate::ymd_hms(fecha),
-                                             format = "%Y-%m-%d"))}
+   fecha_titulo()
+ 
   })
   
 
