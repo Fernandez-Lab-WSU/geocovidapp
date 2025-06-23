@@ -21,21 +21,12 @@ Partidos_UI <- function(id, amba_reducido_names, base_raster) {
         shiny::column(
           6,
           shiny::radioButtons(ns("area"),
-            label = "Selecciona el area",
-            choices = c(
-              "prov. de Buenos Aires" = "baires",
-              "AMBA" = "amba"
-            ),
-            selected = "amba"
-          )
-        ),
-        shiny::column(
-          6,
-          shiny::selectInput(ns("partidos"),
-            label = "Selecciona el partido",
-            choices = amba_reducido_names,
-            selected = amba_reducido_names[1],
-            width = "75%"
+                              label = "Selecciona el area",
+                              choices = c(
+                                "prov. de Buenos Aires" = "baires",
+                                "AMBA" = "amba"
+                              ),
+                              selected = "amba"
           )
         ),
         shiny::column(
@@ -48,15 +39,11 @@ Partidos_UI <- function(id, amba_reducido_names, base_raster) {
                               ),
                               selected = "7dpc")
         ),
-        shiny::column(
-          6,
-          shiny::sliderInput(ns("opacity"),
-                             label = "Transparencia",
-                             min = 0,
-                             max = 1,
-                             value = 0.5,
-                             width = "75%",
-                             ticks = FALSE)
+        shiny::selectInput(ns("partidos"),
+            label = "Selecciona el partido",
+            choices = amba_reducido_names,
+            selected = amba_reducido_names[1],
+            width = "100%"
         )
       )
     )

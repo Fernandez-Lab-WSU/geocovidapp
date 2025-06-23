@@ -67,7 +67,7 @@ ui <- function() {
       ),
       shiny::fluidRow(
         shiny::column(
-          9,
+          10,
           shiny::br(),
           tags$h5(paste(
             "Casos de COVID-19 diarios",
@@ -79,33 +79,37 @@ ui <- function() {
               title = "Por partido",
               sidebar = bslib::sidebar(
                 id = "tab2-sidebar",
-                width = 400,
+                width = 350,
                 geocovidapp::Partidos_UI("selector_dinamico",
                                          amba_reducido_names = amba_reducido_names,
                                          base_raster = base_raster),
-                shiny::hr(),
                 shiny::actionButton(
                   "act_mapas",
                   "Actualizar el mapa",
                   class = "btn btn-secondary btn-sm"
-                )
+                ),
+                geocovidapp::ReporteUI("desc_reporte")
               ), # cierra sidebar
             shiny::tags$h6("Click en el primer grafico para seleccionar la fecha de los mapas"),
               geocovidapp::Dygraph_UI("casos_covid")))
         ),
         shiny::column(
-          3,
+          2,
           shiny::br(),
-          bslib::card(
-          bslib::card_header("Reporte"),
-          geocovidapp::ReporteUI("desc_reporte")),
-          bslib::card(
-            bslib::card_header("Porcentaje de cambio"),
-            shiny::tags$div(
-              style = "padding:0px;margin-top:0px",
-              includeHTML("www/leyenda_leaflet.html")
-            )))
-      ),
+          tags$h5("Controles Mapas"),
+          shiny::br(),
+          shiny::sliderInput("opacity",
+                             label = "Transparencia",
+                             min = 0,
+                             max = 1,
+                             value = 0.5,
+                             width = "80%",
+                             ticks = FALSE),
+          tags$h6("Porcentaje de Cambio"),
+          shiny::tags$div(
+            style = "padding:0px;margin-top:0px",
+            includeHTML("www/leyenda_leaflet.html"))
+      )),
       tags$h5(textOutput("titulo")),
       shiny::fluidRow(
         shiny::column(
@@ -125,7 +129,7 @@ ui <- function() {
                 geocovidapp::HistogramaRaster_UI("hist"),
                 width = 150
               ),
-              geocovidapp::MapaPartido_UI("baires_partidos"),
+              geocovidapp::MapaPartido_UI("baires_partidos")
             )
           )
         ),

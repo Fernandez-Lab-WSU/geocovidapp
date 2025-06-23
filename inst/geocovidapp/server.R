@@ -168,7 +168,7 @@ server <- function(input, output, session, r) {
                      fecha = eleccion_fecha$casos_covid,
                      momento_dia = 'mañana',
                      partido = elecciones_usuario$partido, # Partidos_Input.R
-                     opacidad = elecciones_usuario$opacidad)
+                     opacidad = reactive({ input$opacity }))
 
   mapa_tarde <- geocovidapp::MapaPartido_Server("baires_partidos2",
                      pool = pool,
@@ -181,7 +181,7 @@ server <- function(input, output, session, r) {
                      fecha = eleccion_fecha$casos_covid,
                      momento_dia = 'tarde',
                      partido = elecciones_usuario$partido, # Partidos_Input.R
-                     opacidad = elecciones_usuario$opacidad)
+                     opacidad = reactive({ input$opacity }))
 
   mapa_noche <-geocovidapp::MapaPartido_Server("baires_partidos3",
                      pool = pool,
@@ -194,7 +194,7 @@ server <- function(input, output, session, r) {
                      fecha = eleccion_fecha$casos_covid,
                      momento_dia = 'noche',
                      partido = elecciones_usuario$partido, # Partidos_Input.R
-                     opacidad = elecciones_usuario$opacidad)
+                     opacidad = reactive({ input$opacity }))
 
   # Reporte
   geocovidapp::ReporteServer("desc_reporte",
@@ -209,7 +209,7 @@ server <- function(input, output, session, r) {
                 zoom_mapa_partido_tarde = mapa_tarde$zoom_mapa_partido,
                 zoom_mapa_partido_noche = mapa_noche$zoom_mapa_partido,
                 tipo_de_raster = elecciones_usuario$porcentaje,
-                opacidad = elecciones_usuario$opacidad,
+                opacidad = reactive({ input$opacity }),
                 grafico_casos_prov = eleccion_fecha$grafico_casos_prov,
                 grafico_casos_dpto = eleccion_fecha$grafico_casos_dpto
                 )

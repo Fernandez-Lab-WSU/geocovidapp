@@ -80,10 +80,6 @@ selectormapaServer <- function(id, act_mapas, fecha, amba_reducido_names) {
             locacion == eleccion$area
           )
         
-        print("cucaracha")
-        print(eleccion$area)
-        print(eleccion$partido)
-        
         if (nrow(raster_data) == 0) {
           # showNotification("No hay datos disponibles para la fecha seleccionada.", type = "warning")
           return(NULL)

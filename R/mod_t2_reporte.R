@@ -9,7 +9,8 @@
 ReporteUI <- function(id) {
   ns <- NS(id)
   shiny::tagList(
-    shiny::downloadButton(ns("reporte"), "Descargar reporte")
+    shiny::downloadButton(ns("reporte"), "Descargar reporte",
+                          class = "btn btn-secondary btn-sm")
   )
 }
 
