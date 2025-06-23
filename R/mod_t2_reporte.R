@@ -38,7 +38,7 @@ ReporteUI <- function(id) {
 #' @export
 ReporteServer <- function(id,
                           partido, fecha,
-                          base_raster, bsas, area,
+                          bsas, area,
                           tipo_de_raster, opacidad,
                           mapa_partido_manana,
                           mapa_partido_tarde,
