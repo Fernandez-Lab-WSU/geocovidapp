@@ -4,12 +4,10 @@
 \alias{FechaMomento_UI}
 \title{Elementos de interfaz de usuario de la barra flotante del tab de Mapa BsAs}
 \usage{
-FechaMomento_UI(id, base_raster)
+FechaMomento_UI(id)
 }
 \arguments{
 \item{id}{Nombre del módulo.}
-
-\item{base_raster}{Dataframe que lista todos los rasters y desagrega en sus columnas características de interés, como si son rasters de AMBA o Buenos Aires, si el cambio porcentual es semanal o prepandemia, o el momento del día que representan.}
 }
 \value{
 Elementos de interfaz de usuario para la barra flotante en el tab Mapa Buenos Aires.

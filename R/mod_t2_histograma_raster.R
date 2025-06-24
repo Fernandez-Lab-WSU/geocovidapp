@@ -24,26 +24,18 @@ HistogramaRaster_UI <- function(id) {
 
 #' Servidor: Histograma de la movilidad ciudadana por departamento
 #'
-#' @param id Module name
-#' @param bsas_comunas Mapa vectorial de la provincia de Buenos Aires simplifica
-#' do.
-#' @param amba_reducido_names String. Vector con los nombres de los partidos
-#' que conforman el AMBA.
-#' @param base_raster Dataframe que lista todos los rasters y desagrega en
-#' sus columnas características de interes, como si son rasters de
-#' AMBA o Buenos Aires, si el cambio porcentual es semanal o prepandemia
-#' o el momento del día que representan.
+#' @param id Identificador del módulo Shiny.
+#' @param pool Objeto de conexión a base de datos (actualmente no utilizado directamente).
+#' @param act_mapas Reactive que se activa para recalcular el histograma (trigger externo).
+#' @param imagen Lista de objetos `SpatRaster`, uno por cada momento del día, usados para calcular el histograma.
+#' @param amba_reducido_names Vector de strings. Nombres de los partidos que forman parte del AMBA.
+#' @param bsas_comunas Objeto `sf` o `SpatialPolygonsDataFrame` simplificado con los polígonos de los partidos.
 #' @param fecha Fecha seleccionada.
-#' @param tipo_de_raster String. Si el raster corresponde a el cambio porcentual
-#' prepandemia (pc) o semanal (7dpc).
-#' @param area El raster puede corresponder a Buenos Aires provincia o a AMBA.
-#' @param partido Partido de la provincia de Buenos Aires, seleccionado en otro
-#' módulo.
-#' @param momento_dia Entero. Hora del dia representada en el raster, puede ser
-#' 0am, 8 am o 4 pm.
+#' @param tipo_de_raster String. Tipo de raster: cambio porcentual semanal ("7dpc") o prepandemia ("pc").
+#' @param partido String. Nombre del partido seleccionado.
+#' @param momento_dia Entero. Momento del día representado (e.g. 0, 8, 16).
 #'
-#' @return Histograma de la movilidad ciudadana por partido, respetando la
-#' escala de colores del raster.
+#' @return Un histograma de la movilidad para el partido seleccionado, respetando los colores del raster.
 #'
 #' @importFrom graphics hist par
 #' @export

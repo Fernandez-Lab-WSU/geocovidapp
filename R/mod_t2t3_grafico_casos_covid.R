@@ -34,21 +34,21 @@ Dygraph_UI <- function(id) {
   )
 }
 
-#' Servidor: Gráficos de casos de covid por provincia y departamento
+#' Servidor: Gráficos de casos de COVID por provincia y departamento
 #'
-#' @param id Module name
-#' @param data_sisa Dataframe con los casos diarios reportados de COVID-19.
-#' @param amba_reducido_names String. Vector con los nombres de los partidos
+#' @param id Módulo Shiny (string) usado como identificador del namespace.
+#' @param amba_reducido_names Character vector con los nombres de los partidos
 #' que conforman el AMBA.
-#' @param base_raster Dataframe que lista todos los rasters y desagrega en
-#' sus columnas características de interes, como si son rasters de
-#' AMBA o Buenos Aires, si el cambio porcentual es semanal o prepandemia
-#' o el momento del día que representan.
-#' @param area El raster puede corresponder a Buenos Aires provincia o a AMBA.
-#' @param partido Partido de la provincia de Buenos Aires, seleccionado en otro
-#' módulo.
+#' @param area Reactive que indica si el raster corresponde a Buenos Aires provincia o a AMBA.
+#' @param partido Reactive que devuelve el nombre del partido de la provincia de Buenos Aires,
+#' seleccionado en otro módulo.
 #'
-#' @return La fecha seleccionada por el usuario en el grafico de COVID-19
+#' @return Una lista con tres reactives: 
+#' \describe{
+#'   \item{casos_covid}{La fecha seleccionada por el usuario en el gráfico de COVID-19.}
+#'   \item{grafico_casos_prov}{Reactive con el gráfico de casos por provincia o CABA.}
+#'   \item{grafico_casos_dpto}{Reactive con el gráfico de casos por departamento o comuna.}
+#' }
 #' @export
 Dygraph_Server <- function(id,
                            amba_reducido_names,

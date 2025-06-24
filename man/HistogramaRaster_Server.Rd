@@ -7,6 +7,7 @@
 HistogramaRaster_Server(
   id,
   pool,
+  act_mapas,
   imagen,
   amba_reducido_names,
   bsas_comunas,
@@ -17,35 +18,28 @@ HistogramaRaster_Server(
 )
 }
 \arguments{
-\item{id}{Module name}
+\item{id}{Identificador del módulo Shiny.}
 
-\item{amba_reducido_names}{String. Vector con los nombres de los partidos
-que conforman el AMBA.}
+\item{pool}{Objeto de conexión a base de datos (actualmente no utilizado directamente).}
 
-\item{bsas_comunas}{Mapa vectorial de la provincia de Buenos Aires simplifica
-do.}
+\item{act_mapas}{Reactive que se activa para recalcular el histograma (trigger externo).}
+
+\item{imagen}{Lista de objetos \code{SpatRaster}, uno por cada momento del día, usados para calcular el histograma.}
+
+\item{amba_reducido_names}{Vector de strings. Nombres de los partidos que forman parte del AMBA.}
+
+\item{bsas_comunas}{Objeto \code{sf} o \code{SpatialPolygonsDataFrame} simplificado con los polígonos de los partidos.}
 
 \item{fecha}{Fecha seleccionada.}
 
-\item{tipo_de_raster}{String. Si el raster corresponde a el cambio porcentual
-prepandemia (pc) o semanal (7dpc).}
+\item{tipo_de_raster}{String. Tipo de raster: cambio porcentual semanal ("7dpc") o prepandemia ("pc").}
 
-\item{partido}{Partido de la provincia de Buenos Aires, seleccionado en otro
-módulo.}
+\item{partido}{String. Nombre del partido seleccionado.}
 
-\item{momento_dia}{Entero. Hora del dia representada en el raster, puede ser
-0am, 8 am o 4 pm.}
-
-\item{base_raster}{Dataframe que lista todos los rasters y desagrega en
-sus columnas características de interes, como si son rasters de
-AMBA o Buenos Aires, si el cambio porcentual es semanal o prepandemia
-o el momento del día que representan.}
-
-\item{area}{El raster puede corresponder a Buenos Aires provincia o a AMBA.}
+\item{momento_dia}{Entero. Momento del día representado (e.g. 0, 8, 16).}
 }
 \value{
-Histograma de la movilidad ciudadana por partido, respetando la
-escala de colores del raster.
+Un histograma de la movilidad para el partido seleccionado, respetando los colores del raster.
 }
 \description{
 Servidor: Histograma de la movilidad ciudadana por departamento

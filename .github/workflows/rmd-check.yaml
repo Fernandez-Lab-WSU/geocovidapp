@@ -21,11 +21,11 @@ jobs:
 
       - name: Install R packages
         run: |
-          install.packages("remotes")
-          remotes::install_deps(dependencies = TRUE)
-          remotes::install_cran("rmarkdown")
-          remotes::install_cran("knitr")
-          remotes::install_cran("rmdcheck")
+          Rscript -e 'install.packages("remotes")'
+          Rscript -e 'remotes::install_deps(dependencies = TRUE)'
+          Rscript -e 'remotes::install_cran("rmarkdown")'
+          Rscript -e 'remotes::install_cran("knitr")'
+          Rscript -e 'remotes::install_cran("rmdcheck")'
 
       - name: R CMD check
         uses: r-lib/actions/check-r-package@v2

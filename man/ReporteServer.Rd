@@ -8,7 +8,6 @@ ReporteServer(
   id,
   partido,
   fecha,
-  base_raster,
   bsas,
   area,
   tipo_de_raster,
@@ -31,11 +30,6 @@ módulo.}
 
 \item{fecha}{Fecha seleccionada.}
 
-\item{base_raster}{Dataframe que lista todos los rasters y desagrega en
-sus columnas características de interes, como si son rasters de
-AMBA o Buenos Aires, si el cambio porcentual es semanal o prepandemia
-o el momento del día que representan.}
-
 \item{bsas}{Dataset de clase sf con los partidos de Buenos Aires.}
 
 \item{area}{El raster puede corresponder a Buenos Aires provincia o a AMBA.}
@@ -46,6 +40,11 @@ prepandemia (pc) o semanal (7dpc).}
 \item{opacidad}{Double. Valor de opacidad del raster.a}
 
 \item{imagen}{Imagen raster representando la movilidad ciudadana.}
+
+\item{base_raster}{Dataframe que lista todos los rasters y desagrega en
+sus columnas características de interes, como si son rasters de
+AMBA o Buenos Aires, si el cambio porcentual es semanal o prepandemia
+o el momento del día que representan.}
 }
 \value{
 Devuelve un reporte en base a las selecciones en el tab2.

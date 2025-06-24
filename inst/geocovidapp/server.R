@@ -11,7 +11,6 @@ server <- function(input, output, session, r) {
   
   # Cargo mapa panel "Movilidad Buenos Aires"
   elecciones_mapa <- geocovidapp::MapaBaires_Server("tab1_mapa",
-                                       bsas = bsas,
                                        amba_reducido_names,
                                        fecha = imagen$fecha, # para la informacion de la franja de abajo 
                                        porcentaje = imagen$porcentaje, # para la informacion de la franja de abajo 
@@ -70,7 +69,7 @@ server <- function(input, output, session, r) {
     fecha_final <- if (is.null(eleccion_fecha$casos_covid())) {
       as.Date("2020-05-03")
     } else {
-      as.Date(geocovidapp::formatted_date(eleccion_fecha$casos_covid()))
+     fecha_final <-as.Date(geocovidapp::formatted_date(eleccion_fecha$casos_covid()))
     }
     
     d <- geocovidapp::base_raster |>
@@ -102,24 +101,30 @@ server <- function(input, output, session, r) {
     raster_outputs
   })
   
-  fecha_titulo <- eventReactive(input$act_mapas, ignoreInit = FALSE, ignoreNULL = FALSE,{
+  fecha_titulo <- eventReactive(input$act_mapas,{
     
+  # si el valor de fecha es NULL, como al inicio  
   if(is.null(eleccion_fecha$casos_covid())){
     
-    fecha = as.Date('2020-05-12', origin = "1970-01-01")
-    paste('Movilidad ciudadana el', format(fecha,
-                                           format = "%Y-%m-%d"))
-    
+    fecha <- '2020-05-12 00:00:00' # lubradate::ymd_hms() espera una string
+
   }else{
-    fecha <- eleccion_fecha$casos_covid()
-    paste('Movilidad ciudadana el', format(lubridate::ymd_hms(fecha),
-                                           format = "%Y-%m-%d"))}
+    
+    fecha <- eleccion_fecha$casos_covid() }
+    print(lubridate::ymd_hms(fecha), format = "%d-%m-%Y")
+    paste('Movilidad humana el', 
+          format(lubridate::ymd_hms(fecha), format = "%d-%m-%Y"), 
+          "para",
+          elecciones_usuario$partido(),
+          "- cambio porcentual ",
+          ifelse(elecciones_usuario$porcentaje() == "pc", "prepandemia", "semanal"),
+          "resolución ",
+          ifelse(elecciones_usuario$area() == "amba", "10 m/pixel", "40 m/pixel")) # CHEQUEAR
   })
   
   output$titulo <- renderText({
    fecha_titulo()
- 
-  })
+   })
   
 
   # Histogramas

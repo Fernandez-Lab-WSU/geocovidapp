@@ -81,44 +81,17 @@ ReporteServer <- function(id,
           
           file.copy(reporte_path, path_report, overwrite = TRUE)
           
-          # Como quiero obtener los mapas en un docx tengo que convertirlos en imagen
-          # un mapa leaflet es un widget html y no se puede renderizar en un docx
-          map_path1 <- mapa_base_ggplot(part = partido(), zoom = zoom_mapa_partido_manana())
-         # map_path2 <- mapa_ggplot(raster = mapa_partido_tarde(), opacidad = opacidad(), zoom = zoom_mapa_partido_tarde())
-         # map_path3 <- mapa_ggplot(raster = mapa_partido_noche(), opacidad = opacidad(), zoom = zoom_mapa_partido_noche())
-         # graf_path1 <- mapa_ggplot(grafico_casos_prov(), "casos_prov")
-         # graf_path2 <- mapa_ggplot(grafico_casos_dpto(), "casos_dpto")
-          #leyenda <- mapa_ggplot(system.file("geocovidapp/www/leyenda_leaflet.html", 
-          #                                          package = "geocovidapp"), "leyenda")
-          
-          
           params <- list(
             partido = partido(),
             fecha = fecha_val(),
             tipo_de_raster = tipo_de_raster(),
             opacidad = opacidad(),
-            base_raster = base_raster,
-            bsas = bsas,
             area = area(),
-            map_path1 = map_path1,
             imagen_manana = mapa_partido_manana(),
             imagen_tarde = mapa_partido_tarde(),
             imagen_noche = mapa_partido_noche(),
-            #map_path2 = map_path2,
-            #map_path3 = map_path3,
-           # graf_path1 = graf_path1,
-           # graf_path2 = graf_path2,
-           # leyenda = leyenda,
             pandoc = rmarkdown::pandoc_version()
           )
-          
-          # Ensure cleanup after use
-          # on.exit({
-          #   file.remove(map_path1#, map_path2, map_path3
-          #               #graf_path1, graf_path2, leyenda
-          #               )
-          # }, add = TRUE)
-          # 
           
           id <- showNotification(
             "Preparando reporte...",

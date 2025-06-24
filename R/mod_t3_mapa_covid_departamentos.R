@@ -314,7 +314,7 @@ MapaCovidDepartamentos_Server <- function(id,
         # Filtro las condiciones antes de la query
         # Bajar la base de datos completa tarda mucho tiempo.
         query <- paste0(
-          "SELECT * FROM px_prom.px_prom WHERE ",
+          "SELECT * FROM px_promedio.px_promedio WHERE ",
           "fecha = '", fecha_input, "' AND ",
           "tipo_de_raster = '", tipo_tab_input, "'"
         )

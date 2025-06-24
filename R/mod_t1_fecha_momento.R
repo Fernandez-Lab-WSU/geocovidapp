@@ -5,17 +5,16 @@
 #' mapa base, área de interés, fecha, momento del día y opciones de transparencia.
 #'
 #' @param id Nombre del módulo.
-#' @param base_raster Dataframe que lista todos los rasters y desagrega en sus columnas características de interés, como si son rasters de AMBA o Buenos Aires, si el cambio porcentual es semanal o prepandemia, o el momento del día que representan.
 #'
 #' @return Elementos de interfaz de usuario para la barra flotante en el tab Mapa Buenos Aires.
 #'
 #' @export
-FechaMomento_UI <- function(id, base_raster) {
+FechaMomento_UI <- function(id) {
   ns <- NS(id)
  
   # Crear lista única de momentos del día y asignar nombres
-  momento_del_dia <- as.list(unique(unique(base_raster$hora)))
-  names(momento_del_dia) <- unique(unique(base_raster$momento))
+  momento_del_dia <- as.list(unique(unique(geocovidapp::base_raster$hora)))
+  names(momento_del_dia) <- unique(unique(geocovidapp::base_raster$momento))
 
   shiny::tagList(
     shiny::fluidRow(
@@ -125,22 +124,26 @@ BotonAyuda_UI(ns('tab1_menuflotante'))
     )
   )
 }
-#' Convierte el archivo en raster en base a las elecciones del usuario
+#' Servidor: Carga y configuración de raster COVID-19 según selección del usuario
 #'
-#' @param id Module name
-#' @param base_raster Dataframe que lista todos los rasters y desagrega en
-#' sus columnas características de interes, como si son rasters de
-#' AMBA o Buenos Aires, si el cambio porcentual es semanal o prepandemia
-#' o el momento del día que representan.
-#' @param mapa_zoom Valor de zoom que retorna leaflet en base al uso del mapa.
+#' @param id Identificador del módulo Shiny.
+#' @param pool Objeto de conexión a base de datos, usado para cargar los raster desde la base.
+#' @param mapa_zoom Reactive con el valor de zoom actual del mapa Leaflet, usado para mostrar u ocultar controles.
 #'
-#' @return Una serie de variables extraidas del dataframe base_raster para
-#' el raster que eligio el usuario y representan el area, la opacidad,
-#' el raster mismo (imagen) y basemap
+#' @return Una lista de objetos `reactive()` que incluyen:
+#' \describe{
+#'   \item{area}{Área seleccionada (AMBA o provincia).}
+#'   \item{fecha}{Fecha seleccionada por el usuario.}
+#'   \item{porcentaje}{Tipo de cambio porcentual (p.ej. semanal, prepandemia).}
+#'   \item{momento}{Momento del día (mañana, tarde, etc.).}
+#'   \item{opacity}{Opacidad seleccionada para el mapa.}
+#'   \item{imagen}{Raster generado a partir de las selecciones del usuario.}
+#'   \item{boton}{Trigger del botón para actualizar el mapa.}
+#'   \item{basemap}{Capa base seleccionada.}
+#' }
 #' @export
 FechaMomento_Server <- function(id,
                                 pool,
-                                base_raster,
                                 mapa_zoom) {
   moduleServer(id,
     session = getDefaultReactiveDomain(),

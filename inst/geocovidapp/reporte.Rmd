@@ -5,10 +5,7 @@ params:
   partido: 'AVELLANEDA'
   fecha: NA
   tipo_de_raster: 'pc'
-  bsas: NA
   area: NA
-  base_raster: NA
-  map_path1: NA
   shape_partido: NA
   imagen_manana: NA
   imagen_tarde: NA

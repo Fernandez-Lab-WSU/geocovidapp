@@ -2,25 +2,30 @@
 % Please edit documentation in R/mod_t1_fecha_momento.R
 \name{FechaMomento_Server}
 \alias{FechaMomento_Server}
-\title{Convierte el archivo en raster en base a las elecciones del usuario}
+\title{Servidor: Carga y configuración de raster COVID-19 según selección del usuario}
 \usage{
-FechaMomento_Server(id, pool, base_raster, mapa_zoom)
+FechaMomento_Server(id, pool, mapa_zoom)
 }
 \arguments{
-\item{id}{Module name}
+\item{id}{Identificador del módulo Shiny.}
 
-\item{base_raster}{Dataframe que lista todos los rasters y desagrega en
-sus columnas características de interes, como si son rasters de
-AMBA o Buenos Aires, si el cambio porcentual es semanal o prepandemia
-o el momento del día que representan.}
+\item{pool}{Objeto de conexión a base de datos, usado para cargar los raster desde la base.}
 
-\item{mapa_zoom}{Valor de zoom que retorna leaflet en base al uso del mapa.}
+\item{mapa_zoom}{Reactive con el valor de zoom actual del mapa Leaflet, usado para mostrar u ocultar controles.}
 }
 \value{
-Una serie de variables extraidas del dataframe base_raster para
-el raster que eligio el usuario y representan el area, la opacidad,
-el raster mismo (imagen) y basemap
+Una lista de objetos \code{reactive()} que incluyen:
+\describe{
+\item{area}{Área seleccionada (AMBA o provincia).}
+\item{fecha}{Fecha seleccionada por el usuario.}
+\item{porcentaje}{Tipo de cambio porcentual (p.ej. semanal, prepandemia).}
+\item{momento}{Momento del día (mañana, tarde, etc.).}
+\item{opacity}{Opacidad seleccionada para el mapa.}
+\item{imagen}{Raster generado a partir de las selecciones del usuario.}
+\item{boton}{Trigger del botón para actualizar el mapa.}
+\item{basemap}{Capa base seleccionada.}
+}
 }
 \description{
-Convierte el archivo en raster en base a las elecciones del usuario
+Servidor: Carga y configuración de raster COVID-19 según selección del usuario
 }

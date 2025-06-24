@@ -45,9 +45,7 @@ ui <- function() {
         # me permite que se vean los controles
         # por encima del mapa
         style = "z-index:500;",
-        geocovidapp::FechaMomento_UI("tab1_barraflotante",
-          base_raster = base_raster
-        ),
+        geocovidapp::FechaMomento_UI("tab1_barraflotante"),
         draggable = TRUE,
         width = "350px"
       ),

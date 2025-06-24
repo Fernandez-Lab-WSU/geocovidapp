@@ -2,31 +2,29 @@
 % Please edit documentation in R/mod_t2t3_grafico_casos_covid.R
 \name{Dygraph_Server}
 \alias{Dygraph_Server}
-\title{Servidor: Gráficos de casos de covid por provincia y departamento}
+\title{Servidor: Gráficos de casos de COVID por provincia y departamento}
 \usage{
 Dygraph_Server(id, amba_reducido_names, area, partido)
 }
 \arguments{
-\item{id}{Module name}
+\item{id}{Módulo Shiny (string) usado como identificador del namespace.}
 
-\item{amba_reducido_names}{String. Vector con los nombres de los partidos
+\item{amba_reducido_names}{Character vector con los nombres de los partidos
 que conforman el AMBA.}
 
-\item{area}{El raster puede corresponder a Buenos Aires provincia o a AMBA.}
+\item{area}{Reactive que indica si el raster corresponde a Buenos Aires provincia o a AMBA.}
 
-\item{partido}{Partido de la provincia de Buenos Aires, seleccionado en otro
-módulo.}
-
-\item{data_sisa}{Dataframe con los casos diarios reportados de COVID-19.}
-
-\item{base_raster}{Dataframe que lista todos los rasters y desagrega en
-sus columnas características de interes, como si son rasters de
-AMBA o Buenos Aires, si el cambio porcentual es semanal o prepandemia
-o el momento del día que representan.}
+\item{partido}{Reactive que devuelve el nombre del partido de la provincia de Buenos Aires,
+seleccionado en otro módulo.}
 }
 \value{
-La fecha seleccionada por el usuario en el grafico de COVID-19
+Una lista con tres reactives:
+\describe{
+\item{casos_covid}{La fecha seleccionada por el usuario en el gráfico de COVID-19.}
+\item{grafico_casos_prov}{Reactive con el gráfico de casos por provincia o CABA.}
+\item{grafico_casos_dpto}{Reactive con el gráfico de casos por departamento o comuna.}
+}
 }
 \description{
-Servidor: Gráficos de casos de covid por provincia y departamento
+Servidor: Gráficos de casos de COVID por provincia y departamento
 }

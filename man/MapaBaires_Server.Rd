@@ -6,7 +6,6 @@
 \usage{
 MapaBaires_Server(
   id,
-  bsas,
   imagen,
   area,
   opacidad,
@@ -19,26 +18,34 @@ MapaBaires_Server(
 )
 }
 \arguments{
-\item{id}{Nombre del módulo. Este parámetro es necesario para la correcta integración del módulo de servidor dentro de la aplicación Shiny.}
+\item{id}{Nombre del módulo. Necesario para la integración dentro de una aplicación Shiny.}
 
-\item{bsas}{Dataset de clase \code{sf} con los partidos de Buenos Aires, utilizado para agregar las geometrías de los municipios y su visualización en el mapa.}
+\item{imagen}{Reactive. Objeto \code{SpatRaster} que representa la movilidad ciudadana y se visualiza sobre el mapa.}
 
-\item{imagen}{Imagen raster que representa la movilidad ciudadana. Esta imagen es cargada y visualizada sobre el mapa.}
+\item{area}{Reactive. String que indica el área geográfica de interés: puede ser \code{'baires'} (provincia) o \code{'amba'}.}
 
-\item{area}{Indica el área geográfica de interés: puede ser 'provincia' o 'amba'. Dependiendo de este parámetro, el mapa se ajusta en términos de visualización.}
+\item{opacidad}{Reactive. Valor numérico entre 0 y 1 que determina la transparencia del raster.}
 
-\item{opacidad}{Valor de opacidad del raster, que controla la transparencia de la imagen raster sobre el mapa.}
+\item{fecha}{Reactive. Fecha seleccionada por el usuario.}
 
-\item{basemap}{Estilo de mapa base para la visualización, como "calles" o "relieve", determinado por el usuario.}
+\item{momento}{Reactive. Entero que representa el momento del día (e.g., 0, 8, 16 horas).}
 
-\item{amba_reducido_names}{Vector de nombres de los partidos que conforman el área del AMBA (Área Metropolitana de Buenos Aires), usado para filtrar los datos geoespaciales.}
+\item{porcentaje}{Reactive. Tipo de porcentaje comparado: \code{"pc"} (prepandemia) o \code{"7dpc"} (últimos 7 días).}
+
+\item{basemap}{Reactive. String que define el estilo del mapa base: \code{"calles"} o \code{"relieve"}.}
+
+\item{boton}{Reactive. Trigger que se activa al presionar un botón de actualización.}
+
+\item{amba_reducido_names}{Vector con los nombres de los partidos que conforman el AMBA (Área Metropolitana de Buenos Aires).}
 }
 \value{
-Un objeto \code{leaflet} renderizado con un mapa interactivo, incluyendo la capacidad de hacer zoom y desplazarse por el área seleccionada.
-También retorna el valor de zoom cuando cambia durante la navegación en el mapa.
+Una lista con un único elemento:
+\describe{
+\item{\code{mapa_zoom}}{Reactive que devuelve el nivel de zoom actual del mapa Leaflet.}
+}
 }
 \description{
-Esta función crea la lógica del servidor para renderizar el mapa interactivo de la provincia de Buenos Aires.
-El mapa incluye un raster que representa la movilidad ciudadana y permite la visualización interactiva
-de los cambios en la provincia. También incluye controles de mapa como la escala, medidas, y leyendas.
+Este módulo crea la lógica del servidor para renderizar un mapa interactivo de la provincia de Buenos Aires.
+El mapa incluye un raster que representa la movilidad ciudadana y permite visualizar de forma dinámica
+los cambios geoespaciales. Incluye también controles interactivos como escalas, medidas, coordenadas y leyendas.
 }

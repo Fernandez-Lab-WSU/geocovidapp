@@ -7,6 +7,7 @@
 MapaPartido_Server(
   id,
   pool,
+  act_mapas,
   amba_reducido_names,
   imagen,
   bsas_comunas,
