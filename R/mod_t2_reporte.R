@@ -14,40 +14,35 @@ ReporteUI <- function(id) {
   )
 }
 
-#' Servidor: reporte
-#' 
+#' Servidor: reporte personalizado por partido
+#'
 #' @description
-#' Este módulo se encuentra en el tab 2: 'Por partido' de GeoCovid app
+#' Este módulo corresponde al Tab 2: "Por partido" de la aplicación GeoCovid. Permite generar
+#' un reporte descargable en formato Word (`.docx`) basado en la selección de un partido de 
+#' la provincia de Buenos Aires, una fecha, y los datos de movilidad ciudadana.
 #'
-#' @param id Module name
-#' @param partido Partido de la provincia de Buenos Aires, seleccionado en otro 
-#' módulo.
-#' @param fecha Fecha seleccionada.
-#' @param imagen Imagen raster representando la movilidad ciudadana.
-#' @param area El raster puede corresponder a Buenos Aires provincia o a AMBA.
-#' @param opacidad Double. Valor de opacidad del raster.a 
-#' @param tipo_de_raster String. Si el raster corresponde a el cambio porcentual 
-#' prepandemia (pc) o semanal (7dpc).
-#' @param base_raster Dataframe que lista todos los rasters y desagrega en 
-#' sus columnas características de interes, como si son rasters de 
-#' AMBA o Buenos Aires, si el cambio porcentual es semanal o prepandemia 
-#' o el momento del día que representan. 
-#' @param bsas Dataset de clase sf con los partidos de Buenos Aires.
+#' @param id Nombre del módulo. Necesario para su uso con `moduleServer`.
+#' @param partido Reactive. Nombre del partido seleccionado.
+#' @param fecha Reactive. Fecha seleccionada por el usuario.
+#' @param area Reactive. Área geográfica del raster: `"baires"` o `"amba"`.
+#' @param tipo_de_raster Reactive. Tipo de comparación del raster: `"pc"` (prepandemia) o `"7dpc"` (últimos 7 días).
+#' @param opacidad Reactive. Valor numérico entre 0 y 1 que define la opacidad del raster.
+#' @param mapa_partido_manana Reactive. Raster correspondiente al momento de la mañana.
+#' @param mapa_partido_tarde Reactive. Raster correspondiente al momento de la tarde.
+#' @param mapa_partido_noche Reactive. Raster correspondiente al momento de la noche.
 #'
-#' @return Devuelve un reporte en base a las selecciones en el tab2.
+#' @return Este módulo no retorna valores al servidor de forma explícita, pero registra un `downloadHandler`
+#' que permite descargar un reporte en formato Word (`.docx`) con los parámetros seleccionados.
+#'
 #' @export
 ReporteServer <- function(id,
-                          partido, fecha,
-                          bsas, area,
+                          partido, 
+                          fecha,
+                          area,
                           tipo_de_raster, opacidad,
                           mapa_partido_manana,
                           mapa_partido_tarde,
-                          mapa_partido_noche,
-                          zoom_mapa_partido_manana,
-                          zoom_mapa_partido_tarde,
-                          zoom_mapa_partido_noche,
-                          grafico_casos_prov,
-                          grafico_casos_dpto) {
+                          mapa_partido_noche) {
   moduleServer(
     id,
     function(input, output, session) {

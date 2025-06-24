@@ -46,9 +46,9 @@ BotonAyuda_UI(ns('tab1_menuflotante'))
     # ),
     shinyjs::hidden(shiny::dateInput(ns("fechas"),
       label = "Fecha",
-      min = min(base::unique(base_raster$fecha)), # ojo que va a permitir elegir dias faltantes
-      max = max(base::unique(base_raster$fecha)),
-      value = base::unique(base_raster$fecha)[1],
+      min = min(base::unique(geocovidapp::base_raster$fecha)), # ojo que va a permitir elegir dias faltantes
+      max = max(base::unique(geocovidapp::base_raster$fecha)),
+      value = base::unique(geocovidapp::base_raster$fecha)[1],
       language = "es",
       format = "yyyy-mm-dd"
     )),
