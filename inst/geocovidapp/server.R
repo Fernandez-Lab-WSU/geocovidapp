@@ -203,20 +203,14 @@ server <- function(input, output, session, r) {
 
   # Reporte
   geocovidapp::ReporteServer("desc_reporte",
-                bsas = bsas,
                 area = elecciones_usuario$area,
                 partido = elecciones_usuario$partido, # Partidos_Input.R
                 fecha = eleccion_fecha$casos_covid,
                 mapa_partido_manana = mapa_manana$mapa_partido,
                 mapa_partido_tarde = mapa_tarde$mapa_partido,
                 mapa_partido_noche = mapa_noche$mapa_partido,
-                zoom_mapa_partido_manana = mapa_manana$zoom_mapa_partido,
-                zoom_mapa_partido_tarde = mapa_tarde$zoom_mapa_partido,
-                zoom_mapa_partido_noche = mapa_noche$zoom_mapa_partido,
                 tipo_de_raster = elecciones_usuario$porcentaje,
-                opacidad = reactive({ input$opacity }),
-                grafico_casos_prov = eleccion_fecha$grafico_casos_prov,
-                grafico_casos_dpto = eleccion_fecha$grafico_casos_dpto
+                opacidad = reactive({ input$opacity })
                 )
 
   # Tab 3: casos covid -----

@@ -2,53 +2,45 @@
 % Please edit documentation in R/mod_t2_reporte.R
 \name{ReporteServer}
 \alias{ReporteServer}
-\title{Servidor: reporte}
+\title{Servidor: reporte personalizado por partido}
 \usage{
 ReporteServer(
   id,
   partido,
   fecha,
-  bsas,
   area,
   tipo_de_raster,
   opacidad,
   mapa_partido_manana,
   mapa_partido_tarde,
-  mapa_partido_noche,
-  zoom_mapa_partido_manana,
-  zoom_mapa_partido_tarde,
-  zoom_mapa_partido_noche,
-  grafico_casos_prov,
-  grafico_casos_dpto
+  mapa_partido_noche
 )
 }
 \arguments{
-\item{id}{Module name}
+\item{id}{Nombre del módulo. Necesario para su uso con \code{moduleServer}.}
 
-\item{partido}{Partido de la provincia de Buenos Aires, seleccionado en otro
-módulo.}
+\item{partido}{Reactive. Nombre del partido seleccionado.}
 
-\item{fecha}{Fecha seleccionada.}
+\item{fecha}{Reactive. Fecha seleccionada por el usuario.}
 
-\item{bsas}{Dataset de clase sf con los partidos de Buenos Aires.}
+\item{area}{Reactive. Área geográfica del raster: \code{"baires"} o \code{"amba"}.}
 
-\item{area}{El raster puede corresponder a Buenos Aires provincia o a AMBA.}
+\item{tipo_de_raster}{Reactive. Tipo de comparación del raster: \code{"pc"} (prepandemia) o \code{"7dpc"} (últimos 7 días).}
 
-\item{tipo_de_raster}{String. Si el raster corresponde a el cambio porcentual
-prepandemia (pc) o semanal (7dpc).}
+\item{opacidad}{Reactive. Valor numérico entre 0 y 1 que define la opacidad del raster.}
 
-\item{opacidad}{Double. Valor de opacidad del raster.a}
+\item{mapa_partido_manana}{Reactive. Raster correspondiente al momento de la mañana.}
 
-\item{imagen}{Imagen raster representando la movilidad ciudadana.}
+\item{mapa_partido_tarde}{Reactive. Raster correspondiente al momento de la tarde.}
 
-\item{base_raster}{Dataframe que lista todos los rasters y desagrega en
-sus columnas características de interes, como si son rasters de
-AMBA o Buenos Aires, si el cambio porcentual es semanal o prepandemia
-o el momento del día que representan.}
+\item{mapa_partido_noche}{Reactive. Raster correspondiente al momento de la noche.}
 }
 \value{
-Devuelve un reporte en base a las selecciones en el tab2.
+Este módulo no retorna valores al servidor de forma explícita, pero registra un \code{downloadHandler}
+que permite descargar un reporte en formato Word (\code{.docx}) con los parámetros seleccionados.
 }
 \description{
-Este módulo se encuentra en el tab 2: 'Por partido' de GeoCovid app
+Este módulo corresponde al Tab 2: "Por partido" de la aplicación GeoCovid. Permite generar
+un reporte descargable en formato Word (\code{.docx}) basado en la selección de un partido de
+la provincia de Buenos Aires, una fecha, y los datos de movilidad ciudadana.
 }

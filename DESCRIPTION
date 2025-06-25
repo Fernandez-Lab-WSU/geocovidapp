@@ -53,5 +53,6 @@ Suggests:
     rlang (>= 1.1.2),
     knitr (>= 1.49),
     config,
-    htmltools
+    htmltools,
+    rcmdcheck (>= 1.4.0)
 Config/testthat/edition: 3

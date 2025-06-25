@@ -28,6 +28,16 @@ library(geocovidapp) # shinyapps.io
 
 GeoCovid Buenos Aires es una herramienta interactiva que permite visualizar cómo varía la movilidad en el espacio y en el tiempo en respuesta a intervenciones de salud pública, como las restricciones de circulación implementadas durante la pandemia de COVID-19 en Buenos Aires. A través de mapas dinámicos segmentados por franjas horarias (mañana, tarde y noche), la plataforma permite detectar patrones de movilidad y su evolución semanal. Esta visualización es clave para autoridades sanitarias, ya que permite evaluar el impacto territorial y temporal de distintas medidas, identificar zonas de mayor circulación y ajustar estrategias de control y comunicación de manera focalizada. En paralelo se muestra la evolución de los casos de COVID-19.
 
+## Casos de COVID-19 reportados
+
+```{r}
+
+ggplot_casos_covid(partido = params$partido, fecha = params$fecha)
+
+```
+
+
+
 ## Mapas de Movilidad
 
 ### Mañana
