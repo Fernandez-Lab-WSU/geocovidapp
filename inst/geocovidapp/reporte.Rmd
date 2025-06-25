@@ -6,7 +6,6 @@ params:
   fecha: NA
   tipo_de_raster: 'pc'
   area: NA
-  shape_partido: NA
   imagen_manana: NA
   imagen_tarde: NA
   imagen_noche: NA
@@ -30,13 +29,18 @@ GeoCovid Buenos Aires es una herramienta interactiva que permite visualizar cóm
 
 ## Casos de COVID-19 reportados
 
-```{r}
+```{r fig.height=3, fig.width=10, echo=FALSE}
 
-ggplot_casos_covid(partido = params$partido, fecha = params$fecha)
+graficos <- geocovidapp::ggplot_casos_covid_doble(partido = params$partido,
+                                fecha = params$fecha,
+                                partido_comunas = stringr::str_starts(params$partido, "Comuna"))
 
+print(graficos$grafico_comparativo)
 ```
 
-
+```{r fig.height=3, fig.width=10, echo=FALSE}
+print(graficos$grafico_partido)
+```
 
 ## Mapas de Movilidad
 

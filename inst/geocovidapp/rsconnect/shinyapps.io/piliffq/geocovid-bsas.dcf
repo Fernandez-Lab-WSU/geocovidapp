@@ -5,7 +5,7 @@ account: piliffq
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 13470605
-bundleId: 10513790
+bundleId: 10520241
 url: https://piliffq.shinyapps.io/geocovid-bsas/
 version: 1
 asMultiple: FALSE
