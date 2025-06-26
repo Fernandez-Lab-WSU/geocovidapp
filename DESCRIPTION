@@ -54,5 +54,6 @@ Suggests:
     knitr (>= 1.49),
     config,
     htmltools,
-    rcmdcheck (>= 1.4.0)
+    rcmdcheck (>= 1.4.0),
+    glue (>= 1.8.0)
 Config/testthat/edition: 3

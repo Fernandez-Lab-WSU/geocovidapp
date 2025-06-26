@@ -28,9 +28,9 @@ mapa_reporte <- function(part, imagen) {
   raster_binned <- terra::classify(imagen, rcl = rcl)
   
   # 4. Etiquetas personalizadas
-  etiquetas <- paste(breaks[-length(breaks)], "to", breaks[-1])
+  etiquetas <- paste(breaks[-length(breaks)], "a", breaks[-1])
   etiquetas[1] <- "Aumentó más del 40%"    
-  etiquetas[6] <- "Sin cambio"               # -1 a 1
+  etiquetas[6] <- "Sin cambio"               
   etiquetas[length(etiquetas)] <- "Disminuyó bajo -40%"  
   
   labels_df <- data.frame(
@@ -39,11 +39,12 @@ mapa_reporte <- function(part, imagen) {
   )
   
   # 5. Forzar factor con todos los niveles
-  raster_binned <- terra::as.factor(raster_binned)
-  levels_all <- labels_df
-  raster_binned <- terra::setValues(raster_binned, terra::values(raster_binned))
-  levels(raster_binned) <- levels_all  # 👈 fuerza que todos los niveles estén definidos
+  # Invertir el orden de los niveles para la leyenda (solo la leyenda se invierte)
+  # Podria haber solucionado esto de otra forma
+  labels_df$label <- factor(labels_df$label, levels = rev(labels_df$label))
   
+  # Asignar labels al raster binned con niveles invertidos para la leyenda
+  levels(raster_binned) <- labels_df
   bbox <- sf::st_bbox(shape_partido)
   
   # 6. Visualización
@@ -58,10 +59,10 @@ mapa_reporte <- function(part, imagen) {
       fill = NA, color = "black", size = 0.6
     ) +
     ggplot2::scale_fill_manual(
-      values = setNames(colors, etiquetas),
+      values = setNames(rev(colors), etiquetas), # Tuve que invertir la escala de colores
       name = "Porcentaje de cambio",
-      na.translate = FALSE,
-      drop = FALSE  # 👈 evita que se recorte la leyenda
+      na.translate = FALSE, # Remueve NA de la leyenda
+      drop = FALSE  # Evita que se recorte la leyenda
     ) +
     ggplot2::coord_sf(
       xlim = c(bbox["xmin"], bbox["xmax"]),
@@ -76,14 +77,13 @@ mapa_reporte <- function(part, imagen) {
 #'
 #' @param partido Nombre del partido o comuna (ej. "La Matanza" o "Comuna 1")
 #' @param fecha Fecha a marcar con una línea vertical (formato "YYYY-MM-DD")
-#' @param partido_comunas Vector de nombres de comunas de CABA (ej. paste("Comuna", 1:15))
 #'
 #' @return Una lista con dos ggplots: `grafico_partido` y `grafico_comparativo`
 #' @export
-ggplot_casos_covid_doble <- function(partido, fecha, partido_comunas) {
+ggplot_casos_covid_doble <- function(partido, fecha) {
   
   # 1. Datos base
-  data_acumulada <- geocovidapp::data_sisa |>
+  geocovidapp::data_sisa |>
     dplyr::group_by(residencia_provincia_nombre, fecha_enfermo) |>
     dplyr::summarise(casos_dia = n(), .groups = "drop_last") |> 
     dplyr::mutate(fecha_enfermo = as.Date(fecha_enfermo))
@@ -99,8 +99,12 @@ ggplot_casos_covid_doble <- function(partido, fecha, partido_comunas) {
   # --------------------------
   # GRAFICO 1: Individual por partido
   # --------------------------
-  grafico_partido <- data_acumulada |>
-    dplyr::filter(residencia_provincia_nombre == partido) |>
+  grafico_partido <- geocovidapp::data_sisa |>
+    dplyr::filter(residencia_provincia_nombre %in% c("CABA", "Buenos Aires")) |> 
+    dplyr::group_by(residencia_provincia_nombre, residencia_departamento_nombre, fecha_enfermo) |>
+    dplyr::summarise(casos_dia = n(), .groups = "drop_last") |> 
+    dplyr::mutate(fecha_enfermo = as.Date(fecha_enfermo)) |> 
+    dplyr::filter(residencia_departamento_nombre == partido) |>
     ggplot(aes(x = fecha_enfermo, y = casos_dia)) +
     geom_line(color = color_partido, size = 0.5) +
     geom_vline(xintercept = as.numeric(fecha_evento), linetype = "dashed", color = "black") +
@@ -136,7 +140,10 @@ ggplot_casos_covid_doble <- function(partido, fecha, partido_comunas) {
   # --------------------------
   provincias <- if (es_comuna) "CABA" else c("Buenos Aires", "CABA")
   
-  grafico_comparativo <- data_acumulada |>
+  grafico_comparativo <- geocovidapp::data_sisa |>
+    dplyr::group_by(residencia_provincia_nombre, fecha_enfermo) |>
+    dplyr::summarise(casos_dia = n(), .groups = "drop_last") |> 
+    dplyr::mutate(fecha_enfermo = as.Date(fecha_enfermo)) |>  # fin datos
     dplyr::filter(residencia_provincia_nombre %in% provincias) |>
     ggplot(aes(x = fecha_enfermo, y = casos_dia, color = residencia_provincia_nombre)) +
     geom_line(size = 0.5) +

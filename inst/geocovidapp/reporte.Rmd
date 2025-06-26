@@ -32,8 +32,7 @@ GeoCovid Buenos Aires es una herramienta interactiva que permite visualizar cóm
 ```{r fig.height=3, fig.width=10, echo=FALSE}
 
 graficos <- geocovidapp::ggplot_casos_covid_doble(partido = params$partido,
-                                fecha = params$fecha,
-                                partido_comunas = stringr::str_starts(params$partido, "Comuna"))
+                                fecha = params$fecha)
 
 print(graficos$grafico_comparativo)
 ```
