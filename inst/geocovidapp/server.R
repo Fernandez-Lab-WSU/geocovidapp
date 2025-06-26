@@ -202,15 +202,36 @@ server <- function(input, output, session, r) {
                      opacidad = reactive({ input$opacity }))
 
   # Reporte
+  
+  # Quiero que lo que se guarde en el reporte sea el mapa
+  # Luego de clickear el boton actualizar
+  
+  fecha_val <- eventReactive(input$act_mapas, {
+    f <- eleccion_fecha$casos_covid()
+    if (is.null(f)) {
+      as.Date('2020-05-03')
+    } else {
+      as.Date(f)
+    }
+  })
+  
+  tipo_de_raster_val <- eventReactive(input$act_mapas, { elecciones_usuario$porcentaje })
+  partido_val <- eventReactive(input$act_mapas, { elecciones_usuario$partido })
+  area_val <- eventReactive(input$act_mapas, { elecciones_usuario$area })
+
+  mapa_partido_manana_val <- eventReactive(input$act_mapas, { mapa_manana$mapa_partido })
+  mapa_partido_tarde_val  <- eventReactive(input$act_mapas, { mapa_tarde$mapa_partido })
+  mapa_partido_noche_val  <- eventReactive(input$act_mapas, { mapa_noche$mapa_partido })
+  
   geocovidapp::ReporteServer("desc_reporte",
-                area = elecciones_usuario$area,
-                partido = elecciones_usuario$partido, # Partidos_Input.R
-                fecha = eleccion_fecha$casos_covid,
-                mapa_partido_manana = mapa_manana$mapa_partido,
-                mapa_partido_tarde = mapa_tarde$mapa_partido,
-                mapa_partido_noche = mapa_noche$mapa_partido,
-                tipo_de_raster = elecciones_usuario$porcentaje,
-                opacidad = reactive({ input$opacity })
+                             area = area_val,
+                             partido = partido_val,
+                             fecha = fecha_val,
+                             mapa_partido_manana = mapa_partido_manana_val,
+                             mapa_partido_tarde = mapa_partido_tarde_val,
+                             mapa_partido_noche = mapa_partido_noche_val,
+                             tipo_de_raster = tipo_de_raster_val,
+                             opacidad = reactive({ input$opacity })
                 )
 
   # Tab 3: casos covid -----

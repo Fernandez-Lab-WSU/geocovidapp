@@ -3,11 +3,11 @@
   min-width: 150px;
   color: white;
   background-color: #406177 !important;
-  padding-left:5px;
-  border-color:#406177;
-  border-style:solid;
+  padding-left: 5px;
+  border-color: #406177;
+  border-style: solid;
   border-width:thin;
-  transition:0s 4s;
+  transition: transform 0.3s ease-in-out;
   z-index: 40 !important;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, .3);
   border-radius: 3px;
@@ -36,9 +36,7 @@
 }
 
 
-.dygraph-annotation
-{
-
+.dygraph-annotation{
     font-family: 'Work Sans', sans-serif !important;
     font-size: 12px  !important;
 }
@@ -56,3 +54,6 @@
   padding-left:3px !important;
 }
 
+.dygraph-axis-label {
+  font-size: 10px !important;
+}

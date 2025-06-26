@@ -39,7 +39,8 @@ ReporteServer <- function(id,
                           partido, 
                           fecha,
                           area,
-                          tipo_de_raster, opacidad,
+                          tipo_de_raster,
+                          opacidad,
                           mapa_partido_manana,
                           mapa_partido_tarde,
                           mapa_partido_noche) {
@@ -47,28 +48,33 @@ ReporteServer <- function(id,
     id,
     function(input, output, session) {
       
-     fecha_val <- reactive({
-        f <- fecha()
-
-        if (is.null(f)) { # Tiene que elegir un valor en el mapa
-          as.Date('2020-05-03') # tiene que ser una fecha que tenga raster para todas las opciones
-        } else {
-          print(as.Date(f))
-          as.Date(f)  # Extraigo la fecha solamente
-        }
-      })
-      
+     
       output$reporte <- downloadHandler(
         # https://community.rstudio.com/t/retain-formatting-on-a-pdf-output-from-shiny-downloadhandler/36410
         filename = function(){
-          paste0("GeoCovid_", partido(), "_", as.character(fecha_val()), ".docx")
+          
+          
+          print("dddd")
+          print(reactive({ tipo_de_raster() }) )
+          
+          req(fecha(), tipo_de_raster(), partido())
+          
+          paste0("GeoCovid_", partido(), "_",
+                 as.character(fecha()), "_", 
+                 #ifelse(tipo_de_raster() == "7dpc","semanal", 
+                        "prepandemia", ".docx")
         },
         content = function(file) {
+          
+          req(fecha(), mapa_partido_manana(),
+              mapa_partido_tarde(), mapa_partido_noche())
           
           my_tempdir <- tempdir()
           path_report <- file.path(my_tempdir,
                                    "reporte.Rmd")
           
+ 
+     
           
           # Copy the reporte.Rmd from the inst folder of the package to the temporary directory
           reporte_path <- system.file("geocovidapp/reporte.Rmd", package = "geocovidapp")
@@ -78,7 +84,7 @@ ReporteServer <- function(id,
           
           params <- list(
             partido = partido(),
-            fecha = fecha_val(),
+            fecha = fecha(),
             tipo_de_raster = tipo_de_raster(),
             opacidad = opacidad(),
             area = area(),

@@ -4,7 +4,7 @@
 \alias{dygraphs_events}
 \title{Add Custom Dygraph Events and Styling}
 \usage{
-dygraphs_events(plot)
+dygraphs_events(plot, eje_x = TRUE)
 }
 \arguments{
 \item{plot}{A dygraph object created with \code{dygraphs::dygraph()}.}

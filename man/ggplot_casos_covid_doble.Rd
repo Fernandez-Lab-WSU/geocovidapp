@@ -4,14 +4,12 @@
 \alias{ggplot_casos_covid_doble}
 \title{Gráfico individual y comparativo de casos COVID}
 \usage{
-ggplot_casos_covid_doble(partido, fecha, partido_comunas)
+ggplot_casos_covid_doble(partido, fecha)
 }
 \arguments{
 \item{partido}{Nombre del partido o comuna (ej. "La Matanza" o "Comuna 1")}
 
 \item{fecha}{Fecha a marcar con una línea vertical (formato "YYYY-MM-DD")}
-
-\item{partido_comunas}{Vector de nombres de comunas de CABA (ej. paste("Comuna", 1:15))}
 }
 \value{
 Una lista con dos ggplots: \code{grafico_partido} y \code{grafico_comparativo}

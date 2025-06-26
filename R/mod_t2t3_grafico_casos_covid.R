@@ -10,7 +10,7 @@ Dygraph_UI <- function(id) {
     fluidRow(
       shinycssloaders::withSpinner(
         dygraphs::dygraphOutput(ns("casos_prov"),
-          width = 700,
+          width = 800,
           height = 120
         ),
         type = 2,
@@ -19,7 +19,7 @@ Dygraph_UI <- function(id) {
       ),
       shinycssloaders::withSpinner(
         dygraphs::dygraphOutput(ns("casos_dpto"),
-          width = 700,
+          width = 800,
           height = 100
         ),
         type = 2,
@@ -129,7 +129,7 @@ Dygraph_Server <- function(id,
             pattern = "^Comuna"
           ) | # si quiero ver datos de comuna
           dim(dplyr::filter(
-            data_sisa,
+            geocovidapp::data_sisa,
             .data$residencia_departamento_nombre == partido()
           ))[1] == 0) { # si no hay casos en el partido
 
@@ -139,7 +139,7 @@ Dygraph_Server <- function(id,
             group = "A"
           ) |>
             dygraphs::dySeries("BsAs", color = "#186E8B") |>
-            geocovidapp::dygraphs_events()
+            geocovidapp::dygraphs_events(eje_x = FALSE)
         } else {
           data_plot <- data_xts()
           # Si no es un dato de comuna, que muestre tambien una linea para CABA
@@ -148,7 +148,7 @@ Dygraph_Server <- function(id,
           ) |>
             dygraphs::dySeries("BsAs", color = "#186E8B") |>
             dygraphs::dySeries("CABA", color = "#301A4B") |>
-            geocovidapp::dygraphs_events()
+            geocovidapp::dygraphs_events(eje_x = FALSE)
         }
       })
 

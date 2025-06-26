@@ -66,13 +66,8 @@ ui <- function() {
       shiny::fluidRow(
         shiny::column(
           10,
-          shiny::br(),
-          tags$h5(paste(
-            "Casos de COVID-19 diarios",
-            "reportados por el sistema",
-            "de salud"
-          )),
           bslib::card(
+            style = "height: 400px;", 
             bslib::layout_sidebar(
               title = "Por partido",
               sidebar = bslib::sidebar(
@@ -88,7 +83,12 @@ ui <- function() {
                 ),
                 geocovidapp::ReporteUI("desc_reporte")
               ), # cierra sidebar
-            shiny::tags$h6("Click en el primer grafico para seleccionar la fecha de los mapas"),
+              tags$div(
+                tags$p("Casos de COVID-19 diarios reportados por el sistema de salud",
+                       style = "font-size: 18px; font-weight: bold; margin-bottom: 2px;"),
+                tags$p("Click en el primer gráfico para seleccionar la fecha de los mapas",
+                       style = "font-size: 14px; margin-top: 0px;")
+              ),
               geocovidapp::Dygraph_UI("casos_covid")))
         ),
         shiny::column(

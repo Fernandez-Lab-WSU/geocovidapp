@@ -59,10 +59,12 @@ convertir_xts_serie <- function(serie, nombre_serie){
 #' @importFrom dygraphs dyAxis dyOptions dyHighlight dyCrosshair dyEvent dyLegend dyCSS
 #' @export
 
-dygraphs_events <- function(plot){
+dygraphs_events <- function(plot, eje_x = TRUE){
   
     plot |>
-    dygraphs::dyAxis("y",
+    dygraphs::dyAxis("y", 
+                     drawGrid = TRUE,
+                     drawAxis = eje_x,
                      label = "Nro. de casos") |>
     dygraphs::dyOptions(labelsUTC = TRUE,
                         drawGrid = FALSE
