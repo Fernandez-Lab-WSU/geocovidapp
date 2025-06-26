@@ -139,7 +139,7 @@ Dygraph_Server <- function(id,
             group = "A"
           ) |>
             dygraphs::dySeries("BsAs", color = "#186E8B") |>
-            geocovidapp::dygraphs_events(eje_x = FALSE)
+            geocovidapp::dygraphs_events()
         } else {
           data_plot <- data_xts()
           # Si no es un dato de comuna, que muestre tambien una linea para CABA
@@ -148,7 +148,7 @@ Dygraph_Server <- function(id,
           ) |>
             dygraphs::dySeries("BsAs", color = "#186E8B") |>
             dygraphs::dySeries("CABA", color = "#301A4B") |>
-            geocovidapp::dygraphs_events(eje_x = FALSE)
+            geocovidapp::dygraphs_events()
         }
       })
 

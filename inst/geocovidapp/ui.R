@@ -5,31 +5,21 @@ ui <- function() {
   shiny::navbarPage(
     title = "GeoCovid App",
     id = "nav",
-    shiny::includeCSS(system.file("geocovidapp/www/custom.css",
-      package = "geocovidapp"
-    )),
-    shinyjs::useShinyjs(),
-    position = "fixed-top", # Zoom al mapa del tab1
-    tags$style(type = "text/css", ".navbar{padding-left:30px}"),
-    # lang = "es",
+    header = tagList(
+      shiny::includeCSS(system.file("geocovidapp/www/custom.css", package = "geocovidapp")),
+      shinyjs::useShinyjs()),
+      position = "fixed-top", # Zoom al mapa del tab1
     theme = bslib::bs_theme(
       version = 5,
       bootswatch = "flatly",
-      fg = "#114B5F", # fuentes
-      bg = "white",
-      primary = "#114B5F", # navbar
-      secondary = "#1C7C9C",
-      info = "#88A9BF",
-      heading_font = "Work Sans, sans-serif",
-      "input-border-color" = "#406177",
-      base_font = bslib::font_collection(
-        bslib::font_google("Work Sans",
-          wght = "400",
-          local = FALSE
-        ),
-        "Roboto",
-        "sans-serif"
-      )
+      fg = "#114B5F",        # Color principal para textos
+      bg = "white",          # Fondo blanco
+      primary = "#114B5F",   # Color navbar y botones primarios
+      secondary = "#1C7C9C", # Color secundario
+      info = "#88A9BF",      # Color info
+      heading_font = bslib::font_google("Source Sans Pro", wght = "600", local = FALSE),  # Poppins #Barlow Semi Condensed
+      base_font = bslib::font_google("Public Sans", wght = "400", local = FALSE), # Lato # 
+      "input-border-color" = "#406177" # Color borde inputs
     ),
     windowTitle = "geocovid app",
     shiny::tabPanel( ## TAB 1
@@ -84,7 +74,7 @@ ui <- function() {
                 geocovidapp::ReporteUI("desc_reporte")
               ), # cierra sidebar
               tags$div(
-                tags$p("Casos de COVID-19 diarios reportados por el sistema de salud",
+                tags$h6("Casos de COVID-19 diarios reportados por el sistema de salud",
                        style = "font-size: 18px; font-weight: bold; margin-bottom: 2px;"),
                 tags$p("Click en el primer gráfico para seleccionar la fecha de los mapas",
                        style = "font-size: 14px; margin-top: 0px;")
@@ -95,7 +85,6 @@ ui <- function() {
           2,
           shiny::br(),
           tags$h5("Controles Mapas"),
-          shiny::br(),
           shiny::sliderInput("opacity",
                              label = "Transparencia",
                              min = 0,

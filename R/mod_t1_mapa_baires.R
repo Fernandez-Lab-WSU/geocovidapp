@@ -82,8 +82,8 @@ MapaBaires_Server <- function(id,
           "#FF6600", "#FF3300", "#FF0000"
         ),
         bins = c(
-          50, 40, 30, 20, 10, 1,
-          -1, -10, -20, -30, -40, -50
+          Inf, 40, 30, 20, 10, 1,
+          -1, -10, -20, -30, -40, -Inf
         ),
         na.color = "transparent"
       )
