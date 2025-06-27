@@ -1,5 +1,5 @@
 
-# GeoCovid App <img src="inst/geocovidapp/www/geocovid_logo.png" align="right" height="150" />
+# GeoCovidApp Buenos Aires <img src="inst/geocovidapp/www/geocovid_logo.png" align="right" height="150" />
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -12,8 +12,6 @@ status](https://codecov.io/gh/Fernandez-Lab-WSU/geocovidapp/branch/main/graph/ba
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
-
-# GeoCovid App
 
 GeoCovid App es una aplicación para visualizar datos de movilidad
 ciudadana en la provincia de Buenos Aires durante el período de marzo a

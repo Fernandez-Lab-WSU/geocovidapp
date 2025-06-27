@@ -39,6 +39,7 @@ ReporteServer <- function(id,
                           partido, 
                           fecha,
                           area,
+                          act_mapas,
                           tipo_de_raster,
                           opacidad,
                           mapa_partido_manana,
@@ -48,49 +49,83 @@ ReporteServer <- function(id,
     id,
     function(input, output, session) {
       
-     
+
       output$reporte <- downloadHandler(
         # https://community.rstudio.com/t/retain-formatting-on-a-pdf-output-from-shiny-downloadhandler/36410
         filename = function(){
-          
-          
-          print("dddd")
-          print(reactive({ tipo_de_raster() }) )
-          
-          req(fecha(), tipo_de_raster(), partido())
-          
+          print(paste("Tipo de raster:", tipo_de_raster()))
           paste0("GeoCovid_", partido(), "_",
                  as.character(fecha()), "_", 
-                 #ifelse(tipo_de_raster() == "7dpc","semanal", 
-                        "prepandemia", ".docx")
+                 ifelse(tipo_de_raster() == "7dpc","semanal", "prepandemia"), 
+                 ".docx")
         },
         content = function(file) {
           
-          req(fecha(), mapa_partido_manana(),
-              mapa_partido_tarde(), mapa_partido_noche())
+          fecha_val <- eventReactive(act_mapas(), {
+            f <- fecha()
+          
+            if (is.null(f)) as.Date('2020-05-03') else as.Date(f)
+          })
+          
+        
+          
+          tipo_de_raster_val <- eventReactive(act_mapas(), {
+            
+            print(paste("Tipo de raster:", tipo_de_raster()))
+            if (is.null(tipo_de_raster())) "pc" else tipo_de_raster()
+          })
+          
+          partido_val <- eventReactive(act_mapas(), {
+            if (is.null(partido())) "Avellaneda" else partido()
+          })
+          
+          area_val <- eventReactive(act_mapas(), {
+            if (is.null(area())) "amba" else area()
+          })
+          
+          mapa_partido_manana_val <- eventReactive(act_mapas(), {
+            if (is.null(mapa_partido_manana())) {
+              stop("Mapa de la mañana no disponible.")  # or return(NULL) if preferred
+            } else {
+              mapa_partido_manana()
+            }
+          })
+          
+          mapa_partido_tarde_val <- eventReactive(act_mapas(), {
+            if (is.null(mapa_partido_tarde())) {
+              stop("Mapa de la tarde no disponible.")
+            } else {
+              mapa_partido_tarde()
+            }
+          })
+          
+          mapa_partido_noche_val <- eventReactive(act_mapas(), {
+            if (is.null(mapa_partido_noche())) {
+              stop("Mapa de la noche no disponible.")
+            } else {
+              mapa_partido_noche()
+            }
+          })
           
           my_tempdir <- tempdir()
           path_report <- file.path(my_tempdir,
                                    "reporte.Rmd")
           
- 
-     
-          
-          # Copy the reporte.Rmd from the inst folder of the package to the temporary directory
+           # Copia reporte.Rmd desde inst/ a un directorio temporal
           reporte_path <- system.file("geocovidapp/reporte.Rmd", package = "geocovidapp")
           if (reporte_path == "") stop("reporte.Rmd not found in package.")
           
           file.copy(reporte_path, path_report, overwrite = TRUE)
           
           params <- list(
-            partido = partido(),
-            fecha = fecha(),
-            tipo_de_raster = tipo_de_raster(),
+            partido = partido_val(),
+            fecha = fecha_val(),
+            tipo_de_raster = tipo_de_raster_val(),
             opacidad = opacidad(),
-            area = area(),
-            imagen_manana = mapa_partido_manana(),
-            imagen_tarde = mapa_partido_tarde(),
-            imagen_noche = mapa_partido_noche(),
+            area = area_val(),
+            imagen_manana = mapa_partido_manana_val(),
+            imagen_tarde = mapa_partido_tarde_val(),
+            imagen_noche = mapa_partido_noche_val(),
             pandoc = rmarkdown::pandoc_version()
           )
           

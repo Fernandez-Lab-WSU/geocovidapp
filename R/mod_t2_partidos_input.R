@@ -4,15 +4,11 @@
 #' @param id Module name
 #' @param amba_reducido_names String. Vector con los nombres de los partidos
 #' que conforman el AMBA.
-#' @param base_raster Dataframe que lista todos los rasters y desagrega en
-#' sus columnas características de interes, como si son rasters de
-#' AMBA o Buenos Aires, si el cambio porcentual es semanal o prepandemia
-#' o el momento del día que representan.
 #'
 #' @return Elementos de la IU para que se seleccione partidos de AMBA o de
 #' BsAs de forma condicional.
 #' @export
-Partidos_UI <- function(id, amba_reducido_names, base_raster) {
+Partidos_UI <- function(id, amba_reducido_names) {
   ns <- NS(id)
 
   shiny::tagList(
@@ -61,7 +57,6 @@ Partidos_UI <- function(id, amba_reducido_names, base_raster) {
 #' @return El area y el partido seleccionado.
 #' @export
 Partidos_Server <- function(id,
-                            bsas,
                             amba_reducido_names) {
   moduleServer(
     id,
@@ -102,9 +97,6 @@ Partidos_Server <- function(id,
           }),
           porcentaje = reactive({
             input$porcentaje
-          }),
-          opacidad = reactive({
-            input$opacity
           })
         )
       )

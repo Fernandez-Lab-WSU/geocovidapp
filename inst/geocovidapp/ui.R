@@ -64,8 +64,7 @@ ui <- function() {
                 id = "tab2-sidebar",
                 width = 350,
                 geocovidapp::Partidos_UI("selector_dinamico",
-                                         amba_reducido_names = amba_reducido_names,
-                                         base_raster = base_raster),
+                                         amba_reducido_names = amba_reducido_names),
                 shiny::actionButton(
                   "act_mapas",
                   "Actualizar el mapa",

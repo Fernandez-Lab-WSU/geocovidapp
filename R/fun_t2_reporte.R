@@ -102,7 +102,7 @@ ggplot_casos_covid_doble <- function(partido, fecha) {
   grafico_partido <- geocovidapp::data_sisa |>
     dplyr::filter(residencia_provincia_nombre %in% c("CABA", "Buenos Aires")) |> 
     dplyr::group_by(residencia_provincia_nombre, residencia_departamento_nombre, fecha_enfermo) |>
-    dplyr::summarise(casos_dia = n(), .groups = "drop_last") |> 
+    dplyr::summarise(casos_dia = dplyr::n(), .groups = "drop_last") |> 
     dplyr::mutate(fecha_enfermo = as.Date(fecha_enfermo)) |> 
     dplyr::filter(residencia_departamento_nombre == partido) |>
     ggplot(aes(x = fecha_enfermo, y = casos_dia)) +
@@ -142,7 +142,7 @@ ggplot_casos_covid_doble <- function(partido, fecha) {
   
   grafico_comparativo <- geocovidapp::data_sisa |>
     dplyr::group_by(residencia_provincia_nombre, fecha_enfermo) |>
-    dplyr::summarise(casos_dia = n(), .groups = "drop_last") |> 
+    dplyr::summarise(casos_dia = dplyr::n(), .groups = "drop_last") |> 
     dplyr::mutate(fecha_enfermo = as.Date(fecha_enfermo)) |>  # fin datos
     dplyr::filter(residencia_provincia_nombre %in% provincias) |>
     ggplot(aes(x = fecha_enfermo, y = casos_dia, color = residencia_provincia_nombre)) +
