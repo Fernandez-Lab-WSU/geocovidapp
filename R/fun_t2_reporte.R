@@ -85,7 +85,7 @@ ggplot_casos_covid_doble <- function(partido, fecha) {
   # 1. Datos base
   geocovidapp::data_sisa |>
     dplyr::group_by(residencia_provincia_nombre, fecha_enfermo) |>
-    dplyr::summarise(casos_dia = n(), .groups = "drop_last") |> 
+    dplyr::summarise(casos_dia = dplyr::n(), .groups = "drop_last") |> 
     dplyr::mutate(fecha_enfermo = as.Date(fecha_enfermo))
   
   # 2. Identificar si el partido es una comuna
@@ -105,10 +105,10 @@ ggplot_casos_covid_doble <- function(partido, fecha) {
     dplyr::summarise(casos_dia = dplyr::n(), .groups = "drop_last") |> 
     dplyr::mutate(fecha_enfermo = as.Date(fecha_enfermo)) |> 
     dplyr::filter(residencia_departamento_nombre == partido) |>
-    ggplot(aes(x = fecha_enfermo, y = casos_dia)) +
-    geom_line(color = color_partido, size = 0.5) +
-    geom_vline(xintercept = as.numeric(fecha_evento), linetype = "dashed", color = "black") +
-    annotate(
+    ggplot2::ggplot(ggplot2::aes(x = fecha_enfermo, y = casos_dia)) +
+    ggplot2::geom_line(color = color_partido, size = 0.5) +
+    ggplot2::geom_vline(xintercept = as.numeric(fecha_evento), linetype = "dashed", color = "black") +
+    ggplot2::annotate(
       "text",
       x = fecha_evento,
       y = Inf,
@@ -119,21 +119,21 @@ ggplot_casos_covid_doble <- function(partido, fecha) {
       size = 3,
       fontface = "plain"
     ) +
-    scale_x_date(
+    ggplot2::scale_x_date(
       date_breaks = "1 month",
       date_labels = "%b %Y",
-      expand = expansion(mult = c(0.01, 0.01))
+      expand = ggplot2::expansion(mult = c(0.01, 0.01))
     ) +
-    scale_y_continuous(
+    ggplot2::scale_y_continuous(
       name = "Nro. de Casos",
       breaks = scales::pretty_breaks(n = 8)
     ) +
-    labs(
+    ggplot2::labs(
       title = glue::glue("Casos acumulados en {partido}"),
       x = NULL
     ) +
-    theme_minimal() +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+    ggplot2::theme_minimal() +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
   
   # --------------------------
   # GRAFICO 2: Comparativo
@@ -145,10 +145,10 @@ ggplot_casos_covid_doble <- function(partido, fecha) {
     dplyr::summarise(casos_dia = dplyr::n(), .groups = "drop_last") |> 
     dplyr::mutate(fecha_enfermo = as.Date(fecha_enfermo)) |>  # fin datos
     dplyr::filter(residencia_provincia_nombre %in% provincias) |>
-    ggplot(aes(x = fecha_enfermo, y = casos_dia, color = residencia_provincia_nombre)) +
-    geom_line(size = 0.5) +
-    geom_vline(xintercept = as.numeric(fecha_evento), linetype = "dashed", color = "black") +
-    annotate(
+    ggplot2::ggplot(ggplot2::aes(x = fecha_enfermo, y = casos_dia, color = residencia_provincia_nombre)) +
+    ggplot2::geom_line(size = 0.5) +
+    ggplot2::geom_vline(xintercept = as.numeric(fecha_evento), linetype = "dashed", color = "black") +
+    ggplot2::annotate(
       "text",
       x = fecha_evento,
       y = Inf,
@@ -159,26 +159,26 @@ ggplot_casos_covid_doble <- function(partido, fecha) {
       size = 3,
       fontface = "plain"
     ) +
-    scale_color_manual(
+    ggplot2::scale_color_manual(
       values = colores_comparativo,
       drop = FALSE
     ) +
-    scale_x_date(
+    ggplot2::scale_x_date(
       date_breaks = "1 month",
       date_labels = "%b %Y",
-      expand = expansion(mult = c(0.01, 0.01))
+      expand = ggplot2::expansion(mult = c(0.01, 0.01))
     ) +
-    scale_y_continuous(
+    ggplot2::scale_y_continuous(
       name = "Nro. de Casos",
       breaks = scales::pretty_breaks(n = 8)
     ) +
-    labs(
+    ggplot2::labs(
       title = if (es_comuna) "Casos acumulados en CABA" else "Casos acumulados en Buenos Aires y CABA",
       x = NULL,
       color = "Provincia"
     ) +
-    theme_minimal() +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+    ggplot2::theme_minimal() +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
   
   # Retornar como lista
   list(

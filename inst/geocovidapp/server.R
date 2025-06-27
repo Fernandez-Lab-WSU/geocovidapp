@@ -202,7 +202,7 @@ server <- function(input, output, session, r) {
 
   # Reporte
   
-  geocovidapp::ReporteServer("desc_reporte",
+   geocovidapp::ReporteServer("desc_reporte",
                              area = elecciones_usuario$area,
                              act_mapas = reactive({input$act_mapas}),
                              partido = elecciones_usuario$partido, # Partidos_Input.R

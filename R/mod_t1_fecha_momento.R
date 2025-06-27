@@ -238,7 +238,7 @@ FechaMomento_Server <- function(id,
         }
       })
 
-      BotonAyuda_Server('tab1_menuflotante')
+      geocovidapp::BotonAyuda_Server('tab1_menuflotante')
 
       return(
         list(

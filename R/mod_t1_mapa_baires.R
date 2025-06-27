@@ -164,7 +164,7 @@ MapaBaires_Server <- function(id,
       })
 
 
-BarraInferior_Server('tab1_texto_info',
+ geocovidapp::BarraInferior_Server('tab1_texto_info',
                      boton = boton,
                      area = area,
                      fecha = fecha,

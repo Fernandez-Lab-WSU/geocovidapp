@@ -3,6 +3,8 @@
 #' Esta función toma los valores de área, tipo de raster, fecha y momento del día 
 #' seleccionados por el usuario y verifica si existe una fila en el dataframe `base_raster`
 #' que coincida con todos estos valores.
+#' Es una funcion defensiva, pensada para tratar de encontrar los casos 
+#' cuando no hay rasters y evitar que la aplicacion se rompa
 #'
 #' @param area Una cadena de texto que representa el área seleccionada por el usuario (por ejemplo, "baires" o "amba").
 #' @param porcentaje Una cadena de texto que representa el tipo de cambio porcentual seleccionado por el usuario (por ejemplo, "pc" o "7dpc").

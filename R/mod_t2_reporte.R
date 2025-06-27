@@ -49,63 +49,98 @@ ReporteServer <- function(id,
     id,
     function(input, output, session) {
       
+      
+      # Acoplo el los parametros reactivos al boton actualizar
+      fecha_val <- eventReactive(act_mapas(), ignoreNULL = FALSE,{
+        # Este es el unico widget que no tiene un valor por default
+        # Depende del click del usuario
+        if (is.null(fecha())){ as.Date('2020-05-03') }else{ as.Date(fecha()) }
+      })
+      
+      tipo_de_raster_val <- eventReactive(act_mapas(), ignoreNULL = FALSE,{
+       tipo_de_raster()
+      })
+      
+      partido_val <- eventReactive(act_mapas(), ignoreNULL = FALSE,{
+       partido()
+      })
+      
+      area_val <- eventReactive(act_mapas(), ignoreNULL = FALSE,{
+        area()
+      })
+      
+      mapa_partido_manana_val <- eventReactive(act_mapas(), ignoreNULL = FALSE,{
+        if (is.null(mapa_partido_manana())) {
+          stop("Mapa de la mañana no disponible.") 
+        } else {
+          mapa_partido_manana()
+        }
+      })
+      
+      mapa_partido_tarde_val <- eventReactive(act_mapas(), ignoreNULL = FALSE,{
+        if (is.null(mapa_partido_tarde())) {
+          stop("Mapa de la tarde no disponible.")
+        } else {
+          mapa_partido_tarde()
+        }
+      })
+      
+      mapa_partido_noche_val <- eventReactive(act_mapas(), ignoreNULL = FALSE,{
+        if (is.null(mapa_partido_noche())) {
+          stop("Mapa de la noche no disponible.")
+        } else {
+          mapa_partido_noche()
+        }
+      })
 
+      observeEvent(act_mapas(),{
+        rasters_existen <- any(geocovidapp::base_raster[["locacion"]] == area_val() &
+              base_raster[["tipo_de_raster"]] == tipo_de_raster_val() &
+              base_raster[["fecha"]] == fecha_val())
+        
+        print(area_val())
+        print(tipo_de_raster_val())
+        print(fecha_val())
+        
+  print(rasters_existen)
+        if (!rasters_existen) {
+          showModal(modalDialog(
+            title = "No se puede generar el reporte",
+            paste0("No se cuenta con al menos un raster disponible para esta fecha. Actualiza el mapa con otra combinación de variables."),
+            easyClose = TRUE
+          ))
+          
+        }
+      })
+      
+      
       output$reporte <- downloadHandler(
         # https://community.rstudio.com/t/retain-formatting-on-a-pdf-output-from-shiny-downloadhandler/36410
         filename = function(){
-          print(paste("Tipo de raster:", tipo_de_raster()))
-          paste0("GeoCovid_", partido(), "_",
-                 as.character(fecha()), "_", 
-                 ifelse(tipo_de_raster() == "7dpc","semanal", "prepandemia"), 
+          # # No generar reporte si falta algun mapa
+          # if (is.null(mapa_partido_manana()) ||
+          #     is.null(mapa_partido_tarde()) ||
+          #     is.null(mapa_partido_noche())) {
+          #   shiny::showModal(shiny::modalDialog(
+          #     title = "No se puede generar el reporte",
+          #     "No hay rasters disponibles para la fecha seleccionada.",
+          #     easyClose = TRUE
+          #   ))
+          #   stop("Faltan mapas para generar el reporte.")
+          # }
+          # Genero el nombre del archivo
+           paste0("GeoCovid_", partido_val(), "_",
+                 as.character(fecha_val()), "_", 
+                 ifelse(tipo_de_raster_val() == "7dpc","semanal", "prepandemia"), 
                  ".docx")
         },
         content = function(file) {
           
-          fecha_val <- eventReactive(act_mapas(), {
-            f <- fecha()
-          
-            if (is.null(f)) as.Date('2020-05-03') else as.Date(f)
-          })
-          
-        
-          
-          tipo_de_raster_val <- eventReactive(act_mapas(), {
-            
-            print(paste("Tipo de raster:", tipo_de_raster()))
-            if (is.null(tipo_de_raster())) "pc" else tipo_de_raster()
-          })
-          
-          partido_val <- eventReactive(act_mapas(), {
-            if (is.null(partido())) "Avellaneda" else partido()
-          })
-          
-          area_val <- eventReactive(act_mapas(), {
-            if (is.null(area())) "amba" else area()
-          })
-          
-          mapa_partido_manana_val <- eventReactive(act_mapas(), {
-            if (is.null(mapa_partido_manana())) {
-              stop("Mapa de la mañana no disponible.")  # or return(NULL) if preferred
-            } else {
-              mapa_partido_manana()
-            }
-          })
-          
-          mapa_partido_tarde_val <- eventReactive(act_mapas(), {
-            if (is.null(mapa_partido_tarde())) {
-              stop("Mapa de la tarde no disponible.")
-            } else {
-              mapa_partido_tarde()
-            }
-          })
-          
-          mapa_partido_noche_val <- eventReactive(act_mapas(), {
-            if (is.null(mapa_partido_noche())) {
-              stop("Mapa de la noche no disponible.")
-            } else {
-              mapa_partido_noche()
-            }
-          })
+          if (is.null(mapa_partido_manana()) ||
+              is.null(mapa_partido_tarde()) ||
+              is.null(mapa_partido_noche())) {
+            stop("Faltan mapas para generar el reporte.")
+          }
           
           my_tempdir <- tempdir()
           path_report <- file.path(my_tempdir,
@@ -120,7 +155,7 @@ ReporteServer <- function(id,
           params <- list(
             partido = partido_val(),
             fecha = fecha_val(),
-            tipo_de_raster = tipo_de_raster_val(),
+            tipo_de_raster = tipo_de_raster_val(), # aqui debo extraer el valor
             opacidad = opacidad(),
             area = area_val(),
             imagen_manana = mapa_partido_manana_val(),
