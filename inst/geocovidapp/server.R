@@ -64,17 +64,18 @@ server <- function(input, output, session, r) {
                                                 area = elecciones_usuario$area,
                                                 partido = elecciones_usuario$partido)
   
+  fecha_final <- reactive({  if (is.null(eleccion_fecha$casos_covid())) {
+    as.Date("2020-05-03")
+  } else {
+    fecha_final <-as.Date(geocovidapp::formatted_date(eleccion_fecha$casos_covid()))
+  }
+  })
+  
   datos_raster <- reactive({
-   
-    fecha_final <- if (is.null(eleccion_fecha$casos_covid())) {
-      as.Date("2020-05-03")
-    } else {
-     fecha_final <-as.Date(geocovidapp::formatted_date(eleccion_fecha$casos_covid()))
-    }
-    
+ 
     d <- geocovidapp::base_raster |>
       dplyr::filter(
-        fecha == fecha_final,
+        fecha == fecha_final(),
         tipo_de_raster == elecciones_usuario$porcentaje(),
         locacion == elecciones_usuario$area()
       )
@@ -106,7 +107,7 @@ server <- function(input, output, session, r) {
   # si el valor de fecha es NULL, como al inicio  
   if(is.null(eleccion_fecha$casos_covid())){
     
-    fecha <- '2020-05-12 00:00:00' # lubradate::ymd_hms() espera una string
+    fecha <- '2020-05-03 00:00:00' # lubradate::ymd_hms() espera una string
 
   }else{
     
@@ -125,6 +126,22 @@ server <- function(input, output, session, r) {
    fecha_titulo()
    })
   
+  output$vb_fecha <- renderUI({ 
+    bslib::value_box( # estilo en custom.css
+      id = "vb_1",
+      title = "Fecha seleccionada",
+      value = fecha_final(), # notar que esto no depende del boton actualizar
+      max_height="150px"
+    )
+    })
+  output$vb_casos <- renderUI({ 
+    bslib::value_box(
+    id = "vb_2",
+    title = "Casos de COVID-19",
+    value = "99 problems",
+    max_height="150px"
+  )
+  })
 
   # Histogramas
   geocovidapp::HistogramaRaster_Server('hist',

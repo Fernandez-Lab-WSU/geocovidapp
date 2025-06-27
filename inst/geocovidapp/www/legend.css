@@ -29,7 +29,7 @@
 
 .dygraph-label, .dygraph-axis-label {
   color: black;
-  font-family: 'Work Sans', sans-serif !important;
+  font-family: 'Public Sans', sans-serif !important;
   font-size: 11px  !important;
   padding: 0 !important;
   margin: 0 !important;
@@ -37,7 +37,7 @@
 
 
 .dygraph-annotation{
-    font-family: 'Work Sans', sans-serif !important;
+    font-family: 'Public Sans', sans-serif !important;
     font-size: 12px  !important;
 }
 

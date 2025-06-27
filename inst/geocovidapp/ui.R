@@ -62,7 +62,7 @@ ui <- function() {
               title = "Por partido",
               sidebar = bslib::sidebar(
                 id = "tab2-sidebar",
-                width = 350,
+                width = 320,
                 geocovidapp::Partidos_UI("selector_dinamico",
                                          amba_reducido_names = amba_reducido_names),
                 shiny::actionButton(
@@ -72,14 +72,27 @@ ui <- function() {
                 ),
                 geocovidapp::ReporteUI("desc_reporte")
               ), # cierra sidebar
-              tags$div(
-                tags$h6("Casos de COVID-19 diarios reportados por el sistema de salud",
-                       style = "font-size: 18px; font-weight: bold; margin-bottom: 2px;"),
-                tags$p("Click en el primer gráfico para seleccionar la fecha de los mapas",
-                       style = "font-size: 14px; margin-top: 0px;")
-              ),
-              geocovidapp::Dygraph_UI("casos_covid")))
-        ),
+              bslib::layout_columns(
+                col_widths = c(9, 3),
+                fill = TRUE,  # Fuerza llenar alto
+                bslib::card_body(
+                  tags$div(
+                    style = "display: inline;",
+                    tags$h6("Casos de COVID-19 diarios reportados por el sistema de salud",
+                            style = "font-size: 18px; font-weight: bold; margin: 0; padding: 0;"),
+                    tags$p(" Click en el primer gráfico para seleccionar la fecha de los mapas",
+                           style = "font-size: 14px; margin: 0; padding: 0; display: inline;")
+                  ),
+                  geocovidapp::Dygraph_UI("casos_covid")
+                ),
+              div(
+                uiOutput("vb_fecha"), # value boxes
+                uiOutput("vb_casos")
+                )
+              ) # cierra body
+            
+            )
+        )),
         shiny::column(
           2,
           shiny::br(),

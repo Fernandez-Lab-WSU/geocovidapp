@@ -220,9 +220,12 @@ MapaCovidDepartamentos_Server <- function(id,
             highlightSeriesBackgroundAlpha = 0.4,
             hideOnMouseOut = TRUE
           ) |>
-          dygraphs::dyEvent("2020-04-13") |>
-          dygraphs::dyEvent("2020-04-26") |>
-          dygraphs::dyEvent("2020-05-10") |>
+          dygraphs::dyEvent("2020-05-10",
+                            "a",
+                            labelLoc = "bottom") |>
+          dygraphs::dyEvent("2020-06-07",
+                            "b",
+                            labelLoc = "bottom") |>
           dygraphs::dyLegend(show = "follow", width = 400) |>
           dygraphs::dyCSS(system.file("geocovidapp/www/legend.css",
             package = "geocovidapp"
@@ -232,7 +235,7 @@ MapaCovidDepartamentos_Server <- function(id,
       fecha_formato <- shiny::reactive({
         # Agrego un dia por default para que renderice si no hay otras fechas.
         if (is.null(fechas$casos_covid())) {
-          format("2020-05-12", format = "%Y-%m-%d")
+          format("2020-05-03", format = "%Y-%m-%d")
         } else {
           fecha <- fechas$casos_covid()
           formatted_date(fecha = fecha)
@@ -261,7 +264,7 @@ MapaCovidDepartamentos_Server <- function(id,
       sisa <- reactive({
         # centroides_mapa <- st_read("data/shapefiles_baires_amba/centroides_mapa.gpkg") # incluye caba
 
-        comunas <- data_sisa |>
+        comunas <- geocovidapp::data_sisa |>
           dplyr::filter(residencia_provincia_nombre == "CABA" &
             fecha_enfermo == fecha_formato()) |>
           dplyr::group_by(residencia_provincia_nombre) |>
@@ -270,15 +273,17 @@ MapaCovidDepartamentos_Server <- function(id,
 
         comunas[1, "partido"] <- "Capital Federal"
 
-        casos_diarios <- data_sisa |>
-          dplyr::filter(
-            residencia_provincia_nombre == "Buenos Aires" &
-              fecha_enfermo == fecha_formato()
-          ) |> # combino horarios
-          dplyr::group_by(residencia_departamento_nombre) |>
-          dplyr::summarize(n_casos = dplyr::n()) |>
-          dplyr::rename(partido = residencia_departamento_nombre) |>
-          rbind(comunas)
+        casos_diarios <-  casos_partido_diarios(provincia = "Buenos Aires", 
+                                                fecha = fecha_formato()) |> 
+                      rbind(comunas)
+        # casos_diarios <- geocovidapp::data_sisa |>
+        #   dplyr::filter(
+        #     residencia_provincia_nombre == "Buenos Aires" &
+        #       fecha_enfermo == fecha_formato()
+        #   ) |> # combino horarios
+        #   dplyr::group_by(residencia_departamento_nombre) |>
+        #   dplyr::summarize(n_casos = dplyr::n()) |>
+        #   dplyr::rename(partido = residencia_departamento_nombre) |
 
         # 3. Grafico
         # uso un left_join porque ya casos_darios_partido no es un sf data.frame

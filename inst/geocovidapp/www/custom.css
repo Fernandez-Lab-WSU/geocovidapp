@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;700&display=swap');
+
+/* General styles */
 .added-legend{
     width: 21px;
     height: 21px;
@@ -19,6 +22,7 @@
   padding-left:30px
 }
 
+/* Menu flotante - Tab1 */
 #controles {
   background-color: white;
   padding: 10px 10px 10px 10px;
@@ -36,7 +40,41 @@ opacity: 0.95;
 transition-delay: 1;
 }
 
-.leaflet-control-legend{
-    font-family: 'Public Sans', sans-serif !important;
-    font-size: 10px;
-  }
+/* Leyenda Leaflet - Tab1 */
+.info.legend.leaflet-control {
+  font-family: 'Public Sans', sans-serif !important;
+  font-size: 12px;
+}
+  
+/* Value Boxes - Tab2 */
+.value-box {
+  padding: 8px !important;       
+}
+  
+.value-box-title {
+  font-size: 14px !important;
+}
+
+.value-box-value {
+  font-size: 20px !important;
+}
+  
+  
+.card-body h6 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+.card-body p {
+  font-size: 14px;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* Leyenda mapa - Tab3 */
+.plot-container.plotly g.legend text {
+  font-family: 'Public Sans', sans-serif !important;
+  font-size: 12px !important;
+}
+  
