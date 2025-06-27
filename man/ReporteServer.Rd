@@ -9,6 +9,7 @@ ReporteServer(
   partido,
   fecha,
   area,
+  act_mapas,
   tipo_de_raster,
   opacidad,
   mapa_partido_manana,

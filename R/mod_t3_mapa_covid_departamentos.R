@@ -273,17 +273,9 @@ MapaCovidDepartamentos_Server <- function(id,
 
         comunas[1, "partido"] <- "Capital Federal"
 
-        casos_diarios <-  casos_partido_diarios(provincia = "Buenos Aires", 
+        casos_diarios <-  geocovidapp::casos_partido_diarios(provincia = "Buenos Aires", 
                                                 fecha = fecha_formato()) |> 
                       rbind(comunas)
-        # casos_diarios <- geocovidapp::data_sisa |>
-        #   dplyr::filter(
-        #     residencia_provincia_nombre == "Buenos Aires" &
-        #       fecha_enfermo == fecha_formato()
-        #   ) |> # combino horarios
-        #   dplyr::group_by(residencia_departamento_nombre) |>
-        #   dplyr::summarize(n_casos = dplyr::n()) |>
-        #   dplyr::rename(partido = residencia_departamento_nombre) |
 
         # 3. Grafico
         # uso un left_join porque ya casos_darios_partido no es un sf data.frame

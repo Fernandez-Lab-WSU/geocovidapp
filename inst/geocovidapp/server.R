@@ -48,11 +48,7 @@ server <- function(input, output, session, r) {
   # la eleccion de la fecha depende de dygraph, por ende defini
   # valores
   
-  # elecciones_usuario_partido <- geocovidapp::selectormapaServer("selector_partido",
-  #                                           act_mapas = reactive({input$act_mapas}),
-  #                                           fecha = eleccion_fecha$casos_covid) 
-  # 
-  
+
   elecciones_usuario <- geocovidapp::Partidos_Server(  # mod_t2_partidos_input.R
     "selector_dinamico",
     amba_reducido_names = amba_reducido_names
@@ -134,11 +130,29 @@ server <- function(input, output, session, r) {
       max_height="150px"
     )
     })
+  
+  
+  casos_dia_seleccionado <-reactive({
+  if(stringr::str_starts(elecciones_usuario$partido(), "Comuna")){
+    casos_comunas <-  geocovidapp::casos_partido_diarios(provincia = "CABA", 
+                                      fecha = fecha_final()) 
+    
+    sum(casos_comunas$n_casos) # total de casos
+    
+   
+  } else {  
+    
+    geocovidapp::casos_partido_diarios(provincia = "Buenos Aires", 
+                                               fecha = fecha_final()) |> 
+      dplyr::filter(
+        partido == elecciones_usuario$partido()
+      ) |> dplyr::pull(n_casos)  } })
+  
   output$vb_casos <- renderUI({ 
     bslib::value_box(
     id = "vb_2",
-    title = "Casos de COVID-19",
-    value = "99 problems",
+    title = paste("Casos de COVID-19", elecciones_usuario$partido()),
+    value = casos_dia_seleccionado(),
     max_height="150px"
   )
   })

@@ -5,15 +5,15 @@
 \title{Servidor: Seleccion de departamentos de provincia de Buenos Aires con IU
 dinámica.}
 \usage{
-Partidos_Server(id, bsas, amba_reducido_names)
+Partidos_Server(id, amba_reducido_names)
 }
 \arguments{
 \item{id}{Module name}
 
-\item{bsas}{Dataset de clase sf con los partidos de Buenos Aires.}
-
 \item{amba_reducido_names}{String. Vector con los nombres de los partidos
 que conforman el AMBA.}
+
+\item{bsas}{Dataset de clase sf con los partidos de Buenos Aires.}
 }
 \value{
 El area y el partido seleccionado.

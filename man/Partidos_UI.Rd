@@ -5,18 +5,13 @@
 \title{IU: Seleccion de departamentos de provincia de Buenos Aires con IU
 dinámica.}
 \usage{
-Partidos_UI(id, amba_reducido_names, base_raster)
+Partidos_UI(id, amba_reducido_names)
 }
 \arguments{
 \item{id}{Module name}
 
 \item{amba_reducido_names}{String. Vector con los nombres de los partidos
 que conforman el AMBA.}
-
-\item{base_raster}{Dataframe que lista todos los rasters y desagrega en
-sus columnas características de interes, como si son rasters de
-AMBA o Buenos Aires, si el cambio porcentual es semanal o prepandemia
-o el momento del día que representan.}
 }
 \value{
 Elementos de la IU para que se seleccione partidos de AMBA o de

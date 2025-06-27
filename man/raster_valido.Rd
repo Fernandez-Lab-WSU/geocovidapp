@@ -24,4 +24,6 @@ raster_valido(area, porcentaje, fecha, momento, base_raster)
 Esta función toma los valores de área, tipo de raster, fecha y momento del día
 seleccionados por el usuario y verifica si existe una fila en el dataframe \code{base_raster}
 que coincida con todos estos valores.
+Es una funcion defensiva, pensada para tratar de encontrar los casos
+cuando no hay rasters y evitar que la aplicacion se rompa
 }
