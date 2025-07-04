@@ -1,5 +1,5 @@
 
-# GeoCovidApp Buenos Aires <img src="inst/geocovidapp/www/geocovid_logo.png" align="right" height="150" />
+# GeoCovidApp Buenos Aires <img src="inst/geocovidapp/www/geocovid_logo.png" align="right" height="100" />
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
