@@ -98,11 +98,6 @@ ReporteServer <- function(id,
               base_raster[["tipo_de_raster"]] == tipo_de_raster_val() &
               base_raster[["fecha"]] == fecha_val())
         
-        print(area_val())
-        print(tipo_de_raster_val())
-        print(fecha_val())
-        
-  print(rasters_existen)
         if (!rasters_existen) {
           showModal(modalDialog(
             title = "No se puede generar el reporte",
@@ -117,19 +112,7 @@ ReporteServer <- function(id,
       output$reporte <- downloadHandler(
         # https://community.rstudio.com/t/retain-formatting-on-a-pdf-output-from-shiny-downloadhandler/36410
         filename = function(){
-          # # No generar reporte si falta algun mapa
-          # if (is.null(mapa_partido_manana()) ||
-          #     is.null(mapa_partido_tarde()) ||
-          #     is.null(mapa_partido_noche())) {
-          #   shiny::showModal(shiny::modalDialog(
-          #     title = "No se puede generar el reporte",
-          #     "No hay rasters disponibles para la fecha seleccionada.",
-          #     easyClose = TRUE
-          #   ))
-          #   stop("Faltan mapas para generar el reporte.")
-          # }
-          # Genero el nombre del archivo
-           paste0("GeoCovid_", partido_val(), "_",
+          paste0("GeoCovid_", partido_val(), "_",
                  as.character(fecha_val()), "_", 
                  ifelse(tipo_de_raster_val() == "7dpc","semanal", "prepandemia"), 
                  ".docx")
@@ -148,7 +131,7 @@ ReporteServer <- function(id,
           
            # Copia reporte.Rmd desde inst/ a un directorio temporal
           reporte_path <- system.file("geocovidapp/reporte.Rmd", package = "geocovidapp")
-          if (reporte_path == "") stop("reporte.Rmd not found in package.")
+          if (reporte_path == "") stop("reporte.Rmd faltante.")
           
           file.copy(reporte_path, path_report, overwrite = TRUE)
           

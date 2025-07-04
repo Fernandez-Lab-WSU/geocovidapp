@@ -17,8 +17,10 @@ ui <- function() {
       primary = "#114B5F",   # Color navbar y botones primarios
       secondary = "#1C7C9C", # Color secundario
       info = "#88A9BF",      # Color info
-      heading_font = bslib::font_google("Source Sans Pro", wght = "600", local = FALSE),  # Poppins #Barlow Semi Condensed
-      base_font = bslib::font_google("Public Sans", wght = "400", local = FALSE), # Lato # 
+      heading_font = bslib::font_google("Source Sans Pro",
+                                        wght = "600", local = FALSE),  # Poppins #Barlow Semi Condensed
+      base_font = bslib::font_google("Public Sans", 
+                                     wght = "400", local = FALSE), # Lato # 
       "input-border-color" = "#406177" # Color borde inputs
     ),
     windowTitle = "geocovid app",
@@ -57,21 +59,17 @@ ui <- function() {
         shiny::column(
           10,
           bslib::card(
-            style = "height: 400px;", 
+           # style = "height: 400px;", 
             bslib::layout_sidebar(
               title = "Por partido",
               sidebar = bslib::sidebar(
                 id = "tab2-sidebar",
                 open = "always",
                 width = 320,
-                shiny::p("1. Elige el raster a visualizar:"),
+                shiny::h6("1. Elige el raster a visualizar:"),
                 geocovidapp::Partidos_UI("selector_dinamico",
                                          amba_reducido_names = amba_reducido_names),
-                shiny::actionButton(
-                  "act_mapas",
-                  "3. Actualizar el mapa",
-                  class = "btn btn-secondary btn-sm"
-                ),
+                hr(),
                 geocovidapp::ReporteUI("desc_reporte")
               ), # cierra sidebar
               bslib::layout_columns(
@@ -79,22 +77,36 @@ ui <- function() {
                 fill = TRUE,  # Fuerza llenar alto
                 bslib::card_body(
                   tags$div(
-                    style = "display: inline;",
-                    tags$h6("Casos de COVID-19 diarios reportados por el sistema de salud",
-                            style = "font-size: 18px; font-weight: bold; margin: 0; padding: 0;"),
-                    tags$p("2. Click en el primer gráfico para seleccionar la fecha de los mapas",
-                           style = "font-size: 14px; margin: 0; padding: 0; display: inline;")
+                    # quitamos display:inline que puede generar espacios raros
+                    # solo margin y padding a cero
+                    style = "margin: 0; padding: 0;",
+                    tags$p(
+                      "2. Click en el primer gráfico para seleccionar la fecha de los mapas",
+                      style = "font-size: 14px; margin-top: 0; margin-bottom: 4px; padding: 0;"
+                    ),
+                    tags$h6(
+                      "Casos de COVID-19 diarios reportados por el sistema de salud",
+                      style = "font-size: 18px; font-weight: bold; margin-top: 0; margin-bottom: 0; padding: 0;"
+                    )
                   ),
                   geocovidapp::Dygraph_UI("casos_covid")
+                ), # cierra card body
+                  tags$div(
+                    br(),
+                shiny::actionButton(
+                  "act_mapas",
+                  "3. Actualizar el mapa",
+                  class = "btn btn-secondary btn-sm",
+                  style = "width: 100%;"
                 ),
-              div(
+                hr(),
                 uiOutput("vb_fecha"), # value boxes
                 uiOutput("vb_casos")
                 )
               ) # cierra body
-            
-            )
-        )),
+)
+          ) # cierra card
+        ), # cierra column
         shiny::column(
           2,
           shiny::br(),

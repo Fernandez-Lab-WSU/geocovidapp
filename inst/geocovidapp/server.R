@@ -126,9 +126,8 @@ server <- function(input, output, session, r) {
     bslib::value_box( # estilo en custom.css
       id = "vb_1",
       title = "Fecha seleccionada",
-      value = fecha_final(), # notar que esto no depende del boton actualizar
-      max_height="150px"
-    )
+      value = fecha_final() # notar que esto no depende del boton actualizar
+      )
     })
   
   
@@ -152,8 +151,7 @@ server <- function(input, output, session, r) {
     bslib::value_box(
     id = "vb_2",
     title = paste("Casos de COVID-19", elecciones_usuario$partido()),
-    value = casos_dia_seleccionado(),
-    max_height="150px"
+    value = casos_dia_seleccionado()
   )
   })
 

@@ -38,7 +38,12 @@ print(graficos$grafico_comparativo)
 ```
 
 ```{r fig.height=3, fig.width=10, echo=FALSE}
-print(graficos$grafico_partido)
+
+# si la eleccion es comuna este grafico no se imprime
+if (!is.null(graficos$grafico_partido)) {
+  print(graficos$grafico_partido)
+}
+
 ```
 
 ## Mapas de Movilidad

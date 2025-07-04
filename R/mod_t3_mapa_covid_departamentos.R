@@ -71,7 +71,6 @@ MapaCovidDepartamentos_UI <- function(id) {
           tags$h5("Promedio de movilidad diurna y nocturna"),
           shinycssloaders::withSpinner(
             dygraphs::dygraphOutput(ns("raster_analisis"),
-              width = 600,
               height = 100
             ),
             type = 2,
@@ -93,6 +92,7 @@ MapaCovidDepartamentos_UI <- function(id) {
       ),
       sidebar = bslib::sidebar(
         position = "right",
+        open = "always",
         shiny::selectInput(ns("partidos"),
           label = "Selecciona el partido",
           choices = bsas_lista,
@@ -210,7 +210,7 @@ MapaCovidDepartamentos_Server <- function(id,
           dygraphs::dySeries("Noche") |>
           dygraphs::dyOptions(
             labelsUTC = TRUE,
-            drawGrid = FALSE
+            includeZero = TRUE 
           ) |>
           dygraphs::dyAxis("y",
             label = "% de casos por partido"

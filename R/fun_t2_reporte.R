@@ -29,9 +29,9 @@ mapa_reporte <- function(part, imagen) {
   
   # 4. Etiquetas personalizadas
   etiquetas <- paste(breaks[-length(breaks)], "a", breaks[-1])
-  etiquetas[1] <- "Aumentó más del 40%"    
+  etiquetas[1] <- "Disminuyó bajo -40%"      
   etiquetas[6] <- "Sin cambio"               
-  etiquetas[length(etiquetas)] <- "Disminuyó bajo -40%"  
+  etiquetas[length(etiquetas)] <- "Aumentó más del 40%" 
   
   labels_df <- data.frame(
     value = 1:(length(breaks) - 1),
@@ -59,7 +59,8 @@ mapa_reporte <- function(part, imagen) {
       fill = NA, color = "black", size = 0.6
     ) +
     ggplot2::scale_fill_manual(
-      values = setNames(rev(colors), etiquetas), # Tuve que invertir la escala de colores
+      values = setNames(colors, etiquetas), 
+      breaks = rev(etiquetas), # Invertir el orden de los breaks para la leyenda
       name = "Porcentaje de cambio",
       na.translate = FALSE, # Remueve NA de la leyenda
       drop = FALSE  # Evita que se recorte la leyenda
@@ -69,7 +70,13 @@ mapa_reporte <- function(part, imagen) {
       ylim = c(bbox["ymin"], bbox["ymax"]),
       expand = FALSE
     ) +
-    ggplot2::theme_minimal()
+    ggplot2::theme_minimal()  +
+    ggplot2::theme( # leyenda
+      legend.title = ggplot2::element_text(size = 9),
+      legend.text = ggplot2::element_text(size = 8),
+      legend.key.height = ggplot2::unit(0.5, "lines"),
+      legend.key.width = ggplot2::unit(0.5, "lines")
+    )
 }
 
 
@@ -97,48 +104,11 @@ ggplot_casos_covid_doble <- function(partido, fecha) {
   color_partido <- "#6C9AC6"
   
   # --------------------------
-  # GRAFICO 1: Individual por partido
+  # GRAFICO 1: Comparativo
   # --------------------------
-  grafico_partido <- geocovidapp::data_sisa |>
-    dplyr::filter(residencia_provincia_nombre %in% c("CABA", "Buenos Aires")) |> 
-    dplyr::group_by(residencia_provincia_nombre, residencia_departamento_nombre, fecha_enfermo) |>
-    dplyr::summarise(casos_dia = dplyr::n(), .groups = "drop_last") |> 
-    dplyr::mutate(fecha_enfermo = as.Date(fecha_enfermo)) |> 
-    dplyr::filter(residencia_departamento_nombre == partido) |>
-    ggplot2::ggplot(ggplot2::aes(x = fecha_enfermo, y = casos_dia)) +
-    ggplot2::geom_line(color = color_partido, size = 0.5) +
-    ggplot2::geom_vline(xintercept = as.numeric(fecha_evento), linetype = "dashed", color = "black") +
-    ggplot2::annotate(
-      "text",
-      x = fecha_evento,
-      y = Inf,
-      label = format(fecha_evento, "%d-%m-%Y"),
-      angle = 90,
-      vjust = -0.5,
-      hjust = 1,
-      size = 3,
-      fontface = "plain"
-    ) +
-    ggplot2::scale_x_date(
-      date_breaks = "1 month",
-      date_labels = "%b %Y",
-      expand = ggplot2::expansion(mult = c(0.01, 0.01))
-    ) +
-    ggplot2::scale_y_continuous(
-      name = "Nro. de Casos",
-      breaks = scales::pretty_breaks(n = 8)
-    ) +
-    ggplot2::labs(
-      title = glue::glue("Casos acumulados en {partido}"),
-      x = NULL
-    ) +
-    ggplot2::theme_minimal() +
-    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
-  
-  # --------------------------
-  # GRAFICO 2: Comparativo
-  # --------------------------
-  provincias <- if (es_comuna) "CABA" else c("Buenos Aires", "CABA")
+  # No estamos mostrando datos por comunas. Si la eleccion es comuna
+  # Si el partido es una comuna, mostrar CABA, sino
+  provincias <- if (es_comuna){"CABA" } else { c("Buenos Aires", "CABA") }
   
   grafico_comparativo <- geocovidapp::data_sisa |>
     dplyr::group_by(residencia_provincia_nombre, fecha_enfermo) |>
@@ -178,7 +148,52 @@ ggplot_casos_covid_doble <- function(partido, fecha) {
       color = "Provincia"
     ) +
     ggplot2::theme_minimal() +
-    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)) 
+  
+  # --------------------------
+  # GRAFICO 1: Individual por partido
+  # --------------------------
+  if (!es_comuna) {
+    
+    grafico_partido <- geocovidapp::data_sisa |>
+      dplyr::filter(residencia_provincia_nombre %in% c("CABA", "Buenos Aires")) |> 
+      dplyr::group_by(residencia_provincia_nombre, residencia_departamento_nombre, fecha_enfermo) |>
+      dplyr::summarise(casos_dia = dplyr::n(), .groups = "drop_last") |> 
+      dplyr::mutate(fecha_enfermo = as.Date(fecha_enfermo)) |> 
+      dplyr::filter(residencia_departamento_nombre == partido) |> 
+      ggplot2::ggplot(ggplot2::aes(x = fecha_enfermo, y = casos_dia)) +
+      ggplot2::geom_line(color = color_partido, size = 0.5) +
+      ggplot2::geom_vline(xintercept = as.numeric(fecha_evento), linetype = "dashed", color = "black") +
+      ggplot2::annotate(
+        "text",
+        x = fecha_evento,
+        y = Inf,
+        label = format(fecha_evento, "%d-%m-%Y"),
+        angle = 90,
+        vjust = -0.5,
+        hjust = 1,
+        size = 3,
+        fontface = "plain"
+      ) +
+      ggplot2::scale_x_date(
+        date_breaks = "1 month",
+        date_labels = "%b %Y",
+        expand = ggplot2::expansion(mult = c(0.01, 0.01))
+      ) +
+      ggplot2::scale_y_continuous(
+        name = "Nro. de Casos",
+        breaks = scales::pretty_breaks(n = 8)
+      ) +
+      ggplot2::labs(
+        title = glue::glue("Casos acumulados en {partido}"),
+        x = NULL
+      ) +
+      ggplot2::theme_minimal() +
+      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)) 
+    
+  } else {
+    grafico_partido <- NULL
+  }
   
   # Retornar como lista
   list(

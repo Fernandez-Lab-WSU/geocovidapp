@@ -77,4 +77,12 @@ transition-delay: 1;
   font-family: 'Public Sans', sans-serif !important;
   font-size: 12px !important;
 }
+
+/* Reduce padding de las value boxes - Tab2 */
+.value-box-area {
+  padding: 0.3rem !important;  /* reduce padding */
+  margin: 0 !important;        /* elimina margen extra */
+  min-height: auto !important; /* quita altura mínima */
+  height: auto !important;     /* que la altura se ajuste al contenido */
+}
   
