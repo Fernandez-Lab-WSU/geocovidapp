@@ -197,11 +197,35 @@ MapaCovidDepartamentos_Server <- function(id,
           px_baires_16
         )
 
+ # quiero que empiece el mismo dia que el grafico de los casos de covid
+ # por cuestiones visuales
+        
+        # Fecha que quieres que empiece el eje x
+        start_date <- as.Date("2020-04-15")
+        
+        # Fecha del primer dato real en px_baires
+        first_date <- zoo::index(px_baires_xts)[1]
 
-        base::colnames(px_baires)[1] <- as.character("PromedioDiaYTarde")
-        base::colnames(px_baires)[2] <- as.character("Noche")
+        # Si start_date es antes que first_date, agregamos filas con NA para esas fechas
+        if (start_date < first_date) {
+          missing_dates <- seq(start_date, first_date - 1, by = "days")
+          
+          # Crear xts con NA para esas fechas
+          na_rows <- xts(matrix(NA, nrow = length(missing_dates), ncol = ncol(px_baires)), order.by = missing_dates)
+          colnames(na_rows) <- colnames(px_baires)
+          
+          # Combinar datos NA con datos originales
+          px_baires_extendido <- rbind(na_rows, px_baires)
 
-        dygraphs::dygraph(data = px_baires) |>
+        } else {
+          px_baires_extendido <- px_baires
+        }
+        
+        
+        base::colnames(px_baires_extendido)[1] <- as.character("PromedioDiaYTarde")
+        base::colnames(px_baires_extendido)[2] <- as.character("Noche")
+
+        dygraphs::dygraph(data = px_baires_extendido) |>
           dygraphs::dySeries(c(
             "px_baires_8",
             "PromedioDiaYTarde",
@@ -323,32 +347,60 @@ MapaCovidDepartamentos_Server <- function(id,
         tam_burb <- sisa() |>
           dplyr::group_by(.data$crit_covid) |>
           dplyr::arrange(dplyr::desc(.data$n_casos))
-
-        # Rangos para n_casos que se corresponden con los tamaños de las burbujas
-        q <- quantile(tam_burb$n_casos,
-          probs = c(0.5, 0.9)
-        )
-
-        size_small <- as.integer(q[[1]])
-        size_medium <- as.integer(q[[2]])
-
-        # Genero dataset separados para n_casos
-        tam_burb_small <- subset(
-          tam_burb,
-          n_casos <= size_small
-        )
-
-        tam_burb_medium <- subset(
-          tam_burb,
-          n_casos > size_small &
-            n_casos <= size_medium
-        )
-
-        tam_burb_large <- subset(
-          tam_burb,
-          n_casos > size_medium
-        )
-
+        
+        if (length(unique(tam_burb$n_casos)) == 1) {
+          warning("Todos los valores de n_casos son iguales. No se pueden crear rangos útiles.")
+          
+          # Todo en uno
+          tam_burb_small <- tam_burb
+          tam_burb_medium <- tam_burb[0, ]
+          tam_burb_large <- tam_burb[0, ]
+          
+        } else {
+          q <- quantile(tam_burb$n_casos, probs = c(0.5, 0.9))
+          
+          size_small <- as.integer(q[[1]])
+          size_medium <- as.integer(q[[2]])
+          
+          # Corrige si size_small es 1
+          if (size_small == 1) {
+            size_small <- 2
+          }
+          
+          # Si size_small y size_medium terminan iguales, ajusta
+          if (size_medium <= size_small) {
+            warning("Los cortes small y medium se solapan. Se agrupará todo en dos rangos.")
+            
+            tam_burb_small <- subset(
+              tam_burb,
+              n_casos <= size_small
+            )
+            
+            tam_burb_medium <- tam_burb[0, ]  # vacío
+            
+            tam_burb_large <- subset(
+              tam_burb,
+              n_casos > size_small
+            )
+          } else {
+            # Normal
+            tam_burb_small <- subset(
+              tam_burb,
+              n_casos <= size_small
+            )
+            
+            tam_burb_medium <- subset(
+              tam_burb,
+              n_casos > size_small & n_casos <= size_medium
+            )
+            
+            tam_burb_large <- subset(
+              tam_burb,
+              n_casos > size_medium
+            )
+          }
+        }
+        
         px_data_mapa <- px_data_mapa()
 
         # fun_mapa_bsas_covid_burbujas.R

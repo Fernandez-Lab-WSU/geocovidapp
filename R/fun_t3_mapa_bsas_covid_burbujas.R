@@ -66,6 +66,13 @@ mapa_burbujas <- function(data_sf,
               "-30 - -40"="#2166AC",
               "menor a -40"="#053061")
   
+  
+  # Toma los nombres del vector como niveles
+  niveles_ordenados <- names(colors)
+  
+  # Aplica el orden a tu columna de categoría
+  data_sf[[color_var]] <- factor(data_sf[[color_var]], levels = niveles_ordenados)
+  
 plotly::plot_ly() |>
   plotly::add_sf(stroke = I("#95B2C6"),
                  data = data_sf,
