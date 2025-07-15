@@ -204,7 +204,7 @@ MapaCovidDepartamentos_Server <- function(id,
         start_date <- as.Date("2020-04-15")
         
         # Fecha del primer dato real en px_baires
-        first_date <- zoo::index(px_baires_xts)[1]
+        first_date <- zoo::index(px_baires)[1]
 
         # Si start_date es antes que first_date, agregamos filas con NA para esas fechas
         if (start_date < first_date) {
