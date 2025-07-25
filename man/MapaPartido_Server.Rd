@@ -2,11 +2,10 @@
 % Please edit documentation in R/mod_t2_mapa_partido.R
 \name{MapaPartido_Server}
 \alias{MapaPartido_Server}
-\title{Servidor: Mapa raster por partido}
+\title{Server: Módulo de mapa raster por partido}
 \usage{
 MapaPartido_Server(
   id,
-  pool,
   act_mapas,
   amba_reducido_names,
   imagen,
@@ -20,36 +19,32 @@ MapaPartido_Server(
 )
 }
 \arguments{
-\item{id}{Module name}
+\item{id}{\code{character}. Identificador del módulo Shiny.}
 
-\item{amba_reducido_names}{String. Vector con los nombres de los partidos
-que conforman el AMBA.}
+\item{act_mapas}{\code{reactive}. Trigger reactivo para actualizar el mapa.}
 
-\item{area}{El raster puede corresponder a Buenos Aires provincia o a AMBA.}
+\item{amba_reducido_names}{\code{character}. Vector de nombres de partidos que componen el AMBA.}
 
-\item{fecha}{Fecha seleccionada.}
+\item{imagen}{\code{reactive}. Lista de rasters.}
 
-\item{tipo_de_raster}{String. Si el raster corresponde a el cambio porcentual
-prepandemia (pc) o semanal (7dpc).}
+\item{bsas_comunas}{\code{sf}. Dataset de clase \code{sf} con los polígonos de comunas de Buenos Aires.}
 
-\item{opacidad}{Double. Valor de opacidad del raster.}
+\item{area}{\code{character}. Indica si el raster corresponde a Buenos Aires o AMBA.}
 
-\item{momento_dia}{Entero. Hora del dia representada en el raster, puede ser
-0am, 8 am o 4 pm.}
+\item{fecha}{\code{Date} o \code{reactive}. Fecha seleccionada.}
 
-\item{base_raster}{Dataframe que lista todos los rasters y desagrega en
-sus columnas características de interes, como si son rasters de
-AMBA o Buenos Aires, si el cambio porcentual es semanal o prepandemia
-o el momento del día que representan.}
+\item{tipo_de_raster}{\code{character}. Define si el raster es de cambio porcentual prepandemia (\code{pc}) o semanal (\verb{7dpc}).}
 
-\item{bsas}{Dataset de clase sf con los partidos de Buenos Aires.}
+\item{opacidad}{\code{numeric}. Valor de opacidad del raster.}
 
-\item{part}{Partido de la provincia de Buenos Aires, seleccionado en otro
-módulo.}
+\item{partido}{\code{reactive}. Partido seleccionado (provincia de Buenos Aires).}
+
+\item{momento_dia}{\code{numeric}. Hora del día representada: 0, 8 o 16 horas.}
 }
 \value{
-Mapa raster por partido creado con leaflet.
+Una lista de reactivos con el raster seleccionado (\code{mapa_partido}) y el nivel de zoom (\code{zoom_mapa_partido}).
 }
 \description{
-Este mapa se encuentra en el tab 2, "por partido" de GeoCovid app
+Lógica del servidor para el módulo que muestra un mapa raster por partido.
+Este módulo corresponde a la pestaña 2, "Por partido", de la aplicación GeoCovid.
 }

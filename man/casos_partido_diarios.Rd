@@ -2,15 +2,19 @@
 % Please edit documentation in R/fun_t2t3_data_covid.R
 \name{casos_partido_diarios}
 \alias{casos_partido_diarios}
-\title{Title}
+\title{Calcular casos diarios de COVID-19 por partido}
 \usage{
 casos_partido_diarios(provincia, fecha)
 }
 \arguments{
-\item{provincia}{}
+\item{provincia}{\code{character}. Nombre de la provincia a filtrar (por ejemplo, \code{"Buenos Aires"}).}
 
-\item{fecha}{}
+\item{fecha}{\code{Date} o \code{character}. Fecha de referencia para filtrar los casos (\code{fecha_enfermo}).}
+}
+\value{
+Un \code{tibble} con dos columnas: \code{partido} (nombre del partido) y \code{n_casos} (número de casos reportados).
 }
 \description{
-Title
+Filtra los registros del dataset \code{data_sisa} para una provincia y fecha específica,
+y devuelve la cantidad de casos por partido (departamento).
 }

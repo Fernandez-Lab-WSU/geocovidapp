@@ -43,19 +43,21 @@ addPolygonsLayer <- function(mapa, data, fillopacity_poly) {
       smoothFactor = 0.5                     )
 }
 
-#' Agregar leyenda al mapa raster
+#' Agregar imagen raster y leyenda a un mapa Leaflet
 #'
 #' @description
-#' Esta función agrega una imagen raster al mapa interactivo utilizando `leaflet` y agrega una leyenda que muestra el porcentaje de cambio
-#' en los valores del raster. La leyenda es configurada con colores binarios según los valores del raster y se posiciona en la esquina superior derecha.
+#' Esta función agrega una imagen raster a un mapa interactivo creado con `leaflet` y añade una leyenda personalizada que muestra el porcentaje de cambio 
+#' de los valores del raster. La leyenda se construye a partir de una paleta de colores binaria o numérica y se ubica en la esquina superior derecha.
+#' También se asegura de eliminar capas o leyendas previas para evitar duplicaciones.
 #'
-#' @param mapa Mapa Leaflet al que se le añadirán los polígonos.
-#' @param imagen Objeto `raster` que representa la imagen raster a ser agregada al mapa.
-#' @param opacidad Valor de opacidad que controla la transparencia de la imagen raster en el mapa.
-#' @param pal Objeto de tipo `colorBin` o `colorNumeric` de `leaflet` que define la paleta de colores que se usará para la visualización de los valores en el raster.
+#' @param mapa Objeto `leaflet`. Mapa al que se le añadirá la imagen raster y la leyenda.
+#' @param imagen Objeto `raster` o `SpatRaster` (por ejemplo, de `terra` o `raster`) que representa la capa raster a visualizar.
+#' @param opacidad `numeric`. Valor de opacidad para la capa raster (0 a 1).
+#' @param paleta Objeto `colorBin` o `colorNumeric` generado con `leaflet::colorBin` o `leaflet::colorNumeric` para definir la escala de colores.
+#' @param etiquetas `character`. Vector de etiquetas que se usará para mostrar los intervalos en la leyenda.
 #'
-#' @return Un objeto `leaflet` con la imagen raster agregada y una leyenda que muestra el porcentaje de cambio.
-#' 
+#' @return Un objeto `leaflet` con la capa raster y la leyenda añadidas.
+#'
 #' @export
 addRasterLegend <- function(mapa, imagen, opacidad, paleta, etiquetas){
 

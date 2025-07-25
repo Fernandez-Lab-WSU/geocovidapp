@@ -24,6 +24,7 @@ ReporteUI <- function(id) {
 #' @param id Nombre del módulo. Necesario para su uso con `moduleServer`.
 #' @param partido Reactive. Nombre del partido seleccionado.
 #' @param fecha Reactive. Fecha seleccionada por el usuario.
+#' @param act_mapas Reactive. Evento que activa la actualización del mapa. Se asegura asi que el reporte este actualizado con la ultima eleccion del usuario.
 #' @param area Reactive. Área geográfica del raster: `"baires"` o `"amba"`.
 #' @param tipo_de_raster Reactive. Tipo de comparación del raster: `"pc"` (prepandemia) o `"7dpc"` (últimos 7 días).
 #' @param opacidad Reactive. Valor numérico entre 0 y 1 que define la opacidad del raster.

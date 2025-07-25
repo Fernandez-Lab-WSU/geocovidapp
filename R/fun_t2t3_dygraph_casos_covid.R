@@ -58,7 +58,6 @@ convertir_xts_serie <- function(serie, nombre_serie){
 #'
 #' @importFrom dygraphs dyAxis dyOptions dyHighlight dyCrosshair dyEvent dyLegend dyCSS
 #' @export
-
 dygraphs_events <- function(plot){
   
     plot |>

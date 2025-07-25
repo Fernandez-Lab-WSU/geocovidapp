@@ -66,4 +66,14 @@ onStop(function() {
   pool::poolClose(pool)
 })
 
+# Tidyevaluation
+
+utils::globalVariables(c(
+  ".data",
+  "base_raster",
+  "casos_dia",
+  "data_sisa",
+  "fecha_enfermo"
+))
+
  

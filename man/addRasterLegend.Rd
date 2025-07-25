@@ -2,23 +2,26 @@
 % Please edit documentation in R/fun_t1_mapa_raster.R
 \name{addRasterLegend}
 \alias{addRasterLegend}
-\title{Agregar leyenda al mapa raster}
+\title{Agregar imagen raster y leyenda a un mapa Leaflet}
 \usage{
 addRasterLegend(mapa, imagen, opacidad, paleta, etiquetas)
 }
 \arguments{
-\item{mapa}{Mapa Leaflet al que se le añadirán los polígonos.}
+\item{mapa}{Objeto \code{leaflet}. Mapa al que se le añadirá la imagen raster y la leyenda.}
 
-\item{imagen}{Objeto \code{raster} que representa la imagen raster a ser agregada al mapa.}
+\item{imagen}{Objeto \code{raster} o \code{SpatRaster} (por ejemplo, de \code{terra} o \code{raster}) que representa la capa raster a visualizar.}
 
-\item{opacidad}{Valor de opacidad que controla la transparencia de la imagen raster en el mapa.}
+\item{opacidad}{\code{numeric}. Valor de opacidad para la capa raster (0 a 1).}
 
-\item{pal}{Objeto de tipo \code{colorBin} o \code{colorNumeric} de \code{leaflet} que define la paleta de colores que se usará para la visualización de los valores en el raster.}
+\item{paleta}{Objeto \code{colorBin} o \code{colorNumeric} generado con \code{leaflet::colorBin} o \code{leaflet::colorNumeric} para definir la escala de colores.}
+
+\item{etiquetas}{\code{character}. Vector de etiquetas que se usará para mostrar los intervalos en la leyenda.}
 }
 \value{
-Un objeto \code{leaflet} con la imagen raster agregada y una leyenda que muestra el porcentaje de cambio.
+Un objeto \code{leaflet} con la capa raster y la leyenda añadidas.
 }
 \description{
-Esta función agrega una imagen raster al mapa interactivo utilizando \code{leaflet} y agrega una leyenda que muestra el porcentaje de cambio
-en los valores del raster. La leyenda es configurada con colores binarios según los valores del raster y se posiciona en la esquina superior derecha.
+Esta función agrega una imagen raster a un mapa interactivo creado con \code{leaflet} y añade una leyenda personalizada que muestra el porcentaje de cambio
+de los valores del raster. La leyenda se construye a partir de una paleta de colores binaria o numérica y se ubica en la esquina superior derecha.
+También se asegura de eliminar capas o leyendas previas para evitar duplicaciones.
 }

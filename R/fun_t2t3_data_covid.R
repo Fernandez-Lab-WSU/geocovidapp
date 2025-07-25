@@ -1,7 +1,13 @@
-#' Title
+#' Calcular casos diarios de COVID-19 por partido
 #'
-#' @param provincia 
-#' @param fecha 
+#' @description
+#' Filtra los registros del dataset `data_sisa` para una provincia y fecha específica, 
+#' y devuelve la cantidad de casos por partido (departamento).
+#'
+#' @param provincia `character`. Nombre de la provincia a filtrar (por ejemplo, `"Buenos Aires"`).
+#' @param fecha `Date` o `character`. Fecha de referencia para filtrar los casos (`fecha_enfermo`).
+#'
+#' @return Un `tibble` con dos columnas: `partido` (nombre del partido) y `n_casos` (número de casos reportados).
 #'
 #' @export
 casos_partido_diarios <- function(provincia, fecha){

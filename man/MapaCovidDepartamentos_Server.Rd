@@ -2,19 +2,21 @@
 % Please edit documentation in R/mod_t3_mapa_covid_departamentos.R
 \name{MapaCovidDepartamentos_Server}
 \alias{MapaCovidDepartamentos_Server}
-\title{Servidor: Mapa prov. de Buenos Aires por departamento}
+\title{Server: Módulo de mapa raster por partido}
 \usage{
 MapaCovidDepartamentos_Server(id, pool, amba_caba)
 }
 \arguments{
-\item{id}{Module name}
+\item{id}{\code{character}. Identificador del módulo Shiny.}
 
-\item{amba_caba}{String. Vector con los nombres de los partidos
-que conforman el AMBA sin las comunas de Provincia de Buenos Aires.}
+\item{pool}{Conexión a base de datos.}
+
+\item{amba_caba}{\code{character}.}
 }
 \value{
-Mapas y gráficos del tab 3.
+Una lista de reactivos con el raster seleccionado (\code{mapa_partido}) y el nivel de zoom (\code{zoom_mapa_partido}).
 }
 \description{
-Este mapa se encuentra en el tab 3 de GeoCovid app.
+Lógica del servidor para el módulo que muestra un mapa raster por partido.
+Este módulo corresponde a la pestaña 2, "Por partido", de la aplicación GeoCovid.
 }

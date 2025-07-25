@@ -12,8 +12,6 @@ Partidos_Server(id, amba_reducido_names)
 
 \item{amba_reducido_names}{String. Vector con los nombres de los partidos
 que conforman el AMBA.}
-
-\item{bsas}{Dataset de clase sf con los partidos de Buenos Aires.}
 }
 \value{
 El area y el partido seleccionado.

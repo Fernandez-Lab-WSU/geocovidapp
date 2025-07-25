@@ -21,33 +21,27 @@ MapaPartido_UI <- function(id) {
   )
 }
 
-#' Servidor: Mapa raster por partido
+#' Server: Módulo de mapa raster por partido
 #'
 #' @description
-#' Este mapa se encuentra en el tab 2, "por partido" de GeoCovid app
+#' Lógica del servidor para el módulo que muestra un mapa raster por partido.
+#' Este módulo corresponde a la pestaña 2, "Por partido", de la aplicación GeoCovid.
 #'
-#' @param id Module name
-#' @param amba_reducido_names String. Vector con los nombres de los partidos
-#' que conforman el AMBA.
-#' @param base_raster Dataframe que lista todos los rasters y desagrega en
-#' sus columnas características de interes, como si son rasters de
-#' AMBA o Buenos Aires, si el cambio porcentual es semanal o prepandemia
-#' o el momento del día que representan.
-#' @param fecha Fecha seleccionada.
-#' @param bsas Dataset de clase sf con los partidos de Buenos Aires.
-#' @param area El raster puede corresponder a Buenos Aires provincia o a AMBA.
-#' @param part Partido de la provincia de Buenos Aires, seleccionado en otro
-#' módulo.
-#' @param momento_dia Entero. Hora del dia representada en el raster, puede ser
-#' 0am, 8 am o 4 pm.
-#' @param tipo_de_raster String. Si el raster corresponde a el cambio porcentual
-#' prepandemia (pc) o semanal (7dpc).
-#' @param opacidad Double. Valor de opacidad del raster.
+#' @param id `character`. Identificador del módulo Shiny.
+#' @param act_mapas `reactive`. Trigger reactivo para actualizar el mapa.
+#' @param amba_reducido_names `character`. Vector de nombres de partidos que componen el AMBA.
+#' @param imagen `reactive`. Lista de rasters.
+#' @param bsas_comunas `sf`. Dataset de clase `sf` con los polígonos de comunas de Buenos Aires.
+#' @param area `character`. Indica si el raster corresponde a Buenos Aires o AMBA.
+#' @param fecha `Date` o `reactive`. Fecha seleccionada.
+#' @param tipo_de_raster `character`. Define si el raster es de cambio porcentual prepandemia (`pc`) o semanal (`7dpc`).
+#' @param opacidad `numeric`. Valor de opacidad del raster.
+#' @param partido `reactive`. Partido seleccionado (provincia de Buenos Aires).
+#' @param momento_dia `numeric`. Hora del día representada: 0, 8 o 16 horas.
 #'
-#' @return Mapa raster por partido creado con leaflet.
+#' @return Una lista de reactivos con el raster seleccionado (`mapa_partido`) y el nivel de zoom (`zoom_mapa_partido`).
 #' @export
 MapaPartido_Server <- function(id,
-                               pool,
                                act_mapas,
                                amba_reducido_names,
                                imagen,

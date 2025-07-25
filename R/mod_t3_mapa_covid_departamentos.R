@@ -121,17 +121,17 @@ MapaCovidDepartamentos_UI <- function(id) {
 }
 
 
-#' Servidor: Mapa prov. de Buenos Aires por departamento
+#' Server: Módulo de mapa raster por partido
 #'
 #' @description
-#' Este mapa se encuentra en el tab 3 de GeoCovid app.
+#' Lógica del servidor para el módulo que muestra un mapa raster por partido.
+#' Este módulo corresponde a la pestaña 2, "Por partido", de la aplicación GeoCovid.
 #'
-#' @param id Module name
-#' @param amba_caba String. Vector con los nombres de los partidos
-#' que conforman el AMBA sin las comunas de Provincia de Buenos Aires.
+#' @param id `character`. Identificador del módulo Shiny.
+#' @param pool Conexión a base de datos.
+#' @param amba_caba `character`.
 #'
-#' @importFrom stats quantile
-#' @return Mapas y gráficos del tab 3.
+#' @return Una lista de reactivos con el raster seleccionado (`mapa_partido`) y el nivel de zoom (`zoom_mapa_partido`).
 #' @export
 MapaCovidDepartamentos_Server <- function(id,
                                           pool,

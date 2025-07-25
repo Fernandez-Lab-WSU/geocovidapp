@@ -50,7 +50,6 @@ Partidos_UI <- function(id, amba_reducido_names) {
 #' dinámica.
 #'
 #' @param id Module name
-#' @param bsas Dataset de clase sf con los partidos de Buenos Aires.
 #' @param amba_reducido_names String. Vector con los nombres de los partidos
 #' que conforman el AMBA.
 #'
